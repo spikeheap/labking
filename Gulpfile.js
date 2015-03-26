@@ -53,7 +53,9 @@
       return gulp.src("./templates/module.xml.mustache")
         .pipe(gulpstache({
             name: project.name,
-            version: project.version
+            // LabKey needs double values for the version, so can't cope with SemVer.
+            // We'll take the major and minor numbers to make the LabKey version.
+            version: project.version.split(".").slice(0,2).join('.')
         }))
         .pipe(rename('module.xml'))
         .pipe(gulp.dest(path.join(__dirname, 'dist', 'config')));
