@@ -8,15 +8,23 @@
     // Load plugins
     var gulp = require('gulp'),
         less = require('gulp-less'),
-        autoprefixer = require('gulp-autoprefixer'),
         minifycss = require('gulp-minify-css'),
-        babel = require('gulp-babel'),
-        jshint = require('gulp-jshint'),
-        uglify = require('gulp-uglify'),
         rename = require('gulp-rename'),
         concat = require('gulp-concat'),
-        notify = require('gulp-notify'),
-        del = require('del');
+        del = require('del'),
+
+        jshint = require('gulp-jshint'),
+        jscs = require('gulp-jscs'),
+        browserify = require('browserify'),
+        transform = require('vinyl-transform'),
+        babel = require('gulp-babel'),
+        uglify = require('gulp-uglify'),
+        sourcemaps = require('gulp-sourcemaps');
+
+    var browserified = transform(function(filename) {
+      var b = browserify({entries: filename, debug: true});
+      return b.bundle();
+    });
      
     // Styles
     gulp.task('styles', function() {
@@ -24,22 +32,28 @@
         .pipe(less())
         .pipe(rename({ suffix: '.min' }))
         .pipe(minifycss())
-        .pipe(gulp.dest(path.join(distPath, 'styles')))
-        .pipe(notify({ message: 'Styles task complete' }));
+        .pipe(gulp.dest(path.join(distPath, 'styles')));
     });
      
-    // Scripts
-    gulp.task('scripts', function() {
+    // Validate JavaScript
+    gulp.task('scripts:validate', function() {
       return gulp.src('./js/**/*.js')
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
+        //.pipe(jscs());
+    });
+    
+    // Build JavaScript
+    gulp.task('scripts', ['scripts:validate'], function() {
+      return gulp.src('./js/index.js')
+        .pipe(browserified)
+
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(babel())
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest(path.join(distPath, 'js')))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify({sourceMap: true}))
-        .pipe(gulp.dest(path.join(distPath, 'js')))
-        .pipe(notify({ message: 'Scripts task complete' }));
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+
+        .pipe(gulp.dest(path.join(distPath, 'js')));
     });
      
     // Clean
