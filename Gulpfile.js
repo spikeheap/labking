@@ -3,11 +3,15 @@
 
     var project = require('./package.json'),
         path = require('path'),
-        distPath = path.join(__dirname, 'dist', 'web', project.name);
+        distPath = path.join(__dirname, 'dist', 'web', project.name),
+        production = process.env.NODE_ENV === 'production';
 
     // Load plugins
     var gulp = require('gulp'),
         gutil = require('gulp-util'),
+        buffer = require('gulp-buffer'),
+        transform = require('vinyl-transform'),
+        source = require('vinyl-source-stream'),
         fs = require('fs'),
         stream = require('stream'),
         mustache = require('mustache'),
@@ -21,7 +25,7 @@
         jshint = require('gulp-jshint'),
         jscs = require('gulp-jscs'),
         browserify = require('browserify'),
-        transform = require('vinyl-transform'),
+        reactify = require('reactify'),
         babel = require('gulp-babel'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
@@ -84,21 +88,26 @@
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
       return gulp.src('./js/**/*.js')
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('default'))
+        //.pipe(jshint('.jshintrc'))
+        //.pipe(jshint.reporter('default'))
         //.pipe(jscs());
     });
-    
+
     // Build JavaScript
     gulp.task('scripts', ['scripts:validate'], function() {
-      return gulp.src('./js/index.js')
-        .pipe(browserified)
 
+      var bundler = browserify('./js/index.js', {standalone: 'noscope'});
+
+      return bundler
+        .transform(reactify)
+        .bundle()
+        .pipe(source('index.js'))
+        .pipe(buffer())
+  
         .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(babel())
-        .pipe(uglify())
+          //.pipe(babel())
+          //.pipe(uglify())
         .pipe(sourcemaps.write('./'))
-
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
      
