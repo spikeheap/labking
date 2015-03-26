@@ -1,7 +1,13 @@
 # LabKing :crown:
 _Rule over your subjects in LabKey_
 
+## Building the project
 
+* `npm build` builds the module
+* `npm test` runs the test suite
+* `npm watch` watches for changes and builds each time
+
+These are really just wrappers for Gulp (`gulp`, `gulp test`, and `gulp watch` respectively).
 
 ## License
 
