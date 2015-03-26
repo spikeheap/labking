@@ -105,8 +105,8 @@
         .pipe(buffer())
   
         .pipe(sourcemaps.init({loadMaps: true}))
-          //.pipe(babel())
-          //.pipe(uglify())
+          .pipe(babel())
+          .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
