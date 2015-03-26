@@ -114,5 +114,6 @@
     gulp.task('watch', function() {
       gulp.watch('less/**/*.less', ['styles']);
       gulp.watch('js/**/*.js', ['scripts']);
+      gulp.watch('views/**/*.html', ['views']);
     });
 }(require));
