@@ -10,8 +10,8 @@
   },
   "webParts": [
     {
-      "name": "Study – Subject Record",
-      "htmlFilePrefix": "subject-record"
+      "name": "LabKing Subject Record",
+      "htmlFilePrefix": "subjectRecord"
     }
   ],
   "repository": {

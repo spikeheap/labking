@@ -40,7 +40,7 @@
         mustache.parse(template); // speeds up mustache templating
         webParts.forEach(function(webPart) {
           var templatedOutput = mustache.render(template, {htmlFilePrefix: webPart.htmlFilePrefix});
-          this.push(new gutil.File({ cwd: __dirname, base: path.join(__dirname, './webParts/'), path: path.join(__dirname, './webParts/', webPart.name), contents: new Buffer(templatedOutput) }))
+          this.push(new gutil.File({ cwd: __dirname, base: path.join(__dirname, './webParts/'), path: path.join(__dirname, './webParts/', webPart.name + '.webpart.xml'), contents: new Buffer(templatedOutput) }))
           this.push(null)
         }, this)
       }
