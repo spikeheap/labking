@@ -1,39 +1,44 @@
-var React = require("react"),
-    ReactPropTypes = React.PropTypes;
+(function () {
+  "use strict";
 
-var CheckboxWithLabel = React.createClass({
-  propTypes: {
-    label: ReactPropTypes.string.isRequired,
-    isChecked: ReactPropTypes.bool.isRequired,
-    toggleChecked: React.PropTypes.func.isRequired
-  },
+  var React = require("react"),
+      ReactPropTypes = React.PropTypes;
 
-  getInitialState: function() {
-    return {
-      isChecked: this.props.isChecked
-    };
-  },
+  var CheckboxWithLabel = React.createClass({
+    propTypes: {
+      label: ReactPropTypes.string.isRequired,
+      isChecked: ReactPropTypes.bool.isRequired,
+      toggleChecked: React.PropTypes.func.isRequired
+    },
 
-  _onChange: function(event) {
-    this.setState({isChecked: !this.state.isChecked});
-    this.props.toggleChecked(this.props.label, this.state.isChecked);
-  },
+    getInitialState: function() {
+      return {
+        isChecked: this.props.isChecked
+      };
+    },
 
-  render: function() {
-    return (
-      <li>
-        <input
-          className="toggle"
-          type="checkbox"
-          checked={this.state.isChecked} 
-          onChange={this._onChange}
-        />
-        <label>
-          {this.props.label}
-        </label>
-      </li>
-    );
-  }
-});
+    onChange: function() {
+      this.setState({isChecked: !this.state.isChecked});
+      this.props.toggleChecked(this.props.label, this.state.isChecked);
+    },
 
-module.exports = CheckboxWithLabel;
+    render: function() {
+      return (
+        <li>
+          <input
+            className="toggle"
+            type="checkbox"
+            checked={this.state.isChecked}
+            onChange={this.onChange}
+          />
+          <label>
+            {this.props.label}
+          </label>
+        </li>
+      );
+    }
+  });
+
+  module.exports = CheckboxWithLabel;
+}());
+

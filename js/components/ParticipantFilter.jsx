@@ -1,20 +1,24 @@
-var React = require("react"),
-    ReactPropTypes = React.PropTypes;
+(function () {
+  "use strict";
 
-var CohortList = require("./CohortList.jsx"),
-    ParticipantList = require("./ParticipantList.jsx");
+  var React = require("react");
 
-var ParticipantFilter = React.createClass({
+  var CohortList = require("./CohortList.jsx"),
+      ParticipantList = require("./ParticipantList.jsx");
 
-  render: function() {
-    return (
-      <div>
-        <CohortList />
+  var ParticipantFilter = React.createClass({
 
-        <ParticipantList />
-      </div>
-    );
-  }
-});
+    render: function() {
+      return (
+        <div>
+          <CohortList />
 
-module.exports = ParticipantFilter;
+          <ParticipantList />
+        </div>
+      );
+    }
+  });
+
+  module.exports = ParticipantFilter;
+}());
+
