@@ -1,24 +1,16 @@
 var _ = require('lodash'),
     React = require("react"),
-    ReactPropTypes = React.PropTypes;
+    Marty = require("marty");
+
+var CohortFilterStore = require("../stores/CohortFilterStore");
 
 var ParticipantList = React.createClass({
-  propTypes: {
-    participants: ReactPropTypes.array.isRequired,
-    cohortFilter: ReactPropTypes.object.isRequired
-  },
 
   render: function() {
-
-    var participants = [];
-    this.props.participants.forEach(function(participant) {
-      if(_.any(this.props.cohortFilter, 'rowid', participant.InitialCohort)){
-        return participants.push(<li key={participant.ParticipantId}>{participant.ParticipantId}</li>);
-      }else{
-        return null;
-      }
-
-    }, this);
+    var allParticipants = this.props.allParticipants;
+    var participants = this.props.filteredParticipants.map(function(participant) {
+      return <li key={participant.ParticipantId}>{participant.ParticipantId}</li>;
+    });
 
     return (
       <div>
@@ -31,4 +23,10 @@ var ParticipantList = React.createClass({
   }
 });
 
-module.exports = ParticipantList;
+module.exports = Marty.createContainer(ParticipantList, {
+  listenTo: CohortFilterStore,
+  fetch: {
+    allParticipants() { return CohortFilterStore.getParticipants(); },
+    filteredParticipants() { return CohortFilterStore.getFilteredParticipants(); }
+  }
+});

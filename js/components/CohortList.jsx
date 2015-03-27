@@ -1,15 +1,12 @@
 var _ = require('lodash'),
     React = require("react"),
-    ReactPropTypes = React.PropTypes;
+    Marty = require("marty");
 
 var CheckboxWithLabel = require("./CheckboxWithLabel.jsx"),
-    CohortFilterActions = require("../actions/CohortFilterActions");
+    CohortFilterActions = require("../actions/CohortFilterActions"),
+    CohortFilterStore = require("../stores/CohortFilterStore");
 
 var CohortList = React.createClass({
-  propTypes: {
-    cohorts: ReactPropTypes.array.isRequired,
-    checkedCohorts: React.PropTypes.object.isRequired
-  },
 
   toggleChecked: function(cohortLabel, currentState) {
 
@@ -47,4 +44,10 @@ var CohortList = React.createClass({
   }
 });
 
-module.exports = CohortList;
+module.exports = Marty.createContainer(CohortList, {
+  listenTo: CohortFilterStore,
+  fetch: {
+    cohorts() {                 return CohortFilterStore.getCohorts(); },
+    checkedCohorts() {          return CohortFilterStore.getCohortFilter(); },
+  }
+});
