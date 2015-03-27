@@ -33,6 +33,10 @@ These are really just wrappers for Gulp (`gulp`, `gulp test`, and `gulp watch` r
     ```
 
 
+## Browser requirements
+
+LabKing is unapologetically built for the modern world. You'll need IE9+, or a reasonably up-to-date version of Chrome, Firefox, Opera, or similar to make the most of it. You *may* find it works on IE8, and we'd love to hear your experiences to flesh out the documentation. More than that, we'd love for you to upgrade to a modern browser for general happiness :cocktail: :beers: :wine_glass:.
+
 ## License
 
 This project is [MIT licensed](https://github.com/spikeheap/labkey-subject-view/blob/master/LICENSE.md).
