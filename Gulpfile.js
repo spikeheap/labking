@@ -22,10 +22,11 @@
         concat = require('gulp-concat'),
         del = require('del'),
 
-        jshint = require('gulp-jshint'),
+        eslint = require('gulp-eslint'),
         jscs = require('gulp-jscs'),
         browserify = require('browserify'),
         reactify = require('reactify'),
+        react = require('react'),
         babel = require('gulp-babel'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
@@ -87,16 +88,17 @@
      
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
-      return gulp.src('./js/**/*.js')
-        //.pipe(jshint('.jshintrc'))
-        //.pipe(jshint.reporter('default'))
+      return gulp.src(['./js/**/*.js','./js/**/*.jsx'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        //.pipe(eslint.failOnError());
         //.pipe(jscs());
     });
 
     // Build JavaScript
     gulp.task('scripts', ['scripts:validate'], function() {
 
-      var bundler = browserify('./js/index.js', {standalone: 'noscope'});
+      var bundler = browserify('./js/index.jsx', {standalone: 'noscope'});
 
       return bundler
         .transform(reactify)
@@ -107,7 +109,7 @@
         .pipe(sourcemaps.init({loadMaps: true}))
           .pipe(babel())
           .pipe(uglify())
-        .pipe(sourcemaps.write('./'))
+        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
      
