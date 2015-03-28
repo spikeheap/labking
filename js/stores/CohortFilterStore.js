@@ -132,8 +132,9 @@
     getFilteredParticipants(){
       var that = this;
       var participants = this.state.allParticipants || [];
+
       var included = participants.filter(function(candidateParticipant) {
-        return _.any(that.state.cohortFilter, 'rowid', candidateParticipant.InitialCohort);
+        return _.any(that.state.cohortFilter, 'rowid', candidateParticipant.Cohort);
       });
       return included;
     }
