@@ -24,6 +24,10 @@
 
         eslint = require('gulp-eslint'),
         jscs = require('gulp-jscs'),
+
+        karma = require('karma').server,
+        notifier = require('node-notifier'),
+
         browserify = require('browserify'),
         reactify = require('reactify'),
         react = require('react'),
@@ -85,7 +89,14 @@
         .pipe(minifycss())
         .pipe(gulp.dest(path.join(distPath, 'styles')));
     });
-     
+
+    gulp.task('scripts:test', function (done) {
+      karma.start({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+      }, done);
+    });
+
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
       return gulp.src(['./js/**/*.js','./js/**/*.jsx'])
@@ -96,7 +107,7 @@
     });
 
     // Build JavaScript
-    gulp.task('scripts', ['scripts:validate'], function() {
+    gulp.task('scripts', ['scripts:test','scripts:validate'], function() {
 
       var bundler = browserify('./js/index.jsx', {standalone: 'noscope'});
 
@@ -139,11 +150,13 @@
     gulp.task('default', ['clean'], function() {
         gulp.start('styles', 'scripts', 'labkey:module', 'views');
     });
-     
+    
     // Watch
-    gulp.task('watch', function() {
-      gulp.watch('less/**/*.less', ['styles']);
-      gulp.watch('js/**/*.js', ['scripts']);
-      gulp.watch('views/**/*.html', ['views']);
-    });
+    // gulp.task('watch', function() {
+    //   gulp.watch('less/**/*.less', ['styles']);
+    //   gulp.watch('js/**/*.js', ['scripts']);
+    //   gulp.watch('views/**/*.html', ['views']);
+    // });
+
+
 }(require));

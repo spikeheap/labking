@@ -11,7 +11,9 @@
   class CohortFilterStore extends Marty.Store {
     constructor(options) {
       super(options);
-
+      this.state = {
+        cohortFilter: {}
+      };
       this.handlers = {
         addCohortToFilter: CohortFilterConstants.COHORT_ADD,
         removeCohortFromFilter: CohortFilterConstants.COHORT_REMOVE
@@ -119,7 +121,6 @@
           return LabKeyAPI.getParticipants().then(
             function(data) { 
               that.state.allParticipants = data.rows;
-              console.log(that.state.allParticipants);
               that.hasChanged();
             }, 
             function(error) {
