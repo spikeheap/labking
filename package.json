@@ -8,6 +8,7 @@
     "test": "gulp test",
     "watch": "gulp watch"
   },
+  "deployPath": "/Volumes/LabKey Server/externalModules",
   "webParts": [
     {
       "name": "LabKing Subject Record",

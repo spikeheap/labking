@@ -115,7 +115,24 @@
      
     // Clean
     gulp.task('clean', function(cb) {
-        del(['dist/**'], cb);
+      del(['dist/**'], cb);
+    });
+
+    // Deploy
+    gulp.task('deploy', ['default'], function(cb) {
+      if(project.deployPath){
+        if(!fs.existsSync(project.deployPath)){
+          gutil.log('The `deployDir` specified in package.json does not exist.');
+        }else{
+          // remove deploy directory contents
+          del([path.join(project.deployPath, project.name, '**')],{force: true});
+          // copy dist into it
+          return gulp.src(path.join(__dirname, 'dist', '**'))
+            .pipe(gulp.dest(path.join(project.deployPath, project.name)));
+        }
+      }else{
+        gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
+      }
     });
      
     // Default task
