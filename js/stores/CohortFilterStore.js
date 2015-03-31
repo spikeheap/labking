@@ -12,7 +12,8 @@
     constructor(options) {
       super(options);
       this.state = {
-        cohortFilter: {}
+        cohortFilter: {},
+        participants: {}
       };
       this.handlers = {
         addCohortToFilter: CohortFilterConstants.COHORT_ADD,
@@ -64,6 +65,25 @@
 
 
 
+    getDataSets(){
+      var self = this;
+      return this.fetch('dataSets',
+        // local
+        function(){ 
+          return this.state.dataSets;
+        },
+        // remote
+        function(){ 
+          return LabKeyAPI.getDataSets().then(
+            function(data) { 
+              self.setState({
+                dataSets: data.rows
+              });
+            }, function(error) {
+              console.log("Sad times");
+            });
+        });
+    }
 
     getCohorts(){
       var that = this;
@@ -90,7 +110,7 @@
     }
 
     getParticipantGroups(){
-      var that = this;
+      var self = this;
       return this.fetch('allParticipantGroups',
         // local
         function(){ 
@@ -100,7 +120,9 @@
         function(){ 
           return LabKeyAPI.getParticipantGroups().then(
             function(data) { 
-              that.state.allParticipantGroups = data.rows;
+              self.setState({
+                allParticipantGroups: data.rows
+              });
             }, 
             function(error) {
               console.log("Sad times");
@@ -137,6 +159,35 @@
         return _.any(that.state.cohortFilter, 'rowid', candidateParticipant.Cohort);
       });
       return included;
+    }
+
+    getParticipantDataSet(participantId, dataSetId){
+      var self = this;
+      return this.fetch('participant',
+        // local
+        function(){ 
+          if(this.state.participants[participantId] === undefined){
+            return undefined;
+          }else{
+            return this.state.participants[participantId][dataSetId];
+          }
+        },
+        // remote
+        function(){ 
+          return LabKeyAPI.getParticipantDataSet(participantId, dataSetId).then(
+            function(data) { 
+              self.setState({
+                participants: {
+                  [participantId]: {
+                    [dataSetId]: data.rows[0]
+                  }
+                }
+              });
+            }, 
+            function(error) {
+              console.log("Sad times");
+            });
+        });
     }
   }
 

@@ -1,13 +1,12 @@
 (function () {
   "use strict";
 
-  var React = require("react"),
-      ReactPropTypes = React.PropTypes;
+  var React = require("react");
 
   var CheckboxWithLabel = React.createClass({
     propTypes: {
-      label: ReactPropTypes.string.isRequired,
-      isChecked: ReactPropTypes.bool.isRequired,
+      label: React.PropTypes.string.isRequired,
+      isChecked: React.PropTypes.bool.isRequired,
       toggleChecked: React.PropTypes.func.isRequired
     },
 

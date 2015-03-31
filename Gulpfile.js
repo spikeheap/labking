@@ -29,9 +29,8 @@
         notifier = require('node-notifier'),
 
         browserify = require('browserify'),
-        reactify = require('reactify'),
+        babelify = require('babelify'),
         react = require('react'),
-        babel = require('gulp-babel'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
 
@@ -107,19 +106,18 @@
     });
 
     // Build JavaScript
-    gulp.task('scripts', ['scripts:test','scripts:validate'], function() {
+    gulp.task('scripts:build', function() {
 
       var bundler = browserify('./js/index.jsx', {standalone: 'noscope'});
 
       return bundler
-        .transform(reactify)
+        .transform(babelify)
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
   
         .pipe(sourcemaps.init({loadMaps: true}))
-          .pipe(babel())
-          .pipe(uglify())
+          //.pipe(uglify())
         .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
@@ -129,26 +127,31 @@
       del(['dist/**'], cb);
     });
 
-    // Deploy
-    gulp.task('deploy', ['default'], function(cb) {
-      if(project.deployPath){
-        if(!fs.existsSync(project.deployPath)){
-          gutil.log('The `deployDir` specified in package.json does not exist.');
-        }else{
-          // remove deploy directory contents
-          del([path.join(project.deployPath, project.name, '**')],{force: true});
-          // copy dist into it
-          return gulp.src(path.join(__dirname, 'dist', '**'))
-            .pipe(gulp.dest(path.join(project.deployPath, project.name)));
-        }
-      }else{
-        gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
-      }
-    });
+    // // Deploy
+    // gulp.task('deploy', ['default'], function() {
+    //   if(project.deployPath){
+    //     return gulp.src(path.join(__dirname, 'dist', '**'))
+    //         .pipe(gulp.dest(path.join(project.deployPath, project.name)));
+    //     // if(!fs.existsSync(project.deployPath)){
+    //     //   gutil.log('The `deployDir` specified in package.json does not exist.');
+    //     // }else{
+    //     //   // remove deploy directory contents
+    //     //   //del([path.join(project.deployPath, project.name, '**')],{force: true});
+    //     //   // copy dist into it
+    //     //   return gulp.src(path.join(__dirname, 'dist', '**'))
+    //     //     .pipe(gulp.dest(path.join(project.deployPath, project.name)));
+    //     // }
+    //   }else{
+    //     gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
+    //   }
+    // });
      
     // Default task
     gulp.task('default', ['clean'], function() {
-        gulp.start('styles', 'scripts', 'labkey:module', 'views');
+        gulp.start('styles', 
+          'scripts:test','scripts:validate', 'scripts:build', 
+          'labkey:module', 
+          'views');
     });
     
     // Watch

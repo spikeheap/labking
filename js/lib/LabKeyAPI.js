@@ -2,43 +2,33 @@
   "use strict";
 
   // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
-  function labkeyQuery(schemaName, queryName){
+  function labkeyQuery(schemaName, queryName, filterArray=[]){
     return new Promise(function(resolve, reject) {
       LABKEY.requiresExt3ClientAPI(true, function() {
-        Ext.onReady(function() {
-          LABKEY.Query.selectRows({ schemaName: schemaName, queryName: queryName, success: resolve, failure: reject});
-        });
+        LABKEY.Query.selectRows({ 
+          schemaName: schemaName, 
+          queryName: queryName, 
+          filterArray: filterArray,
+          success: resolve, 
+          failure: reject});
       });
     });
+  }
+
+  function createLabKeyFilter(field, value){
+    return LABKEY.Filter.create(field, value);
   }
 
   /**
    * API calls, all returning promises
    **/
 
-     // function getParticipantById(participantId) {
-
-    //   // For each dataset
-    //   // - get the participant"s entries
-    //   LABKEY.Query.selectRows({
-    //     schemaName: "study",
-    //     queryName: "Database_Enrollment",
-    //     filterArray: [
-    //       LABKEY.Filter.create("ParticipantId", participantId)
-    //     ],
-    //     success: function(data){
-    //       console.log(data);
-    //       var demoData = data.rows.map(function(participantGroup) {
-    //         return buildListItemHTML(participantGroup.Label);
-    //       });
-    //       $( ".editable-participant .participant-demographics" ).append( demoData.join("") );
-    //     }
-    //   });
-    // }
-
-
   function getParticipants(){
     return labkeyQuery("study", "Participant");
+  }
+
+  function getParticipantDataSet(participantId, dataSetId){
+    return labkeyQuery("study", dataSetId, [createLabKeyFilter('ParticipantId', participantId)]);
   }
 
   function getCohorts(){
@@ -60,12 +50,31 @@
     return labkeyQuery("study", "ParticipantGroupMap");
   }
 
+  function getDataSets(){
+    return labkeyQuery("study", "DataSets");
+  }
+
+  function addDataSet(){
+    LABKEY.Query.insertRows({
+                schemaName: 'study',
+                queryName: 'Database_Enrollment',
+                rows: [
+                  JSON.parse('{"ParticipantId":"HEP-0004","MRNNumber":"TEST0001","HCVEnroll":"Y","LCID":null,"MedWarNum":"402","LastName":"Hawking","StartDate":"2015/03/05 00:00:00","HCVRUKID":"TEST0001060-0065","HEPType":"Hepatitis C","FirstName":"Steve","NHSNumber":"TEST0001"}')
+                ],
+                successCallback: function(data){
+                  console.log(data);
+                },
+         });  
+  }
+
   module.exports = {
     getParticipants: getParticipants,
     getCohorts: getCohorts,
     getParticipantCategories: getParticipantCategories,
     getParticipantGroups: getParticipantGroups,
-    getParticipantGroupMaps: getParticipantGroupMaps
+    getParticipantGroupMaps: getParticipantGroupMaps,
+    getDataSets: getDataSets,
+    getParticipantDataSet: getParticipantDataSet
   };
 
-}(window.LABKEY, window.EXT));
+}(window.LABKEY));

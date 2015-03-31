@@ -1,6 +1,5 @@
 (function() {
   "use strict";
-  //var $ = require("jQuery");
 
   var React = require("react");
 
