@@ -5,45 +5,237 @@
       Marty = require("marty"),
       when = require('marty/when');
 
-  var StudyStoreConstants = require("../constants/StudyStoreConstants"),
+  var StudyConstants = require("../constants/StudyConstants"),
       LabKeyAPI = require("../lib/LabKeyAPI");
-
-  function logError(error) {
-    console.log("Sad times");
-  }
 
   class StudyStore extends Marty.Store {
     constructor(options) {
       super(options);
       this.state = {
-        dataSets: []
+        Study: {},
+        participants: {},
+        participantRecords: []
       };
       this.handlers = {
-        addCohortToFilter: StudyStoreConstants.COHORT_ADD,
-        removeCohortFromFilter: StudyStoreConstants.COHORT_REMOVE
+        addCohortToFilter: StudyConstants.COHORT_ADD,
+        removeCohortFromFilter: StudyConstants.COHORT_REMOVE
       };
     }
 
-    
+    addCohort(cohort) {
+      this.state.cohorts.push(cohort);
+      this.hasChanged();
+    }
 
-    getDataSets(){
-      var self = this;
-      return this.fetch('dataSets',
+    /**
+     * FILTER BY COHORT
+     **/
+    addCohortToFilter(cohort) {
+      this.state.Study[cohort.rowid] = cohort;
+      this.hasChanged();
+    }
+
+    removeCohortFromFilter(cohort) {
+      delete this.state.Study[cohort.rowid];
+      this.hasChanged();
+    }
+
+    getStudy() {
+      return this.state.Study || this.getCohorts();
+    }
+
+    /**
+     * FILTER BY PARTICIPANT GROUP
+     **/
+
+    addParticipantGroupToFilter(cohort) {
+      // TODO this.state.Study[cohort.rowid] = cohort;
+      // TODO this.hasChanged();
+    }
+
+    removeParticipantGroupFromFilter(cohort) {
+      // TODO delete this.state.Study[cohort.rowid];
+      // TODO this.hasChanged();
+    }
+
+    getParticipantGroupFilter() {
+      // TODO return this.state.Study || this.getCohorts();
+    }
+
+
+    getCohorts(){
+      var that = this;
+      return this.fetch('allCohorts',
         // local
         function(){ 
-          return this.state.dataSets;
+          return this.state.cohorts;
         },
         // remote
         function(){ 
-          return LabKeyAPI.getDataSets().then(
+          return LabKeyAPI.getCohorts().then(
             function(data) { 
-              console.log('success');
-              console.log(data);
-              self.state.dataSets = data.rows;
-              self.hasChanged();
-            }, function(error) {
+              that.state.cohorts = [];
+              that.state.Study = {};
+              data.rows.forEach(function(cohort) {
+                that.addCohort(cohort);
+                that.addCohortToFilter(cohort)
+              });
+            }, 
+            function(error) {
               console.log("Sad times");
             });
+        });
+    }
+
+    getParticipantGroups(){
+      var self = this;
+      return this.fetch('allParticipantGroups',
+        // local
+        function(){ 
+          return this.state.allParticipantGroups;
+        },
+        // remote
+        function(){ 
+          return LabKeyAPI.getParticipantGroups().then(
+            function(data) { 
+              self.setState({
+                allParticipantGroups: data.rows
+              });
+            }, 
+            function(error) {
+              console.log("Sad times");
+            });
+        });
+    }
+
+
+    getParticipants(){
+      var that = this;
+      return this.fetch('allParticipants',
+        // local
+        function(){ 
+          return this.state.allParticipants;
+        },
+        // remote
+        function(){ 
+          return LabKeyAPI.getParticipants().then(
+            function(data) { 
+              that.state.allParticipants = data.rows;
+              that.hasChanged();
+            }, 
+            function(error) {
+              console.log("Sad times");
+            });
+        });
+    }
+
+    getFilteredParticipants(){
+      var that = this;
+      var participants = this.state.allParticipants || [];
+
+      var included = participants.filter(function(candidateParticipant) {
+        return _.any(that.state.Study, 'rowid', candidateParticipant.Cohort);
+      });
+      return included;
+    }
+
+    getParticipantDataSet(participantId, dataSetId){
+      var self = this;
+      return this.fetch('participant',
+        // local
+        function(){ 
+          if(this.state.participants[participantId] === undefined){
+            return undefined;
+          }else{
+            return this.state.participants[participantId][dataSetId];
+          }
+        },
+        // remote
+        function(){ 
+          return LabKeyAPI.getParticipantDataSet(participantId, dataSetId).then(
+            function(data) { 
+              self.setState({
+                participants: {
+                  [participantId]: {
+                    [dataSetId]: data.rows[0]
+                  }
+                }
+              });
+            }, 
+            function(error) {
+              console.log("Sad times");
+            });
+        });
+    }
+
+    /** 
+     * Fetch a complete participant record,
+     * including all data sets.
+    **/
+    getParticipantRecord(participantId){
+      var self = this;
+      return this.fetch('participantRecord',
+        // local
+        () => this.state.participantRecords[participantId],
+        // remote
+        () => {
+          return LabKeyAPI.getDataSets()
+            .then((response) => {
+                var participantDataSetPromises = response.rows.map((dataSet) => LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name));
+                return Promise.all(participantDataSetPromises);
+              })
+            .then((responsesArray) => {
+                var dataSets = {};
+                responsesArray.forEach((response) => {
+                  dataSets[response.queryName] = response.rows[0];
+                });
+
+                self.setState({
+                  participantRecords: {
+                    [participantId]: {
+                      dataSets: dataSets
+                    }
+                  }
+                });
+
+                console.log(this.state.participantRecords[participantId]);
+              })
+            .catch((error) => console.log("Sad times", error));
+        }
+      );
+    }
+
+    /**
+     * Fetch the Study metadata
+     **/
+    getDataSetMetaData(){
+      var self = this;
+      return this.fetch('dataSetMetaData',
+        // local
+        () => this.state.dataSetMetaData,
+        // remote
+        () => {
+          return Promise.all([
+                LabKeyAPI.getDataSets(), 
+                LabKeyAPI.getDataSetsColumns()
+              ])
+            .then(responses => {
+                var [dataSets, dataSetsColumns] = responses;
+
+                var groupedColumns = _.groupBy(dataSetsColumns.rows, function(row) {
+                  return row["DataSet/Name"];
+                });
+
+                var dataSetMetaData = dataSets.rows.map(function(dataSet) {
+                  dataSet.columns = (groupedColumns[dataSet.Name] !== undefined) ? groupedColumns[dataSet.Name] : [];
+                  return dataSet;
+                });
+
+                self.setState({
+                  dataSetMetaData: dataSetMetaData
+                });
+              })
+            .catch((error) => console.log("Sad times"));
         });
     }
   }

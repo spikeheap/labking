@@ -2,7 +2,7 @@ var _ = require('lodash'),
     React = require("react"),
     Marty = require("marty");
 
-var CohortFilterStore = require("../stores/CohortFilterStore");
+var StudyStore = require("../stores/StudyStore");
 
 var ParticipantList = React.createClass({
 
@@ -24,9 +24,9 @@ var ParticipantList = React.createClass({
 });
 
 module.exports = Marty.createContainer(ParticipantList, {
-  listenTo: CohortFilterStore,
+  listenTo: StudyStore,
   fetch: {
-    allParticipants() { return CohortFilterStore.getParticipants(); },
-    filteredParticipants() { return CohortFilterStore.getFilteredParticipants(); }
+    allParticipants() { return StudyStore.getParticipants(); },
+    filteredParticipants() { return StudyStore.getFilteredParticipants(); }
   }
 });

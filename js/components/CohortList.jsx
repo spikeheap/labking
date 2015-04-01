@@ -3,8 +3,8 @@ var _ = require('lodash'),
     Marty = require("marty");
 
 var CheckboxWithLabel = require("./CheckboxWithLabel.jsx"),
-    CohortFilterActions = require("../actions/CohortFilterActions"),
-    CohortFilterStore = require("../stores/CohortFilterStore");
+    StudyActions = require("../actions/StudyActions"),
+    StudyStore = require("../stores/StudyStore");
 
 var CohortList = React.createClass({
 
@@ -15,9 +15,9 @@ var CohortList = React.createClass({
     });
 
     if(currentState === true){
-      CohortFilterActions.removeCohort(cohort);
+      StudyActions.removeCohort(cohort);
     }else{
-      CohortFilterActions.addCohort(cohort);
+      StudyActions.addCohort(cohort);
     }
   },
 
@@ -45,9 +45,9 @@ var CohortList = React.createClass({
 });
 
 module.exports = Marty.createContainer(CohortList, {
-  listenTo: CohortFilterStore,
+  listenTo: StudyStore,
   fetch: {
-    cohorts() {                 return CohortFilterStore.getCohorts(); },
-    checkedCohorts() {          return CohortFilterStore.getCohortFilter(); },
+    cohorts() {                 return StudyStore.getCohorts(); },
+    checkedCohorts() {          return StudyStore.getStudy(); },
   }
 });

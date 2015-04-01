@@ -54,6 +54,18 @@
     return labkeyQuery("study", "DataSets");
   }
 
+  // Returns all column names for all datasets.
+  // You can restrict to 
+  function getDataSetsColumns(){
+    return labkeyQuery("study", "DataSetColumns");
+  }
+
+  // Get the columns for a single dataset. This takes the `Name` attribute
+  // (not to be confused with `Label`)
+  function getDataSetColumns(dataSetName){
+    return labkeyQuery("study", "DataSetColumns", [LABKEY.Filter.create('DataSet/Name', dataSetName)]);
+  }
+
   function addDataSet(){
     LABKEY.Query.insertRows({
                 schemaName: 'study',
@@ -74,6 +86,7 @@
     getParticipantGroups: getParticipantGroups,
     getParticipantGroupMaps: getParticipantGroupMaps,
     getDataSets: getDataSets,
+    getDataSetsColumns: getDataSetsColumns,
     getParticipantDataSet: getParticipantDataSet
   };
 

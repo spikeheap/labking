@@ -1,6 +1,6 @@
 
 
-var CohortFilterStore = require('./CohortFilterStore');
+var StudyStore = require('./StudyStore');
 
 var uniqueId = 0;
 
@@ -47,7 +47,7 @@ describe('filtered participants', function() {
 
   beforeEach(function() {
     cohort = generateCohort()
-    CohortFilterStore.setState({
+    StudyStore.setState({
       allParticipants: [
         generateParitipant(cohort.rowid+1),
         generateParitipant(cohort.rowid+5),
@@ -56,7 +56,7 @@ describe('filtered participants', function() {
         generateParitipant(cohort.rowid)
       ]
     });
-    CohortFilterStore.addCohortToFilter(cohort);
+    StudyStore.addCohortToFilter(cohort);
   });
 
   xit('includes participants from the ParticipantGroup filter', function() {
@@ -64,7 +64,7 @@ describe('filtered participants', function() {
   });
 
   it('includes participants from the Cohort filter', function() {
-    var filteredParticipants = CohortFilterStore.getFilteredParticipants();
+    var filteredParticipants = StudyStore.getFilteredParticipants();
     expect(filteredParticipants.length).to.equal(3);
     filteredParticipants.forEach(function(participant) {
       expect(participant.Cohort).to.equal(cohort.rowid);
