@@ -7,7 +7,9 @@
       ParticipantList = require("./ParticipantList.jsx");
 
   var ParticipantFilter = React.createClass({
-
+    propTypes: {
+      onSelectedParticipantChange: React.PropTypes.func.isRequired
+    },
     render: function() {
       return (
         <div>

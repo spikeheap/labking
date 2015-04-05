@@ -9,6 +9,9 @@ class StudyActions extends Marty.ActionCreators {
   removeCohort(cohort) {
     this.dispatch(StudyConstants.COHORT_REMOVE, cohort)
   }
+  ensureParticipantIsPresent(participantId) {
+    this.dispatch(StudyConstants.GET_PARTICIPANT, participantId)
+  }
 }
 
 module.exports = Marty.register(StudyActions);
