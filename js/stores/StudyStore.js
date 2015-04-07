@@ -6,6 +6,7 @@
       when = require('marty/when');
 
   var StudyConstants = require("../constants/StudyConstants"),
+      StudyQueries = require("../queries/StudyQueries"),
       LabKeyAPI = require("../lib/LabKeyAPI");
 
   class StudyStore extends Marty.Store {
@@ -18,7 +19,9 @@
       };
       this.handlers = {
         addCohortToFilter: StudyConstants.COHORT_ADD,
-        removeCohortFromFilter: StudyConstants.COHORT_REMOVE
+        removeCohortFromFilter: StudyConstants.COHORT_REMOVE,
+        updateParticipantRecord: StudyConstants.GET_PARTICIPANT,
+        addParticipantRecord: StudyConstants.RECEIVE_PARTICIPANT
       };
     }
 
@@ -169,40 +172,27 @@
     }
 
     /** 
-     * Fetch a complete participant record,
+     * Fetch a complete participant record, if needed,
      * including all data sets.
     **/
-    getParticipantRecord(participantId){
+    updateParticipantRecord(participantId){
+      console.log("updating ", participantId);
       var self = this;
-      return this.fetch('participantRecord',
-        // local
-        () => this.state.participantRecords[participantId],
-        // remote
-        () => {
-          return LabKeyAPI.getDataSets()
-            .then((response) => {
-                var participantDataSetPromises = response.rows.map((dataSet) => LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name));
-                return Promise.all(participantDataSetPromises);
-              })
-            .then((responsesArray) => {
-                var dataSets = {};
-                responsesArray.forEach((response) => {
-                  dataSets[response.queryName] = response.rows[0];
-                });
+      if(this.state.participantRecords[participantId] === undefined){
+        StudyQueries.getParticipant(participantId);
+      }else{
+        console.log("nothing changed");
+      }
+    }
 
-                self.setState({
-                  participantRecords: {
-                    [participantId]: {
-                      dataSets: dataSets
-                    }
-                  }
-                });
+    getParticipantRecords() {
+      return this.state.participantRecords;
+    }
 
-                console.log(this.state.participantRecords[participantId]);
-              })
-            .catch((error) => console.log("Sad times", error));
-        }
-      );
+    addParticipantRecord(participantId, participantRecord){
+      console.log("addParticipantRecord", participantRecord);
+      this.state.participantRecords[participantId] = participantRecord;
+      this.hasChanged();
     }
 
     /**

@@ -12,10 +12,13 @@
     },
     render: function() {
       return (
-        <div>
-          <CohortList />
-
-          <ParticipantList />
+        <div className="pure-g">
+          <div className="pure-u-1 pure-u-md-1-4">
+            <CohortList />
+          </div>
+          <div className="pure-u-1 pure-u-md-3-4">
+            <ParticipantList onSelectedParticipantChange={this.props.onSelectedParticipantChange}/>
+          </div>
         </div>
       );
     }

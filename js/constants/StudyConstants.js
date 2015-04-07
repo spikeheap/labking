@@ -4,6 +4,8 @@
 
   module.exports = Marty.createConstants([
     "COHORT_ADD",
-    "COHORT_REMOVE"
+    "COHORT_REMOVE",
+    "GET_PARTICIPANT",
+    "RECEIVE_PARTICIPANT"
   ]);
 }(module));

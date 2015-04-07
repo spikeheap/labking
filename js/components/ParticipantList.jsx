@@ -13,10 +13,17 @@ var ParticipantList = React.createClass({
     this.props.onSelectedParticipantChange(participantId);
   },
   render: function() {
+    var self = this;
     var allParticipants = this.props.allParticipants;
     var participants = this.props.filteredParticipants.map(function(participant) {
-      return <li key={participant.ParticipantId}>{participant.ParticipantId}</li>;
+      return <li key={participant.ParticipantId}>
+              <a onClick={self.changeSelectedParticipant.bind(self, participant.ParticipantId)}>
+                {participant.ParticipantId}
+              </a>
+            </li>;
     });
+
+    participants = participants.length > 0 ? participants : <li>No participants match the current filter</li>;
 
     return (
       <div>

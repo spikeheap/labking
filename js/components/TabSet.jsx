@@ -22,7 +22,7 @@
       var tabHeaders = [];
 
       this.props.tabs.forEach(function(item, i) {
-        tabHeaders.push(<li key={i}><a onClick={this.handleTabClick.bind(this, i)}>{item.label}</a></li>);
+        tabHeaders.push(<li key={i} className="horizontal-multiline-menu-item"><a className="pure-menu-link" onClick={this.handleTabClick.bind(this, i)}>{item.label}</a></li>);
       }.bind(this));
 
       if(this.props.tabs[this.state.activeTabId] !== undefined){
@@ -31,9 +31,11 @@
 
       return (
         <div>
-          <ul>
-            {tabHeaders}
-          </ul>
+          <div className="pure-menu">
+            <ul className="pure-menu-list">
+              {tabHeaders}
+            </ul>
+          </div>
           <div>{tabContent}</div>
         </div>
       );
