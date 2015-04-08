@@ -4,13 +4,18 @@
   var React = require("react");
 
 
-  var TabSet = require('./TabSet.jsx');
+  var TabSet = require('./TabSet.jsx'),
+      RecordDataSet = require('./RecordDataSet.jsx');
 
   var ParticipantRecord = React.createClass({
 
     propTypes: {
       dataSetMetaData: React.PropTypes.array.isRequired,
       participant: React.PropTypes.object
+    },
+
+    getInitialState: function() {
+      return {editable: true};
     },
 
     render: function() {
@@ -27,12 +32,7 @@
 
       var tabs = [];
       this.props.dataSetMetaData.forEach((dataSet) => {
-        var content = dataSet.columns.map( (column) => {
-          var result = (this.props.participant.dataSets[dataSet.Name] !== undefined) ? this.props.participant.dataSets[dataSet.Name][column.Name] : "N/A";
-          return <li><strong>{column.Label}</strong> {result}</li>;
-        });
-        content = <ul>{content}</ul>;
-        tabs.push({ label: dataSet.Label, content: content})
+        tabs.push({ label: dataSet.Label, content: <RecordDataSet key={dataSet.Name} editable={this.state.editable} dataSetMetaData={dataSet} participantDataSet={this.props.participant.dataSets[dataSet.Name]} />})
       }, this);
 
       return (
