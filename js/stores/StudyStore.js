@@ -176,12 +176,10 @@
      * including all data sets.
     **/
     updateParticipantRecord(participantId){
-      console.log("updating ", participantId);
       var self = this;
+      // TODO should we just do the call anyway?
       if(this.state.participantRecords[participantId] === undefined){
         StudyQueries.getParticipant(participantId);
-      }else{
-        console.log("nothing changed");
       }
     }
 
@@ -190,7 +188,6 @@
     }
 
     addParticipantRecord(participantId, participantRecord){
-      console.log("addParticipantRecord", participantRecord);
       this.state.participantRecords[participantId] = participantRecord;
       this.hasChanged();
     }
@@ -220,7 +217,7 @@
                   dataSet.columns = (groupedColumns[dataSet.Name] !== undefined) ? groupedColumns[dataSet.Name] : [];
                   return dataSet;
                 });
-
+                
                 self.setState({
                   dataSetMetaData: dataSetMetaData
                 });
