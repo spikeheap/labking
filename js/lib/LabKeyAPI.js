@@ -15,6 +15,20 @@
     });
   }
 
+  function labkeyInsertRow(schemaName, dataSetName, entry) {
+    return new Promise(function(resolve, reject) {
+      LABKEY.requiresExt3ClientAPI(true, function() {
+        LABKEY.Query.insertRows({
+          schemaName: schemaName,
+          queryName: dataSetName,
+          rows: [entry],
+          success: resolve, 
+          failure: reject
+        });  
+      });
+    });
+  }
+
   function createLabKeyFilter(field, value){
     return LABKEY.Filter.create(field, value);
   }
@@ -66,17 +80,8 @@
     return labkeyQuery("study", "DataSetColumns", [LABKEY.Filter.create('DataSet/Name', dataSetName)]);
   }
 
-  function addDataSet(){
-    LABKEY.Query.insertRows({
-                schemaName: 'study',
-                queryName: 'Database_Enrollment',
-                rows: [
-                  JSON.parse('{"ParticipantId":"HEP-0004","MRNNumber":"TEST0001","HCVEnroll":"Y","LCID":null,"MedWarNum":"402","LastName":"Hawking","StartDate":"2015/03/05 00:00:00","HCVRUKID":"TEST0001060-0065","HEPType":"Hepatitis C","FirstName":"Steve","NHSNumber":"TEST0001"}')
-                ],
-                successCallback: function(data){
-                  console.log(data);
-                },
-         });  
+  function addDataSetRow(dataSetName, entry){
+    return labkeyInsertRow("study", dataSetName, entry);
   }
 
   module.exports = {
