@@ -60,6 +60,7 @@
     "lodash": "^3.6.0",
     "mocha": "^2.2.1",
     "mustache": "^1.2.0",
+    "newforms": "^0.12.1",
     "node-notifier": "^4.1.2",
     "react-tools": "^0.13.1",
     "reactify": "^1.1.0",
