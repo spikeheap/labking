@@ -5,12 +5,24 @@
   We wrall all our styles in the `.labking` class so we don't bleed out into other
   areas of the site.
 **/
+
 .labking {
   .horizontal-multiline-menu-item {
     display: inline-block;
     *display: inline;
     zoom: 1;
     vertical-align: middle;
+  }
+
+  // PureCSS sets the width of labels as 10em, which is a bit small
+  // 15em * 2 is roughly the breakpoint for xs, which stacks them and makes them full-width anyway.
+  .pure-form-aligned .pure-control-group {
+    label{
+      width: 15em;
+    }
+    input{
+      width: 15em;
+    }
   }
 }
 
