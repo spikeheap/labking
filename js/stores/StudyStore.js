@@ -222,7 +222,7 @@
                   dataSetMetaData: dataSetMetaData
                 });
               })
-            .catch((error) => console.log("Sad times"));
+            .catch((error)
         });
     }
   }
