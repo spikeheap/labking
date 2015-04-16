@@ -192,6 +192,34 @@
       this.hasChanged();
     }
 
+    getLookups(){
+      return this.fetch('fieldLookups',
+        // local
+        () => {
+          this.state.fieldLookups
+        },
+        // remote
+        () => {
+          return LabKeyAPI.getLookups()
+            .then(function(lookups){
+              console.log('remote 2');
+              // var fieldLookups = lookups.map(function(lookupResponse) {
+              //   //console.log(lookupResponse.rows)
+              //   return lookupResponse.rows;
+              // });
+
+              console.log('remote 3', this.state.fieldLookups);
+
+                self.setState({
+                  fieldLookups: fieldLookups
+                });
+              }, errors => { 
+                console.log(errors) 
+             });
+        }
+      );
+    }
+
     /**
      * Fetch the Study metadata
      **/
@@ -221,8 +249,9 @@
                 self.setState({
                   dataSetMetaData: dataSetMetaData
                 });
+              }, errors => { 
+                console.log(errors) 
               })
-            .catch((error)
         });
     }
   }

@@ -2,6 +2,18 @@
   "use strict";
 
   // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
+  function getLabkeyQueries(schemaName){
+    return new Promise(function(resolve, reject) {
+      LABKEY.requiresExt3ClientAPI(true, function() {
+        LABKEY.Query.getQueries({ 
+          schemaName: schemaName, 
+          success: resolve, 
+          failure: reject
+        });
+      });
+    });
+  }
+
   function labkeyQuery(schemaName, queryName, filterArray=[]){
     return new Promise(function(resolve, reject) {
       LABKEY.requiresExt3ClientAPI(true, function() {
@@ -10,7 +22,8 @@
           queryName: queryName, 
           filterArray: filterArray,
           success: resolve, 
-          failure: reject});
+          failure: reject
+        });
       });
     });
   }
@@ -84,6 +97,16 @@
     return labkeyInsertRow("study", dataSetName, entry);
   }
 
+  // Get all the available lookups (valid select-items)
+  function getLookups() {
+    return getLabkeyQueries('lists')
+      .then(function(response) {
+        return Promise.all(response.queries.map(function(lookupName){
+          return labkeyQuery("lists", lookupName.name);
+        }))
+      });
+  }
+
   module.exports = {
     getParticipants: getParticipants,
     getCohorts: getCohorts,
@@ -92,7 +115,8 @@
     getParticipantGroupMaps: getParticipantGroupMaps,
     getDataSets: getDataSets,
     getDataSetsColumns: getDataSetsColumns,
-    getParticipantDataSet: getParticipantDataSet
+    getParticipantDataSet: getParticipantDataSet,
+    getLookups: getLookups
   };
 
 }(window.LABKEY));

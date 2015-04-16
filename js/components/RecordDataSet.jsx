@@ -3,6 +3,10 @@
 
   var React = require("react");
   var forms = require("newforms");
+  var Marty = require("marty");
+
+  var StudyStore = require("../stores/StudyStore"),
+      StudyActions = require("../actions/StudyActions");
 
   var RecordDataSet = React.createClass({
 
@@ -44,12 +48,9 @@
 
       var fieldSet = {};
       this.props.dataSetMetaData.columns.forEach( (column) => {
-        console.log(column.RangeURI);
         if(column.RangeURI === "http://www.w3.org/2001/XMLSchema#dateTime"){
-          console.log(column.Name, "date");
           fieldSet[column.Name] = forms.DateField({initial: this.props.participantDataSet[column.Name] || '', required: false, label: column.Label})
         }else{
-          console.log(column.Name, "text");
           fieldSet[column.Name] = forms.CharField({initial: this.props.participantDataSet[column.Name] || '', required: false, label: column.Label})
         }
         
@@ -58,6 +59,8 @@
       });
 
       var RecordForm = forms.Form.extend(fieldSet);
+
+      //console.log(this.props.lookupList);
 
       return (
         <form onSubmit={this.handleSubmit}>
@@ -73,6 +76,17 @@
     }
   });
 
-  module.exports = RecordDataSet;
+  module.exports = Marty.createContainer(RecordDataSet, {
+    listenTo: StudyStore,
+    fetch: {
+       lookupList() { return StudyStore.getLookups(); }
+    },
+    failed(errors) {
+      return <div className="error">{errors}</div>;
+    },
+    pending() {
+      return <div>Loading...</div>
+    }
+  });
 }());
 
