@@ -1,10 +1,23 @@
-<div ng-controller="ShellController as vm">
-    <header class="clearfix">
-        <ht-top-nav navline="vm.navline"></ht-top-nav>
-    </header>
-    <section id="content" class="content">
-        
-        <div ui-view></div>
+<div class="labking" ng-controller="ShellController as vm">
 
-    </section>
+  <participant-filter on-participant-select="vm.selectParticipant(participant)"></participant-filter>
+
+  <hr/>
+
+  <div ng-show="!vm.currentParticipant || vm.loadingParticipant">
+    <div ng-show="vm.loadingParticipant" class="text-center">
+      <h4>Loading...</h4>
+      <i class="fa fa-spinner fa-pulse fa-5x"></i>
+    </div>
+    <div ng-hide="vm.loadingParticipant" class="text-center">
+      <h4>Please select a participant...</h4>
+      <i class="fa fa-rocket fa-5x"></i>
+    </div>
+  </div>
+
+  <div ng-hide="!vm.currentParticipant || vm.loadingParticipant">
+    <participant-record participant="vm.currentParticipant"></participant-record>
+  </div>
+  
+  <hr/>
 </div>

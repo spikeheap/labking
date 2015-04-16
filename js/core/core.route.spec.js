@@ -29,3 +29,11 @@
 //         });
 //     });
 // });
+
+describe('core', function() {
+  describe('anything to stop a 0-test error', function() {
+    it('does not fail, yet', function() {
+      expect(true).to.equal(true);
+    });
+  });
+});

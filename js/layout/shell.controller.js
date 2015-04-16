@@ -3,29 +3,17 @@
 //ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger'];
 
 /* @ngInject */
-function ShellController($rootScope, $timeout, config, logger) {
-    var vm = this;
-    vm.busyMessage = 'Please wait ...';
-    vm.isBusy = true;
-    $rootScope.showSplash = false;
-    vm.navline = {
-        title: config.appTitle,
-        text: 'Created by Ryan Brooks',
-        link: 'http://twitter.com/spikeheap'
-    };
-
-    activate();
-
-    function activate() {
-        hideSplash();
-    }
-
-    function hideSplash() {
-        //Force a 1 second delay so we can see the splash.
-        $timeout(function() {
-            $rootScope.showSplash = false;
-        }, 1000);
-    }
+function ShellController($scope, $q, logger, DatasetMetadataService, ParticipantService, CohortService) {
+  var self = this;
+  
+  self.selectParticipant = function(participantId) {
+    self.loadingParticipant=true;
+    $q.when(ParticipantService.getParticipantRecord(participantId))
+      .then(function(participant) {
+        self.loadingParticipant=false;
+        self.currentParticipant = participant;
+      });
+  };
 }
 
 module.exports = ShellController;

@@ -14,6 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "pure": "~0.6.0"
+    "pure": "~0.6.0",
+    "fontawesome": "~4.3.0"
   }
 }
