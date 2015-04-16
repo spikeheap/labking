@@ -98,7 +98,7 @@
 
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
-      return gulp.src(['./js/**/*.js','./js/**/*.jsx'])
+      return gulp.src(['./js/**/*.js'])
         .pipe(eslint())
         .pipe(eslint.format())
         //.pipe(eslint.failOnError());
@@ -108,7 +108,7 @@
     // Build JavaScript
     gulp.task('scripts:build', function() {
 
-      var bundler = browserify('./js/index.jsx', {standalone: 'noscope'});
+      var bundler = browserify('./js/labking.module.js', {standalone: 'noscope'});
 
       return bundler
         .transform(babelify)
@@ -122,6 +122,11 @@
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
      
+    gulp.task('copy-partials', function() {
+      return gulp.src(['./js/**/*.html'])
+      .pipe(gulp.dest(path.join(distPath, 'js')));
+    });
+
     // Clean
     gulp.task('clean', function(cb) {
       del(['dist/**'], cb);
@@ -146,6 +151,14 @@
     //   }
     // });
      
+    gulp.task('build:quick', function() {
+      gulp.start('scripts:build',
+        'copy-partials',
+        'styles',
+        'labkey:module',
+        'views');
+    });
+
     // Default task
     gulp.task('default', ['clean'], function() {
         gulp.start('styles', 

@@ -7,7 +7,7 @@ LookupQuery: "lkGender"
 LookupSchema: "lists"
 ```
 
-We're making the crass assumption that the `LookupContainer` will be the same as the container we're operating in, which should be true for most use-cases, and simplifies the implementation considerably.
+We're making the crass assumption that the `LookupContainer` will be the same as the container We're operating in, which should be true for most use-cases, and simplifies the implementation considerably.
 
 We can find the set of available lookups using the `lists` schema:
 
