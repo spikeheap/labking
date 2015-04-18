@@ -15,7 +15,25 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <h4>Tabs</h4>
+
+    <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" class="active"
+          ng-repeat="(categoryName, category) in categories" >
+        <a aria-controls="home" role="tab" 
+            ng-bind="categoryName" 
+            ng-click="selectCategory(category)"></a>
+      </li>
+    </ul>
+
+    <ul class="nav nav-pills nav-justified">
+      <li role="presentation" class="active"
+            ng-repeat="dataSet in selectedCategory">
+          <a aria-controls="home" role="tab" 
+            ng-bind="dataSet.Label"></a>
+      </li>
+    </ul>
+
+
   </div>
 </div>
 <div class="row">

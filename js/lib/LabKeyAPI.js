@@ -14,13 +14,14 @@ function getLabkeyQueries(schemaName){
   });
 }
 
-function labkeyQuery(schemaName, queryName, filterArray=[]){
+function labkeyQuery(schemaName, queryName, filterArray=[], columns=[]){
   return new Promise(function(resolve, reject) {
     LABKEY.requiresExt3ClientAPI(true, function() {
       LABKEY.Query.selectRows({ 
         schemaName: schemaName, 
         queryName: queryName, 
         filterArray: filterArray,
+        columns: columns,
         success: resolve, 
         failure: reject
       });
@@ -78,7 +79,7 @@ function getParticipantGroupMaps(){
 }
 
 function getDataSets(){
-  return labkeyQuery("study", "DataSets");
+  return labkeyQuery("study", "DataSets", [], ['CategoryId/Label', 'CategoryId', 'DataSetId', 'DemographicData', 'DisplayOrder', 'Label', 'Name', 'ProtocolId', 'ShowByDefault', 'Type', 'cohortid']);
 }
 
 // Returns all column names for all datasets.

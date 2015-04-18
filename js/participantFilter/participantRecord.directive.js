@@ -25,15 +25,20 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`
         };
 
+        scope.selectCategory = function(category) {
+          scope.selectedCategory = category
+        };
+
         activate();
 
         function activate() {;
-
+          scope.selectedCategory = {};
+          
           DatasetMetadataService.getMetaData().then(function(metadata) {
             scope.metadata = metadata;
             scope.categories = _.groupBy(scope.metadata, function(dataset) {
-              return dataset.CategoryId;
-            })
+              return dataset['CategoryId/Label'];
+            });
           });
 
           DatasetMetadataService.getLookups().then(function(lookups) {
