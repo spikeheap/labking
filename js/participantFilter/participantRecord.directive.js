@@ -26,19 +26,26 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         };
 
         scope.selectCategory = function(category) {
-          scope.selectedCategory = category
+          scope.selectedCategory = category;
+          scope.selectDataSet(scope.selectedCategory[0]);
+        };
+
+        scope.selectDataSet = function(dataSet) {
+          scope.selectedDataSet = dataSet;
         };
 
         activate();
 
-        function activate() {;
+        function activate() {
           scope.selectedCategory = {};
+          scope.selectedDataSet = {};
           
           DatasetMetadataService.getMetaData().then(function(metadata) {
-            scope.metadata = metadata;
+            scope.metadata = _.sortBy(metadata, 'DisplayOrder');
             scope.categories = _.groupBy(scope.metadata, function(dataset) {
               return dataset['CategoryId/Label'];
             });
+            scope.selectCategory(scope.categories[_.keys(scope.categories)[0]]);
           });
 
           DatasetMetadataService.getLookups().then(function(lookups) {

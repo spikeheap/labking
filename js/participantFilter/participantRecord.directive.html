@@ -17,7 +17,8 @@
   <div class="col-xs-12">
 
     <ul class="nav nav-tabs nav-justified">
-      <li role="presentation" class="active"
+      <li role="presentation" 
+          ng-class="{active: selectedCategory == category}"
           ng-repeat="(categoryName, category) in categories" >
         <a aria-controls="home" role="tab" 
             ng-bind="categoryName" 
@@ -26,10 +27,12 @@
     </ul>
 
     <ul class="nav nav-pills nav-justified">
-      <li role="presentation" class="active"
+      <li role="presentation"
+            ng-class="{active: selectedDataSet == dataSet}"
             ng-repeat="dataSet in selectedCategory">
           <a aria-controls="home" role="tab" 
-            ng-bind="dataSet.Label"></a>
+            ng-bind="dataSet.Label"
+            ng-click="selectDataSet(dataSet)"></a>
       </li>
     </ul>
 
@@ -38,7 +41,7 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-      Participant
+      
   </div>
 </div>
 
