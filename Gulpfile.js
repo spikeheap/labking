@@ -89,6 +89,12 @@
         .pipe(gulp.dest(path.join(distPath, 'styles')));
     });
 
+    // Fonts
+    gulp.task('fonts', function() {
+      return gulp.src('./bower_components/fontawesome/fonts/*')
+        .pipe(gulp.dest(path.join(distPath, 'fonts')));
+    });
+
     gulp.task('scripts:test', function (done) {
       karma.start({
         configFile: __dirname + '/karma.conf.js',
@@ -98,7 +104,7 @@
 
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
-      return gulp.src(['./js/**/*.js','./js/**/*.jsx'])
+      return gulp.src(['./js/**/*.js'])
         .pipe(eslint())
         .pipe(eslint.format())
         //.pipe(eslint.failOnError());
@@ -108,7 +114,7 @@
     // Build JavaScript
     gulp.task('scripts:build', function() {
 
-      var bundler = browserify('./js/index.jsx', {standalone: 'noscope'});
+      var bundler = browserify('./js/labking.module.js', {standalone: 'noscope'});
 
       return bundler
         .transform(babelify)
@@ -122,6 +128,11 @@
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
      
+    gulp.task('copy-partials', function() {
+      return gulp.src(['./js/**/*.html'])
+      .pipe(gulp.dest(path.join(distPath, 'js')));
+    });
+
     // Clean
     gulp.task('clean', function(cb) {
       del(['dist/**'], cb);
@@ -146,9 +157,19 @@
     //   }
     // });
      
+    gulp.task('build:quick', function() {
+      gulp.start('scripts:build',
+        'copy-partials',
+        'styles',
+        'fonts',
+        'labkey:module',
+        'views');
+    });
+
     // Default task
     gulp.task('default', ['clean'], function() {
-        gulp.start('styles', 
+        gulp.start(
+          'styles', 'fonts',
           'scripts:test','scripts:validate', 'scripts:build', 
           'labkey:module', 
           'views');

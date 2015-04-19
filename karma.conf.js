@@ -3,7 +3,7 @@
 
 module.exports = function(config) {
   config.set({
-     plugins : [
+     plugins: [
       'karma-browserify',
       'karma-mocha',
       'karma-chai',
@@ -22,13 +22,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+
+      // Test utilities
+      // 'bower_components/angular-mocks/angular-mocks.js',
+      // 'bower_components/bardjs/dist/bard.js',
+      // 'bower_components/bardjs/dist/bard-ngRouteTester.js',
+      // 'node_modules/bardjs/dist/bard.js',
+
+      // Then our app for testing
+      'js/labking.module.js',
+
+      // Finally, the tests
       'js/**/*.spec.js',
     ],
 
-
-    // list of files to exclude
-    exclude: [
-    ],
 
     logLevel: 'LOG_DEBUG',
 
@@ -37,11 +44,18 @@ module.exports = function(config) {
     browserify: {
       watch: true,
       debug: true,
-      transform: ['babelify'],
-      extensions: ['.js', '.jsx']
+      transform: [
+        'babelify',
+        'debowerify',
+        // ngAnnotate,
+        // // 'brfs',
+        // // 'bulkify'
+      ],
+      extensions: ['.js']
     },
+
     preprocessors: {
-      'js/**/*.spec.js': ['browserify']
+      'js/labking.module.js': ['browserify']
     },
 
 

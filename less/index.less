@@ -1,12 +1,33 @@
-@import "../bower_components/pure/pure.css";
-@import "../bower_components/pure/grids-responsive.css";
-/** 
+@import "../bower_components/bootstrap/less/bootstrap";
+
+// FontAwesome – we need to override the font base so load it in one by one
+@import "../bower_components/fontawesome/less/variables.less";
+@fa-font-path:   "../fonts";
+@import "../bower_components/fontawesome/less/mixins.less";
+@import "../bower_components/fontawesome/less/path.less";
+@import "../bower_components/fontawesome/less/core.less";
+@import "../bower_components/fontawesome/less/larger.less";
+@import "../bower_components/fontawesome/less/fixed-width.less";
+@import "../bower_components/fontawesome/less/list.less";
+@import "../bower_components/fontawesome/less/bordered-pulled.less";
+@import "../bower_components/fontawesome/less/animated.less";
+@import "../bower_components/fontawesome/less/rotated-flipped.less";
+@import "../bower_components/fontawesome/less/stacked.less";
+@import "../bower_components/fontawesome/less/icons.less";
+
+/**
   Labking-specific styling
-  We wrall all our styles in the `.labking` class so we don't bleed out into other
+  We wrap all our styles in the `.labking` class so we don't bleed out into other
   areas of the site.
 **/
 
 .labking {
+
+  // Remove some of the grey padding from the Bootstrap jumbotron
+  .jumbotron {
+    padding: 10px 0;
+  }
+
   .horizontal-multiline-menu-item {
     display: inline-block;
     *display: inline;
