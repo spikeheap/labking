@@ -41,7 +41,15 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-      
+
+      <table class="table table-striped table-condensed">
+        <tr ng-repeat="column in selectedDataSet.columns">
+          <th class="col-xs-1 text-right" scope="row" ng-bind="column.Name"></th>
+          <td class="col-xs-11" ng-bind="participant.dataSets[selectedDataSet.Name][column.Name]"></td>
+          <td ng-if="column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'" ng-bind="participant.dataSets[selectedDataSet.Name][column.Name]"></td>
+        </tr>
+      </table>
+
   </div>
 </div>
 
