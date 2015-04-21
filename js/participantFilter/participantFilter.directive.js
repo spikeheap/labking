@@ -75,6 +75,13 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           });
           scope.$apply();
         });
+
+        scope.participantCount = participantCount;
+        function participantCount(cohort){
+          return scope.allParticipants.filter(function(participant) {
+            return participant.Cohort === cohort.rowid;
+          }).length;
+        }
       }
     };
   }
