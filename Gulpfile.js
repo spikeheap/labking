@@ -30,7 +30,7 @@
 
         browserify = require('browserify'),
         babelify = require('babelify'),
-        react = require('react'),
+        debowerify = require('debowerify'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
 
@@ -118,6 +118,7 @@
 
       return bundler
         .transform(babelify)
+        .transform(debowerify)
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
