@@ -30,7 +30,7 @@
             <th>NHS #</th>
             <th>MRN #</th>
             <th>Name</th>
-            <th>LabKey ID</th>
+            <th>Date of Birth</th>
           </tr>
         </thead>
         <tbody>
@@ -41,7 +41,7 @@
             <td class="col-xs-1"><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>
             <td class="col-xs-1"><span class="label label-info" ng-bind="participant.keyInfo.MRNNumber"></span></td>
             <td>{{participant.keyInfo.FirstName}} {{participant.keyInfo.LastName}}</td>
-            <td><span class="badge badge-info pull-right" ng-bind="participant.ParticipantId"></span></td>
+            <td><span class="badge badge-info pull-right" ng-bind="participant.keyInfo.DOB"></span></td>
           </tr>
         </tbody>
       </table>
