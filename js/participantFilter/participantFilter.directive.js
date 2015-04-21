@@ -10,6 +10,8 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
 
       link: function (scope) {
+
+        scope.allParticipants = [];
         $q.all([
           ParticipantService.getParticipantList(),
           ParticipantService.getParticipantKeyInfo()

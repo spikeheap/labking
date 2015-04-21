@@ -9,4 +9,5 @@ require('angular')
   .module('labking.participantFilter', ['blocks.logger', 'labking.core', 'angularUtils.directives.dirPagination'])
   .directive('participantFilter', require('./participantFilter.directive'))
   .directive('participantRecord', require('./participantRecord.directive'))
+  .directive('datasetView', require('./datasetView.directive'))
   ;

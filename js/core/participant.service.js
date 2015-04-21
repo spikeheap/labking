@@ -16,7 +16,8 @@ function ParticipantService($q, logger) {
   return {
     getParticipantKeyInfo: getParticipantKeyInfo,
     getParticipantRecord: getParticipantRecord,
-    getParticipantList: getParticipantList
+    getParticipantList: getParticipantList,
+    createRecord: createRecord
   }
 
   function getParticipantList() {
@@ -87,12 +88,27 @@ function ParticipantService($q, logger) {
     function updateParticipantCache(responsesArray){
       var dataSets = {};
       responsesArray.forEach((response) => {
-        dataSets[response.queryName] = response.rows[0];
+        dataSets[response.queryName] = response.rows;
       });
 
-      resultsCache.participants[participantId] = { dataSets: dataSets };
+      resultsCache.participants[participantId] = { ParticipantId: participantId, dataSets: dataSets };
     }
   }
+
+  function createRecord(dataSetName, record) {
+    return $q.when(LabKeyAPI.insertRow('study', dataSetName, record))
+      .then(function(response) {
+        var participantId = response.rows[0].ParticipantId;
+        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
+        logger.success("Record saved");
+        return $q.when();
+      })
+      .catch(function(errors){
+        logger.error(exception, errors, "Save failed");
+        return $q.reject(errors);
+      });
+
+  };
 
   function fail(error) {
     var msg = 'query failed. ' + error.data.description;

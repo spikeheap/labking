@@ -171,7 +171,7 @@
     gulp.task('default', ['clean'], function() {
         gulp.start(
           'styles', 'fonts',
-          'scripts:test','scripts:validate', 'scripts:build', 
+          'scripts:test','scripts:validate', 'scripts:build', 'copy-partials',
           'labkey:module', 
           'views');
     });

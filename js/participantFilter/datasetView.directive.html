@@ -1,0 +1,27 @@
+<form name="form" class="form-horizontal" novalidate>
+  <table class="table table-striped table-condensed "
+      ng-class="{'table-bordered': !dataset.DemographicData}">
+    <tbody>
+      <tr ng-repeat="column in dataset.columns">
+        <th class="col-xs-1 text-right" scope="row" ng-bind="column.Label"></th>
+        <td class="col-xs-4" 
+            ng-show="isFormShown()">
+          <input class="form-control" type="text"
+              ng-if="column.RangeURI !== 'http://www.w3.org/2001/XMLSchema#dateTime'"
+              ng-model="$parent.$parent.entry[column.Name]">
+          <input class="form-control" type="date" 
+              ng-if="column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
+              ng-model="$parent.$parent.entry[column.Name]">
+        </td>
+        <td class="col-xs-1" 
+            ng-repeat="row in participant.dataSets[dataset.Name]"
+            ng-bind="row[column.Name]">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div ng-show="isFormShown()">
+    <input type="button" ng-click="reset(form)" value="Reset" />
+    <input type="submit" ng-click="createEntry(entry)" value="Save" />
+  </div>
+</form>

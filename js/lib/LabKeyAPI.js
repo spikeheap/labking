@@ -122,5 +122,6 @@ module.exports = {
   getDataSetsColumns: getDataSetsColumns,
   getDataSet: getDataSet,
   getParticipantDataSet: getParticipantDataSet,
-  getLookups: getLookups
+  getLookups: getLookups,
+  insertRow: labkeyInsertRow
 };
