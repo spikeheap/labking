@@ -55,6 +55,10 @@ function getParticipants(){
   return labkeyQuery("study", "Participant");
 }
 
+function getDataSet(dataSetId){
+  return labkeyQuery("study", dataSetId);
+}
+
 function getParticipantDataSet(participantId, dataSetId){
   return labkeyQuery("study", dataSetId, [createLabKeyFilter('ParticipantId', participantId)]);
 }
@@ -116,6 +120,7 @@ module.exports = {
   getParticipantGroupMaps: getParticipantGroupMaps,
   getDataSets: getDataSets,
   getDataSetsColumns: getDataSetsColumns,
+  getDataSet: getDataSet,
   getParticipantDataSet: getParticipantDataSet,
   getLookups: getLookups
 };

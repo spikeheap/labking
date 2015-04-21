@@ -2,7 +2,7 @@
 var _ = require('lodash');
 module.exports = ParticipantFilter;
 
-function ParticipantFilter(CohortService, ParticipantService) {
+function ParticipantFilter($q, CohortService, ParticipantService) {
     return {
       scope: {
         onParticipantSelect: '&'
@@ -10,12 +10,17 @@ function ParticipantFilter(CohortService, ParticipantService) {
       templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
 
       link: function (scope) {
-
-        ParticipantService.getParticipantList().then(function(participants) {
-          scope.allParticipants = participants;
+        $q.all([
+          ParticipantService.getParticipantList(),
+          ParticipantService.getParticipantKeyInfo()
+        ]).then(function(responses) {
+          var [participants, participantsKeyInfo] = responses;
+          scope.allParticipants = participants.map(function(participant) {
+            participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
+            return participant
+          });
           filterParticipants();
-          scope.$apply();
-        });
+        })
 
         scope.selectedParticipant = {};
         scope.selectParticipant = function(participant, other) {
@@ -31,6 +36,20 @@ function ParticipantFilter(CohortService, ParticipantService) {
           scope.filteredParticipants = scope.allParticipants.filter(function(candidateParticipant) {
             return scope.selectedCohorts[candidateParticipant.Cohort];
           });
+        }
+
+        scope.participantSearchText = '';
+        scope.participantSearchFilter = function(participant) {
+          return (
+            fieldMatches(participant.ParticipantId, scope.participantSearchText) ||
+            fieldMatches(participant.keyInfo.NHSNumber, scope.participantSearchText) ||
+            fieldMatches(participant.keyInfo.FirstName, scope.participantSearchText) ||
+            fieldMatches(participant.keyInfo.LastName, scope.participantSearchText)
+          )
+        };
+
+        function fieldMatches(field, term){
+          return field && field.toUpperCase().indexOf(scope.participantSearchText.toUpperCase()) > -1;
         }
 
         /**
@@ -56,7 +75,6 @@ function ParticipantFilter(CohortService, ParticipantService) {
           });
           scope.$apply();
         });
-
       }
     };
   }

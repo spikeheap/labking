@@ -9,10 +9,12 @@ function ParticipantService($q, logger) {
   // Caching the queries reduces server load
   // and makes the UI more responsive
   var resultsCache = {
-    participants: {}
+    participants: {},
+    participantKeyInfo: {}
   };
 
   return {
+    getParticipantKeyInfo: getParticipantKeyInfo,
     getParticipantRecord: getParticipantRecord,
     getParticipantList: getParticipantList
   }
@@ -31,9 +33,36 @@ function ParticipantService($q, logger) {
       .catch(fail);
 
     function updateParticipantListCache(response){
+      var deferred = $q.defer();
       resultsCache.participantList = response.rows;
+      deferred.resolve();
+      return deferred.promise;
     }
   }
+
+
+  function getParticipantKeyInfo() {
+    const KEY_INFO_DATASET_NAME = 'Database_Enrollment';
+    var getFromCacheIfPossible;
+    if(resultsCache[KEY_INFO_DATASET_NAME]){
+      getFromCacheIfPossible = $q.when();
+    }else{
+      getFromCacheIfPossible = LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME)
+        .then(updateParticipantKeyInfoCache)
+    }
+    return getFromCacheIfPossible
+      .then(function(){ return resultsCache.participantKeyInfo; })
+      .catch(fail);
+
+    function updateParticipantKeyInfoCache(response){
+      var deferred = $q.defer();
+      response.rows.forEach(function(record) {
+        resultsCache.participantKeyInfo[record.ParticipantId] = record;
+      });
+      deferred.resolve();
+      return deferred.promise;
+    }
+  };
 
 
   function getParticipantRecord(participantId) {
