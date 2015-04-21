@@ -41,7 +41,9 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           scope.selectedDataSet = {};
           
           DatasetMetadataService.getMetaData().then(function(metadata) {
-            scope.metadata = _.sortBy(metadata, 'DisplayOrder');
+
+            scope.metadata = _.sortBy(metadata, 'DisplayOrder')
+              .filter(function(dataSet) { return dataSet.ShowByDefault; });
             scope.categories = _.groupBy(scope.metadata, function(dataset) {
               return dataset['CategoryId/Label'];
             });
