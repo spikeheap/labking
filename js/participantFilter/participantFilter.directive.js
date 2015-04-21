@@ -45,6 +45,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           return (
             fieldMatches(participant.ParticipantId, scope.participantSearchText) ||
             fieldMatches(participant.keyInfo.NHSNumber, scope.participantSearchText) ||
+            fieldMatches(participant.keyInfo.MRNNumber, scope.participantSearchText) ||
             fieldMatches(participant.keyInfo.FirstName, scope.participantSearchText) ||
             fieldMatches(participant.keyInfo.LastName, scope.participantSearchText)
           )
