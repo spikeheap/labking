@@ -104,7 +104,7 @@ function ParticipantService($q, logger) {
         return $q.when();
       })
       .catch(function(errors){
-        logger.error(exception, errors, "Save failed");
+        logger.error(errors, "Save failed");
         return $q.reject(errors);
       });
 

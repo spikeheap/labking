@@ -25,8 +25,10 @@ function DatasetView(ParticipantService, DatasetMetadataService, $window) {
 
       scope.getValue = getValue;
       function getValue(row, column){
-        if (column.LookupQuery) {
+        if (column.LookupQuery && scope.lookups[column.LookupQuery]) {
           return _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name]).Label
+        }else if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
+          return new Date(row[column.Name]).toLocaleDateString('en-GB');
         }else{
           return row[column.Name]
         }
@@ -35,6 +37,7 @@ function DatasetView(ParticipantService, DatasetMetadataService, $window) {
       scope.createEntry = function(entry) {
         var record = angular.copy(entry);
         record.ParticipantId = scope.participant.ParticipantId;
+
         ParticipantService.createRecord(scope.dataset.Name, record).then(function() {
           scope.reset();
         })

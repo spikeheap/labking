@@ -1,4 +1,3 @@
-
 'use strict';
 
 // Wraps queries to ensure the LabKey Ext libraries are present and loaded.

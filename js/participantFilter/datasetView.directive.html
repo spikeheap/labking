@@ -2,6 +2,15 @@
   <table class="table table-striped table-condensed "
       ng-class="{'table-bordered': !dataset.DemographicData}">
     <tbody>
+      <tr ng-if="!dataset.DemographicData">
+        <th class="col-xs-1 text-right" scope="row">
+          Record Date
+        </th>
+        <td>
+          <input class="form-control" type="date"
+              ng-model="entry.Date">
+        </td>
+      </tr>
       <tr ng-repeat="column in dataset.columns">
         <th class="col-xs-1 text-right" scope="row" ng-bind="column.Label"></th>
         <td class="col-xs-4" 
@@ -16,8 +25,17 @@
           
           <input class="form-control" type="number"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#int'"
+              ng-pattern="/^\d*$/"
               ng-model="$parent.$parent.entry[column.Name]"
               placeholder="Requires whole numbers only">
+
+          <input class="form-control" type="number"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#double'"
+              ng-pattern="/^\d{0,}\.{0,1}\d{0,}$/"
+              ng-model="$parent.$parent.entry[column.Name]"
+              placeholder="Decimal places allowed"
+              step="any">
+
 
           <input class="form-control" type="date"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
