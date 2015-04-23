@@ -57,10 +57,6 @@
         "catch",
         "typeof"
     ],
-    "requirePaddingNewLinesBeforeLineComments": {
-        "allExcept": "firstAfterCurly"
-    },
-    "requirePaddingNewLinesAfterBlocks": true,
     "safeContextKeyword": "_this",
     "validateLineBreaks": "LF",
     "validateQuoteMarks": "'",

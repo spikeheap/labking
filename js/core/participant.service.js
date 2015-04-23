@@ -1,11 +1,9 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash');
+var LabKeyAPI = require('../lib/LabKeyAPI');
 
 /* @ngInject */
 function ParticipantService($q, logger) {
-  var self = this;
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -14,12 +12,18 @@ function ParticipantService($q, logger) {
     participantKeyInfo: {}
   };
 
+  function fail(error) {
+    var msg = 'query failed. ' + error.data.description;
+    logger.error(msg);
+    return $q.reject(msg);
+  }
+
   return {
     getParticipantKeyInfo: getParticipantKeyInfo,
     getParticipantRecord: getParticipantRecord,
     getParticipantList: getParticipantList,
     createRecord: createRecord
-  }
+  };
 
   function getParticipantList() {
     var getFromCacheIfPossible;
@@ -27,7 +31,7 @@ function ParticipantService($q, logger) {
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = LabKeyAPI.getParticipants()
-        .then(updateParticipantListCache)
+        .then(updateParticipantListCache);
     }
 
     return getFromCacheIfPossible
@@ -50,7 +54,7 @@ function ParticipantService($q, logger) {
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME)
-        .then(updateParticipantKeyInfoCache)
+        .then(updateParticipantKeyInfoCache);
     }
     return getFromCacheIfPossible
       .then(function(){ return resultsCache.participantKeyInfo; })
@@ -64,7 +68,7 @@ function ParticipantService($q, logger) {
       deferred.resolve();
       return deferred.promise;
     }
-  };
+  }
 
 
   function getParticipantRecord(participantId) {
@@ -74,7 +78,7 @@ function ParticipantService($q, logger) {
     }else{
       getFromCacheIfPossible = LabKeyAPI.getDataSets()
         .then(getDataSetsForParticipant)
-        .then(updateParticipantCache)
+        .then(updateParticipantCache);
     }
 
     return getFromCacheIfPossible
@@ -84,7 +88,7 @@ function ParticipantService($q, logger) {
     function getDataSetsForParticipant(response) {
         var participantDataSetPromises = response.rows.map((dataSet) => LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name));
         return Promise.all(participantDataSetPromises);
-    };
+    }
 
     function updateParticipantCache(responsesArray){
       var dataSets = {};
@@ -104,18 +108,8 @@ function ParticipantService($q, logger) {
         logger.success("Record saved");
         return $q.when();
       })
-      .catch(function(errors){
-        logger.error(exception, errors, "Save failed");
-        return $q.reject(errors);
-      });
-
-  };
-
-  function fail(error) {
-    var msg = 'query failed. ' + error.data.description;
-    logger.error(msg);
-    return $q.reject(msg);
-  }
+      .catch(fail);
+  }  
 }
 
 module.exports = ParticipantService;

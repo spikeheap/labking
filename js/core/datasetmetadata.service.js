@@ -5,16 +5,21 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
 
 /* @ngInject */
 function DatasetMetadataService($q, logger) {
-  var self = this;
 
   // We only need to do this request once, and it's quite heavy
   var resultsCache = {};
 
+  function fail(error) {
+    var msg = 'query failed. ' + error.data.description;
+    logger.error(msg);
+    return $q.reject(msg);
+  }
+  
   return {
     getMetaData: getMetaData,
     getLookups: getLookups,
     getCohortCategories: getCohortCategories
-  }
+  };
 
   function getMetaData() {
     var getFromCacheIfPossible;
@@ -25,7 +30,7 @@ function DatasetMetadataService($q, logger) {
             LabKeyAPI.getDataSets(), 
             LabKeyAPI.getDataSetsColumns()
           ])
-        .then(updateMetaDataCache)
+        .then(updateMetaDataCache);
     }
 
     return getFromCacheIfPossible
@@ -81,12 +86,6 @@ function DatasetMetadataService($q, logger) {
         return response.rows;
       });
     }
-  }
-
-  function fail(error) {
-    var msg = 'query failed. ' + error.data.description;
-    logger.error(msg);
-    return $q.reject(msg);
   }
 }
 

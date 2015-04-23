@@ -1,10 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
+var angular = require('angular');
+
 module.exports = DatasetView;
 
 /* @ngInject */
-function DatasetView(ParticipantService, $window) {
+function DatasetView(ParticipantService) {
   return {
     scope: {
       participant: '=',
@@ -13,12 +14,12 @@ function DatasetView(ParticipantService, $window) {
     templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
 
     /* @ngInject */
-    link: function (scope) {
+    link: function(scope) {
 
-      scope.isFormShown = isFormShown
+      scope.isFormShown = isFormShown;
       function isFormShown() {
-        return !(scope.dataset && scope.dataset.DemographicData && 
-                scope.participant && scope.participant.dataSets[scope.dataset.Name].length)
+        return !(scope.dataset && scope.dataset.DemographicData &&
+                scope.participant && scope.participant.dataSets[scope.dataset.Name].length);
       }
 
       scope.createEntry = function(entry) {
@@ -26,7 +27,7 @@ function DatasetView(ParticipantService, $window) {
         record.ParticipantId = scope.participant.ParticipantId;
         ParticipantService.createRecord(scope.dataset.Name, record).then(function() {
           scope.reset();
-        })
+        });
 
       };
 
@@ -34,15 +35,14 @@ function DatasetView(ParticipantService, $window) {
         if (form) {
           form.$setPristine();
           form.$setUntouched();
-        }else{
+        }else {
           scope.reset(scope.form);
         }
         scope.entry = {};
       };
 
-      var _skipWatch = false;
       // Watch the dataset and clear the form on change
-      scope.$watch('dataset', function(after, before) {
+      scope.$watch('dataset', function() {
         scope.reset();
       });
 

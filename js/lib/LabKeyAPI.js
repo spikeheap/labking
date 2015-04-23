@@ -1,5 +1,6 @@
-
 'use strict';
+
+var LABKEY = window.LABKEY;
 
 // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
 function getLabkeyQueries(schemaName){
@@ -92,23 +93,13 @@ function getDataSetsColumns(){
   return labkeyQuery("study", "DataSetColumns");
 }
 
-// Get the columns for a single dataset. This takes the `Name` attribute
-// (not to be confused with `Label`)
-function getDataSetColumns(dataSetName){
-  return labkeyQuery("study", "DataSetColumns", [LABKEY.Filter.create('DataSet/Name', dataSetName)]);
-}
-
-function addDataSetRow(dataSetName, entry){
-  return labkeyInsertRow("study", dataSetName, entry);
-}
-
 // Get all the available lookups (valid select-items)
 function getLookups() {
   return getLabkeyQueries('lists')
     .then(function(response) {
       return Promise.all(response.queries.map(function(lookupName){
         return labkeyQuery("lists", lookupName.name);
-      }))
+      }));
     });
 }
 

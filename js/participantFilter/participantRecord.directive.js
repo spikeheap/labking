@@ -13,18 +13,19 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
 
       /* @ngInject */
       link: function (scope) {
+        var self = this;
         
         // Utility to get at demographic data for the headers
         scope.getEnrolmentDataSet = function() {
           if(scope.participant && scope.participant.dataSets){
-            return scope.participant.dataSets['Database_Enrollment'][0];
+            return scope.participant.dataSets.Database_Enrollment[0];
           }else{
             return {};
           }
         };
 
         scope.getParticipantName = function() {
-          return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`
+          return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`;
         };
 
         scope.selectCategory = function(category) {
@@ -57,7 +58,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           });
 
 
-        };
+        }
       }
     };
   }

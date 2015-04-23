@@ -22,7 +22,7 @@
         concat = require('gulp-concat'),
         del = require('del'),
 
-        eslint = require('gulp-eslint'),
+        jshint = require('gulp-jshint'),
         jscs = require('gulp-jscs'),
 
         karma = require('karma').server,
@@ -106,9 +106,8 @@
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
       return gulp.src(['./js/**/*.js'])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        //.pipe(eslint.failOnError());
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
         //.pipe(jscs());
     });
 

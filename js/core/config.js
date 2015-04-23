@@ -24,4 +24,4 @@ module.exports = {
   config: config,
   configure: configure,
   toastrConfig: toastrConfig
-}
+};

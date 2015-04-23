@@ -1,7 +1,6 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash');
+var LabKeyAPI = require('../lib/LabKeyAPI');
 
 /* @ngInject */
 function CohortService($q, logger) {
@@ -14,33 +13,30 @@ function CohortService($q, logger) {
 
   return {
     getCohorts: getCohorts
-  }
+  };
 
   function getCohorts() {
     var getFromCacheIfPossible;
-    if(resultsCache.cohorts){
+    if (resultsCache.cohorts) {
       getFromCacheIfPossible = $q.when();
-    }else{
+    }else {
       getFromCacheIfPossible = LabKeyAPI.getCohorts()
-        .then(updateCohortCache)
+        .then(updateCohortCache);
     }
 
     return getFromCacheIfPossible
-      .then(function(){ 
-          return resultsCache.cohorts; 
+      .then(function() {
+          return resultsCache.cohorts;
         })
-      .catch(fail);
+      .catch(function(error) {
+        var msg = 'query failed. ' + error.data.description;
+        logger.error(msg);
+        return $q.reject(msg);
+      });
 
-
-    function updateCohortCache(response){
+    function updateCohortCache(response) {
       resultsCache.cohorts = response.rows;
     }
-  }
-
-  function fail(error) {
-    var msg = 'query failed. ' + error.data.description;
-    logger.error(msg);
-    return $q.reject(msg);
   }
 }
 

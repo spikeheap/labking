@@ -1,28 +1,28 @@
 (function() {
-    'use strict';
+  'use strict';
 
-    var angular = require('angular');
-    
-    angular
-        .module('app.core')
-        .run(appRun);
+  var angular = require('angular');
 
-    /* @ngInject */
-    function appRun(routerHelper) {
-        var otherwise = '/404';
-        routerHelper.configureStates(getStates(), otherwise);
+  angular
+  .module('app.core')
+  .run(appRun);
+
+  /* @ngInject */
+  function appRun(routerHelper) {
+    var otherwise = '/404';
+    routerHelper.configureStates(getStates(), otherwise);
+  }
+
+  function getStates() {
+    return [
+    {
+      state: '404',
+      config: {
+        url: '/404',
+        templateUrl: 'app/core/404.html',
+        title: '404'
+      }
     }
-
-    function getStates() {
-        return [
-            {
-                state: '404',
-                config: {
-                    url: '/404',
-                    templateUrl: 'app/core/404.html',
-                    title: '404'
-                }
-            }
-        ];
-    }
+    ];
+  }
 })();
