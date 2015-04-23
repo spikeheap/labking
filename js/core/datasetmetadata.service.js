@@ -49,16 +49,17 @@ function DatasetMetadataService($q, logger) {
     if(resultsCache.lookups){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getLookups().then(updateLookupCache);
+      getFromCacheIfPossible =  $q.when(LabKeyAPI.getLookups()).then(updateLookupCache);
     }
 
     return getFromCacheIfPossible
-      .then(function(){ return resultsCache.lookups; })
+      .then(function(){ return $q.when(resultsCache.lookups); })
       .catch(fail);
 
     function updateLookupCache(lookups){
-      resultsCache.lookups = lookups.map(function(lookupResponse) {
-        return lookupResponse.rows;
+      resultsCache.lookups = {};
+      lookups.forEach(function(lookupResponse) {
+        resultsCache.lookups[lookupResponse.queryName] = lookupResponse;
       });
     }
   }

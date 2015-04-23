@@ -80,5 +80,12 @@
       background: rgb(66, 184, 221); /* this is a light blue */
   }
 
+  // Form styling
+  input {
+    &.ng-invalid {
+      box-shadow: 0 0 1.5px 1px red;
+      background-color: lighten(red, 50%)
+    }
+  }
 }
 

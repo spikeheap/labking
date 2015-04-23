@@ -6,6 +6,9 @@
 function ShellController($scope, $q, logger, DatasetMetadataService, ParticipantService, CohortService) {
   var self = this;
   
+  // Pre-load the lookups
+  DatasetMetadataService.getLookups();
+
   self.selectParticipant = function(participantId) {
     self.loadingParticipant=true;
     $q.when(ParticipantService.getParticipantRecord(participantId))

@@ -3,7 +3,7 @@
 var _ = require('lodash');
 module.exports = DatasetView;
 
-function DatasetView(ParticipantService, $window) {
+function DatasetView(ParticipantService, DatasetMetadataService, $window) {
   return {
     scope: {
       participant: '=',
@@ -12,11 +12,24 @@ function DatasetView(ParticipantService, $window) {
     templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
 
     link: function (scope) {
+      scope.lookups = {};
+      DatasetMetadataService.getLookups().then(function(lookupSet) {
+        scope.lookups = lookupSet;
+      });
 
       scope.isFormShown = isFormShown
       function isFormShown() {
         return !(scope.dataset && scope.dataset.DemographicData && 
                 scope.participant && scope.participant.dataSets[scope.dataset.Name].length)
+      }
+
+      scope.getValue = getValue;
+      function getValue(row, column){
+        if (column.LookupQuery) {
+          return _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name]).Label
+        }else{
+          return row[column.Name]
+        }
       }
 
       scope.createEntry = function(entry) {

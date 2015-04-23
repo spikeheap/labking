@@ -6,16 +6,32 @@
         <th class="col-xs-1 text-right" scope="row" ng-bind="column.Label"></th>
         <td class="col-xs-4" 
             ng-show="isFormShown()">
+          <select ng-model="$parent.$parent.entry[column.Name]"
+                  ng-if="column.LookupQuery"
+                  class="form-control">
+            <option ng-repeat="option in lookups[column.LookupQuery].rows" value="{{option.Key}}">
+              {{option.Label}}
+            </option>
+          </select>
+          
+          <input class="form-control" type="number"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#int'"
+              ng-model="$parent.$parent.entry[column.Name]"
+              placeholder="Requires whole numbers only">
+
+          <input class="form-control" type="date"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
+              ng-model="$parent.$parent.entry[column.Name]">
+
           <input class="form-control" type="text"
-              ng-if="column.RangeURI !== 'http://www.w3.org/2001/XMLSchema#dateTime'"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#string'"
               ng-model="$parent.$parent.entry[column.Name]">
-          <input class="form-control" type="date" 
-              ng-if="column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
-              ng-model="$parent.$parent.entry[column.Name]">
+          
+          
         </td>
-        <td class="col-xs-1" 
+        <td ng-class="{'col-xs-1': !dataset.DemographicData}" 
             ng-repeat="row in participant.dataSets[dataset.Name]"
-            ng-bind="row[column.Name]">
+            ng-bind="getValue(row, column)">
         </td>
       </tr>
     </tbody>
