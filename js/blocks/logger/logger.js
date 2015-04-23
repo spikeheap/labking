@@ -1,7 +1,5 @@
 'use strict';
 
-//logger.$inject = ['$log', 'toastr'];
-
 /* @ngInject */
 //function logger($log, toastr) {
   function logger($log) {

@@ -3,6 +3,7 @@
 var _ = require('lodash');
 module.exports = ParticipantRecord;
 
+/* @ngInject */
 function ParticipantRecord(ParticipantService, DatasetMetadataService) {
     return {
       scope: {
@@ -10,6 +11,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
       },
       templateUrl: '../../labking/js/participantFilter/participantRecord.directive.html',
 
+      /* @ngInject */
       link: function (scope) {
         
         // Utility to get at demographic data for the headers

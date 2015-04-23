@@ -3,6 +3,7 @@
 var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
+/* @ngInject */
 function ParticipantService($q, logger) {
   var self = this;
 

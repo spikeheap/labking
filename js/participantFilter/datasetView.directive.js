@@ -3,6 +3,7 @@
 var _ = require('lodash');
 module.exports = DatasetView;
 
+/* @ngInject */
 function DatasetView(ParticipantService, $window) {
   return {
     scope: {
@@ -11,6 +12,7 @@ function DatasetView(ParticipantService, $window) {
     },
     templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
 
+    /* @ngInject */
     link: function (scope) {
 
       scope.isFormShown = isFormShown

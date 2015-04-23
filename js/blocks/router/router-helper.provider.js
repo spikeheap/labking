@@ -2,7 +2,6 @@
 
 'use strict';
 
-//routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
 /* @ngInject */
 function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
     /* jshint validthis:true */
@@ -18,7 +17,7 @@ function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvi
     };
 
     this.$get = RouterHelper;
-    RouterHelper.$inject = ['$location', '$rootScope', '$state', 'logger'];
+    
     /* @ngInject */
     function RouterHelper($location, $rootScope, $state, logger) {
         var handlingStateChangeError = false;

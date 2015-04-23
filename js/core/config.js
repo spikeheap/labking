@@ -1,6 +1,5 @@
 'use strict';
 
-//toastrConfig.$inject = ['toastr'];
 /* @ngInject */
 function toastrConfig(toastr) {
   toastr.options.timeOut = 4000;
@@ -12,7 +11,6 @@ var config = {
   appTitle: 'labKing'
 };
 
-configure.$inject = ['$logProvider', 'routerHelperProvider', 'exceptionHandlerProvider'];
 /* @ngInject */
 function configure($logProvider, routerHelperProvider, exceptionHandlerProvider) {
   if ($logProvider.debugEnabled) {

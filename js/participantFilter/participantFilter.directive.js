@@ -2,6 +2,7 @@
 var _ = require('lodash');
 module.exports = ParticipantFilter;
 
+/* @ngInject */
 function ParticipantFilter($q, CohortService, ParticipantService) {
     return {
       scope: {
@@ -9,6 +10,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       },
       templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
 
+      /* @ngInject */
       link: function (scope) {
 
         scope.allParticipants = [];

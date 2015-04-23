@@ -1,7 +1,5 @@
 'use strict';
 
-// exception.$inject = ['logger'];
-
 /* @ngInject */
 function exception(logger) {
     var service = {
