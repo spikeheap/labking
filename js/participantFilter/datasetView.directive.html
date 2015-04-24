@@ -55,7 +55,9 @@
     </tbody>
   </table>
   <div ng-show="isFormShown()">
-    <input type="button" ng-click="reset(form)" value="Reset" />
-    <input type="submit" ng-click="createEntry(entry)" value="Save" />
+    <div class="btn-toolbar" role="toolbar" aria-label="Form controls">
+      <input type="button" class-"btn btn-success" ng-click="reset(form)" value="Reset" />
+      <input type="submit" class="btn" ng-click="createEntry(entry)" value="Save" />
+    </div>
   </div>
 </form>
