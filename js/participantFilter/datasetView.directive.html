@@ -4,7 +4,7 @@
     <tbody>
       <tr ng-if="!dataset.DemographicData">
         <th class="col-xs-1 text-right" scope="row">
-          Record Date
+          <label class="control-label">Record Date</label>
         </th>
         <td>
           <input class="form-control" type="date"
@@ -12,7 +12,9 @@
         </td>
       </tr>
       <tr ng-repeat="column in dataset.columns">
-        <th class="col-xs-1 text-right" scope="row" ng-bind="column.Label"></th>
+        <th class="col-xs-1 text-right" scope="row">
+          <label class="control-label" ng-bind="column.Label"></label>
+        </th>
         <td class="col-xs-4" 
             ng-show="isFormShown()">
           <select ng-model="$parent.$parent.entry[column.Name]"
