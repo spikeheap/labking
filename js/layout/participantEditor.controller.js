@@ -3,7 +3,7 @@
 //ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger'];
 
 /* @ngInject */
-function ShellController($scope, $q, logger, DatasetMetadataService, ParticipantService, CohortService) {
+function ParticipantEditorController($scope, $q, logger, DatasetMetadataService, ParticipantService, CohortService) {
   var self = this;
   
   // Pre-load the lookups
@@ -19,4 +19,4 @@ function ShellController($scope, $q, logger, DatasetMetadataService, Participant
   };
 }
 
-module.exports = ShellController;
+module.exports = ParticipantEditorController;
