@@ -18,10 +18,11 @@ function config($provide) {
  * Extend the $exceptionHandler service to also display a toast.
  * @param  {Object} $delegate
  * @param  {Object} exceptionHandler
- * @param  {Object} logger
+ * @param  {Object} injector
  * @return {Function} the decorated $exceptionHandler service
+ * @ngInject
  */
-function extendExceptionHandler($delegate, exceptionHandler, logger) {
+function extendExceptionHandler($delegate, exceptionHandler, $injector) {
     return function(exception, cause) {
         var appErrorPrefix = exceptionHandler.config.appErrorPrefix || '';
         var errorData = {exception: exception, cause: cause};
@@ -36,6 +37,7 @@ function extendExceptionHandler($delegate, exceptionHandler, logger) {
          * @example
          *     throw { message: 'error message we added' };
          */
+        var logger = $injector.get('logger');
         logger.error(exception.message, errorData);
     };
 }

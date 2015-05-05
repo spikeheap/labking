@@ -51,6 +51,7 @@ function ParticipantService($q, logger) {
       getFromCacheIfPossible = LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME)
         .then(updateParticipantKeyInfoCache)
     }
+
     return getFromCacheIfPossible
       .then(function(){ return resultsCache.participantKeyInfo; })
       .catch(fail);
@@ -104,7 +105,7 @@ function ParticipantService($q, logger) {
         return $q.when();
       })
       .catch(function(errors){
-        logger.error(errors, "Save failed");
+        logger.error(errors.exception, "Save failed");
         return $q.reject(errors);
       });
 

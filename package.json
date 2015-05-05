@@ -36,7 +36,8 @@
     "ui.router": "./bower_components/angular-ui-router/release/angular-ui-router.js",
     "ui.utils": "./bower_components/angular-ui-utils/ui-utils.js",
     "angular-utils-pagination": "./bower_components/angular-utils-pagination/dirPagination.js",
-    "angular-utils-pagination-tpls": "./bower_components/angular-utils-pagination/dirPagination.tpl.js"
+    "angular-utils-pagination-tpls": "./bower_components/angular-utils-pagination/dirPagination.tpl.js",
+    "toastr.tpls": "./bower_components/angular-toastr/dist/angular-toastr.tpls.js"
   },
   "browserify-shim": {
     "angular": {
