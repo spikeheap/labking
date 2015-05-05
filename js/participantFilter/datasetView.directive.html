@@ -11,12 +11,12 @@
         </td>
         <td ng-repeat="row in participant.dataSets[dataset.Name]"/>
       </tr>
+
       <tr ng-repeat="column in dataset.columns">
         <th class="col-xs-1 text-right" scope="row">
           <label class="control-label form-control-static" ng-bind="column.Label"></label>
         </th>
-        <td class="col-xs-4" 
-            ng-show="isFormShown()">
+        <td class="col-xs-4" ng-show="isFormShown()">
           <select ng-model="$parent.$parent.entry[column.Name]"
                   ng-if="column.LookupQuery"
                   class="form-control">
@@ -43,9 +43,19 @@
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
               ng-model="$parent.$parent.entry[column.Name]">
 
+          <div class="checkbox"  ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#boolean'">
+            <input type="checkbox"
+                 ng-model="$parent.$parent.entry[column.Name]"
+                 ui-indeterminate="$parent.$parent.entry[column.Name] === undefined">
+          </div>
+          
           <input class="form-control" type="text"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#string'"
               ng-model="$parent.$parent.entry[column.Name]">
+
+          <textarea class="form-control"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#multiLine'"
+              ng-model="$parent.$parent.entry[column.Name]"></textarea>
            
         </td>
 
