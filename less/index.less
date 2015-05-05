@@ -72,6 +72,7 @@
 body {
   line-height: 1;
 }
+
 /**
   Labking-specific styling
   We wrap all our styles in the `.labking` class so we don't bleed out into other
@@ -80,69 +81,18 @@ body {
 
 .labking {
 
+  .form-element {
+    display: inline-block;
+  }
+  
+  .border-left {
+    border-left: 1px solid #ddd;
+  }
+
   // Remove some of the grey padding from the Bootstrap jumbotron
   .jumbotron {
     padding: 10px 0;
   }
 
-  .horizontal-multiline-menu-item {
-    display: inline-block;
-    *display: inline;
-    zoom: 1;
-    vertical-align: middle;
-  }
-
-  // PureCSS sets the width of labels as 10em, which is a bit small
-  // 15em * 2 is roughly the breakpoint for xs, which stacks them and makes them full-width anyway.
-  .pure-form-aligned .pure-control-group {
-    label{
-      width: 15em;
-    }
-    input{
-      width: 15em;
-    }
-  }
-
-  .pull-right {
-    float: right;
-  }
-
-  .btn-primary,
-  .btn-success,
-  .btn-error,
-  .btn-warning,
-  .btn-secondary {
-      color: white;
-      border-radius: 4px;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  }
-
-  .btn-primary {
-    background-color: rgb(0, 120, 231);
-  }
-  
-  .btn-success {
-      background: rgb(28, 184, 65); /* this is a green */
-  }
-
-  .btn-error {
-      background: rgb(202, 60, 60); /* this is a maroon */
-  }
-
-  .btn-warning {
-      background: rgb(223, 117, 20); /* this is an orange */
-  }
-
-  .btn-secondary {
-      background: rgb(66, 184, 221); /* this is a light blue */
-  }
-
-  // Form styling
-  input {
-    &.ng-invalid {
-      box-shadow: 0 0 1.5px 1px red;
-      background-color: lighten(red, 50%)
-    }
-  }
 }
 
