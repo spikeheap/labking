@@ -6,8 +6,7 @@
           <label class="control-label form-control-static">Record Date</label>
         </th>
         <td>
-          <input class="form-control" type="date"
-              ng-model="entry.Date">
+          <input class="form-control" type="date" ng-model="entry.Date" required>
         </td>
         <td ng-repeat="row in participant.dataSets[dataset.Name]"/>
       </tr>
