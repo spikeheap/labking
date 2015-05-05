@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="jumbotron">
+    <div class="container">
+        <h2>{{getParticipantName()}}</h2>
+        <dl class="dl-horizontal">
+          <dt>NHS #:</dt>
+          <dd ng-bind="getEnrolmentDataSet().NHSNumber"></dd>
+          <dt>MRN #:</dt>
+          <dd ng-bind="getEnrolmentDataSet().MRNNumber"></dd>
+          <dt>Date of birth:</dt>
+          <dd ng-bind="getEnrolmentDataSet().DOB"></dd>
+        </dl>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+
+    <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" 
+          ng-class="{active: selectedCategory == category}"
+          ng-repeat="(categoryName, category) in categories" >
+        <a aria-controls="home" role="tab" 
+            ng-bind="categoryName" 
+            ng-click="selectCategory(category)"></a>
+      </li>
+    </ul>
+
+    <ul class="nav nav-pills nav-justified">
+      <li role="presentation"
+            ng-class="{active: selectedDataSet == dataSet}"
+            ng-repeat="dataSet in selectedCategory">
+          <a aria-controls="home" role="tab" 
+            ng-bind="dataSet.Label"
+            ng-click="selectDataSet(dataSet)"></a>
+      </li>
+    </ul>
+
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <dataset-view
+        participant="participant"
+        dataset="selectedDataSet">
+    </dataset-view>
+  </div>
+</div>
+
