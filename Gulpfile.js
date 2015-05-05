@@ -117,8 +117,6 @@
       var bundler = browserify('./js/labking.module.js', {standalone: 'noscope'});
 
       return bundler
-        .transform(babelify)
-        .transform(debowerify)
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())

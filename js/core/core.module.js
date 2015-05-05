@@ -1,5 +1,5 @@
 'use strict';
-require('angular-ui-router');
+require('ui.router');
 
 require('../blocks/exception/exception.module');
 require('../blocks/logger/logger.module');
