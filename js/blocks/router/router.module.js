@@ -1,6 +1,6 @@
 'use strict';
 
-require('angular-ui-router');
+require('ui.router');
 require('../logger/logger.module');
 
 require('angular')
