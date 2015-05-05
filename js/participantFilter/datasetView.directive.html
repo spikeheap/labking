@@ -51,7 +51,7 @@
 
         <td ng-class="{'col-xs-1': !dataset.DemographicData, 'border-left': !$first}" 
             ng-repeat="row in participant.dataSets[dataset.Name]">
-          <span class="form-control-static labking-form-element"
+          <span class="form-control-static labking-form-element text-with-newlines"
                 ng-bind="getValue(row, column)"></span>
         </td>
       </tr>
