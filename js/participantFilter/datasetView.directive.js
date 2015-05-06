@@ -26,11 +26,12 @@ function DatasetView(ParticipantService, DatasetMetadataService, $window) {
       scope.getValue = getValue;
       function getValue(row, column){
         if (column.LookupQuery && scope.lookups[column.LookupQuery]) {
-          return _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name]).Label
+          var val = _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name])
+          return val === undefined ? '' : val.Label;
         }else if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
           return new Date(row[column.Name]).toLocaleDateString('en-GB');
         }else{
-          return row[column.Name]
+          return row[column.Name];
         }
       }
 
