@@ -1,14 +1,7 @@
-(function () {
-    'use strict';
+'use strict';
 
-    var angular = require('angular');
-
-    require('./core/core.module');
-    require('./layout/layout.module');
-
-    angular.module('labking', [
-        'labking.core',
-        'labking.layout'
-    ]);
-
-})();
+require('angular')
+  .module('labking', [
+    require('./core/core.module'),
+    require('./layout/layout.module')
+  ]);

@@ -4,7 +4,6 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
 function DatasetMetadataService($q, logger) {
-  var self = this;
 
   // We only need to do this request once, and it's quite heavy
   var resultsCache = {};
@@ -13,7 +12,7 @@ function DatasetMetadataService($q, logger) {
     getMetaData: getMetaData,
     getLookups: getLookups,
     getCohortCategories: getCohortCategories
-  }
+  };
 
   function getMetaData() {
     var getFromCacheIfPossible;
@@ -21,10 +20,10 @@ function DatasetMetadataService($q, logger) {
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.all([
-            LabKeyAPI.getDataSets(), 
+            LabKeyAPI.getDataSets(),
             LabKeyAPI.getDataSetsColumns()
           ])
-        .then(updateMetaDataCache)
+        .then(updateMetaDataCache);
     }
 
     return getFromCacheIfPossible
@@ -34,7 +33,7 @@ function DatasetMetadataService($q, logger) {
     function updateMetaDataCache(responses){
       var [dataSets, dataSetsColumns] = responses;
       var groupedColumns = _.groupBy(dataSetsColumns.rows, function(row) {
-        return row["DataSet/Name"];
+        return row['DataSet/Name'];
       });
 
       resultsCache.metadata = dataSets.rows.map(function(dataSet) {
@@ -49,7 +48,7 @@ function DatasetMetadataService($q, logger) {
     if(resultsCache.lookups){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible =  $q.when(LabKeyAPI.getLookups()).then(updateLookupCache);
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getLookups()).then(updateLookupCache);
     }
 
     return getFromCacheIfPossible

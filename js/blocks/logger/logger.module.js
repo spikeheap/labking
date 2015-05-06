@@ -1,7 +1,6 @@
 'use strict';
 
-//
-require('toastr.tpls')
+require('toastr.tpls');
 
 require('angular')
   .module('blocks.logger', ['toastr'])

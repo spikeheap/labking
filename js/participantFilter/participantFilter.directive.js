@@ -19,19 +19,19 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           var [participants, participantsKeyInfo] = responses;
           scope.allParticipants = participants.map(function(participant) {
             participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
-            return participant
+            return participant;
           });
           filterParticipants();
-        })
+        });
 
         scope.selectedParticipant = {};
-        scope.selectParticipant = function(participant, other) {
+        scope.selectParticipant = function(participant) {
           scope.selectedParticipant = participant;
           scope.onParticipantSelect({participant: participant.ParticipantId});
         };
 
         scope.isParticipantSelected = function(participant){
-          return participant, participant && participant.ParticipantId && scope.selectedParticipant.ParticipantId === participant.ParticipantId;
+          return participant && participant.ParticipantId && scope.selectedParticipant.ParticipantId === participant.ParticipantId;
         };
 
         function filterParticipants(){
@@ -48,11 +48,11 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
             fieldMatches(participant.keyInfo.MRNNumber, scope.participantSearchText) ||
             fieldMatches(participant.keyInfo.FirstName, scope.participantSearchText) ||
             fieldMatches(participant.keyInfo.LastName, scope.participantSearchText)
-          )
+          );
         };
 
         function fieldMatches(field, term){
-          return field && field.toUpperCase().indexOf(scope.participantSearchText.toUpperCase()) > -1;
+          return field && field.toUpperCase().indexOf(term.toUpperCase()) > -1;
         }
 
         /**

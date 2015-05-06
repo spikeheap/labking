@@ -11,18 +11,18 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
       templateUrl: '../../labking/js/participantFilter/participantRecord.directive.html',
 
       link: function (scope) {
-        
+
         // Utility to get at demographic data for the headers
         scope.getEnrolmentDataSet = function() {
           if(scope.participant && scope.participant.dataSets){
-            return scope.participant.dataSets['Database_Enrollment'][0];
+            return scope.participant.dataSets.Database_Enrollment[0];
           }else{
             return {};
           }
         };
 
         scope.getParticipantName = function() {
-          return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`
+          return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`;
         };
 
         scope.selectCategory = function(category) {
@@ -39,7 +39,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         function activate() {
           scope.selectedCategory = {};
           scope.selectedDataSet = {};
-          
+
           DatasetMetadataService.getMetaData().then(function(metadata) {
 
             scope.metadata = _.sortBy(metadata, 'DisplayOrder')
@@ -53,9 +53,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           DatasetMetadataService.getLookups().then(function(lookups) {
             self.lookups = lookups;
           });
-
-
-        };
+        }
       }
     };
   }
