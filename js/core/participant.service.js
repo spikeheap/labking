@@ -25,7 +25,7 @@ function ParticipantService($q, logger) {
     if(resultsCache.participantList){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getParticipants()
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getParticipants())
         .then(updateParticipantListCache)
     }
 
@@ -48,7 +48,7 @@ function ParticipantService($q, logger) {
     if(resultsCache[KEY_INFO_DATASET_NAME]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME)
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME))
         .then(updateParticipantKeyInfoCache)
     }
 
@@ -72,7 +72,7 @@ function ParticipantService($q, logger) {
     if(resultsCache.participants[participantId]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getDataSets()
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSets())
         .then(getDataSetsForParticipant)
         .then(updateParticipantCache)
     }
@@ -82,8 +82,8 @@ function ParticipantService($q, logger) {
       .catch(fail);
 
     function getDataSetsForParticipant(response) {
-        var participantDataSetPromises = response.rows.map((dataSet) => LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name));
-        return Promise.all(participantDataSetPromises);
+        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name)));
+        return $q.all(participantDataSetPromises);
     };
 
     function updateParticipantCache(responsesArray){

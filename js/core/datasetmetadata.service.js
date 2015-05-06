@@ -69,7 +69,7 @@ function DatasetMetadataService($q, logger) {
     if(resultsCache.cohortCategories){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getLookups().then(updateCohortCategoriesCache);
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getLookups().then(updateCohortCategoriesCache));
     }
 
     return getFromCacheIfPossible

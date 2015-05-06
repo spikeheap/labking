@@ -76,7 +76,6 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           scope.cohorts.forEach(function(cohort) {
             scope.selectedCohorts[cohort.rowid] = true;
           });
-          scope.$apply();
         });
 
         scope.participantCount = participantCount;

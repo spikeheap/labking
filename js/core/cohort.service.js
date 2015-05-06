@@ -20,7 +20,7 @@ function CohortService($q, logger) {
     if(resultsCache.cohorts){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getCohorts()
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getCohorts())
         .then(updateCohortCache)
     }
 
