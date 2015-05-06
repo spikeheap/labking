@@ -55,7 +55,7 @@
       return src
     };
 
-     
+
     // Module definition XML for LabKey
     gulp.task('labkey:module', function() {
       return gulp.src("./templates/module.xml.mustache")
@@ -120,13 +120,13 @@
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
-  
+
         .pipe(sourcemaps.init({loadMaps: true}))
           //.pipe(uglify())
         .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
         .pipe(gulp.dest(path.join(distPath, 'js')));
     });
-     
+
     gulp.task('copy-partials', function() {
       return gulp.src(['./js/**/*.html'])
       .pipe(gulp.dest(path.join(distPath, 'js')));
@@ -155,7 +155,7 @@
     //     gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
     //   }
     // });
-     
+
     gulp.task('build:quick', function() {
       gulp.start('scripts:build',
         'copy-partials',
@@ -170,10 +170,10 @@
         gulp.start(
           'styles', 'fonts',
           'scripts:test','scripts:validate', 'scripts:build', 'copy-partials',
-          'labkey:module', 
+          'labkey:module',
           'views');
     });
-    
+
     // Watch
     // gulp.task('watch', function() {
     //   gulp.watch('less/**/*.less', ['styles']);
