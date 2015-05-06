@@ -1,5 +1,4 @@
 <div ng-controller="ParticipantEditorController as vm">
-
   <participant-filter on-participant-select="vm.selectParticipant(participant)"></participant-filter>
 
   <hr/>
@@ -18,6 +17,6 @@
   <div ng-hide="!vm.currentParticipant || vm.loadingParticipant">
     <participant-record participant="vm.currentParticipant"></participant-record>
   </div>
-  
+
   <hr/>
 </div>

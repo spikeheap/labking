@@ -1,7 +1,12 @@
 'use strict';
 
-require('angular')
+var angular = require('angular');
+
+require('./core/core.module'),
+require('./layout/layout.module')
+
+angular
   .module('labking', [
-    require('./core/core.module'),
-    require('./layout/layout.module')
+    'labking.core',
+    'labking.layout'
   ]);
