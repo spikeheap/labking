@@ -80,6 +80,7 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['PhantomJS2'],
+    browserNoActivityTimeout: 50000, // default 10k timeout too short for compilation
 
   });
 };

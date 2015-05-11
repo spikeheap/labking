@@ -5,7 +5,7 @@
   "main": "Gulpfile.js",
   "scripts": {
     "build": "gulp",
-    "test": "gulp test",
+    "test": "./node_modules/.bin/karma start --single-run",
     "watch": "gulp watch"
   },
   "deployPath": "/Volumes/LabKey Server/externalModules",
@@ -76,6 +76,7 @@
     "karma": "^0.12.31",
     "karma-browserify": "^4.1.2",
     "karma-chai": "^0.1.0",
+    "karma-cli": "0.0.4",
     "karma-mocha": "^0.1.10",
     "karma-osx-reporter": "^0.2.0",
     "karma-phantomjs2-launcher": "^0.1.5",
