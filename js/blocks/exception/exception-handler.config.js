@@ -1,5 +1,4 @@
-
-// config.$inject = ['$provide'];
+'use strict';
 
 /**
  * Configure by setting an optional string value for appErrorPrefix.
@@ -11,8 +10,6 @@
 function config($provide) {
     $provide.decorator('$exceptionHandler', extendExceptionHandler);
 }
-
-// extendExceptionHandler.$inject = ['$delegate', 'exceptionHandler', 'logger'];
 
 /**
  * Extend the $exceptionHandler service to also display a toast.

@@ -3,7 +3,8 @@
 
     var project = require('./package.json'),
         path = require('path'),
-        distPath = path.join(__dirname, 'dist', 'web', project.name),
+        outputPath = path.join(__dirname, 'dist', project.name),
+        distWebPath = path.join(outputPath, 'web', project.name),
         production = process.env.NODE_ENV === 'production';
 
     // Load plugins
@@ -55,7 +56,7 @@
       return src
     };
 
-     
+
     // Module definition XML for LabKey
     gulp.task('labkey:module', function() {
       return gulp.src("./templates/module.xml.mustache")
@@ -66,18 +67,18 @@
             version: project.version.split(".").slice(0,2).join('.')
         }))
         .pipe(rename('module.xml'))
-        .pipe(gulp.dest(path.join(__dirname, 'dist', 'config')));
+        .pipe(gulp.dest(path.join(outputPath, 'config')));
     });
 
     // Generates the XML definitions for each WebPart
     gulp.task('labkey:webParts', function() {
       return mustachifyWebParts(project.webParts, "./templates/webpart.xml.mustache")
-        .pipe(gulp.dest(path.join(__dirname, 'dist', 'views')));
+        .pipe(gulp.dest(path.join(outputPath, 'views')));
     });
 
     gulp.task('views', ['labkey:webParts'], function() {
       return gulp.src("./views/**/*.html")
-        .pipe(gulp.dest(path.join(__dirname, 'dist', 'views')));
+        .pipe(gulp.dest(path.join(outputPath, 'views')));
     });
 
     // Styles
@@ -86,13 +87,13 @@
         .pipe(less())
         .pipe(rename({ suffix: '.min' }))
         .pipe(minifycss())
-        .pipe(gulp.dest(path.join(distPath, 'styles')));
+        .pipe(gulp.dest(path.join(distWebPath, 'styles')));
     });
 
     // Fonts
     gulp.task('fonts', function() {
       return gulp.src('./bower_components/fontawesome/fonts/*')
-        .pipe(gulp.dest(path.join(distPath, 'fonts')));
+        .pipe(gulp.dest(path.join(distWebPath, 'fonts')));
     });
 
     gulp.task('scripts:test', function (done) {
@@ -120,16 +121,16 @@
         .bundle()
         .pipe(source('index.js'))
         .pipe(buffer())
-  
+
         .pipe(sourcemaps.init({loadMaps: true}))
           //.pipe(uglify())
         .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
-        .pipe(gulp.dest(path.join(distPath, 'js')));
+        .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
-     
+
     gulp.task('copy-partials', function() {
       return gulp.src(['./js/**/*.html'])
-      .pipe(gulp.dest(path.join(distPath, 'js')));
+      .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
 
     // Clean
@@ -155,7 +156,7 @@
     //     gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
     //   }
     // });
-     
+
     gulp.task('build:quick', function() {
       gulp.start('scripts:build',
         'copy-partials',
@@ -170,10 +171,10 @@
         gulp.start(
           'styles', 'fonts',
           'scripts:test','scripts:validate', 'scripts:build', 'copy-partials',
-          'labkey:module', 
+          'labkey:module',
           'views');
     });
-    
+
     // Watch
     // gulp.task('watch', function() {
     //   gulp.watch('less/**/*.less', ['styles']);

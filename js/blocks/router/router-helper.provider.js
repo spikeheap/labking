@@ -2,10 +2,9 @@
 
 'use strict';
 
-//routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
 /* @ngInject */
 function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
-    /* jshint validthis:true */
+    var angular = require('angular');
     var config = {
         docTitle: undefined,
         resolveAlways: {}
@@ -84,7 +83,7 @@ function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvi
 
         function updateDocTitle() {
             $rootScope.$on('$stateChangeSuccess',
-                function(event, toState, toParams, fromState, fromParams) {
+                function(event, toState) {
                     stateCounts.changes++;
                     handlingStateChangeError = false;
                     var title = config.docTitle + ' ' + (toState.title || '');
@@ -95,4 +94,4 @@ function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvi
     }
 }
 
-module.exports = routerHelperProvider
+module.exports = routerHelperProvider;

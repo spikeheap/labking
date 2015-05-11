@@ -1,10 +1,8 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash');
+var LabKeyAPI = require('../lib/LabKeyAPI');
 
 function ParticipantService($q, logger) {
-  var self = this;
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -18,15 +16,15 @@ function ParticipantService($q, logger) {
     getParticipantRecord: getParticipantRecord,
     getParticipantList: getParticipantList,
     createRecord: createRecord
-  }
+  };
 
   function getParticipantList() {
     var getFromCacheIfPossible;
     if(resultsCache.participantList){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getParticipants()
-        .then(updateParticipantListCache)
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getParticipants())
+        .then(updateParticipantListCache);
     }
 
     return getFromCacheIfPossible
@@ -48,8 +46,8 @@ function ParticipantService($q, logger) {
     if(resultsCache[KEY_INFO_DATASET_NAME]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME)
-        .then(updateParticipantKeyInfoCache)
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME))
+        .then(updateParticipantKeyInfoCache);
     }
 
     return getFromCacheIfPossible
@@ -64,7 +62,7 @@ function ParticipantService($q, logger) {
       deferred.resolve();
       return deferred.promise;
     }
-  };
+  }
 
 
   function getParticipantRecord(participantId) {
@@ -72,9 +70,9 @@ function ParticipantService($q, logger) {
     if(resultsCache.participants[participantId]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = LabKeyAPI.getDataSets()
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSets())
         .then(getDataSetsForParticipant)
-        .then(updateParticipantCache)
+        .then(updateParticipantCache);
     }
 
     return getFromCacheIfPossible
@@ -82,9 +80,9 @@ function ParticipantService($q, logger) {
       .catch(fail);
 
     function getDataSetsForParticipant(response) {
-        var participantDataSetPromises = response.rows.map((dataSet) => LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name));
-        return Promise.all(participantDataSetPromises);
-    };
+        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name)));
+        return $q.all(participantDataSetPromises);
+    }
 
     function updateParticipantCache(responsesArray){
       var dataSets = {};
@@ -97,19 +95,18 @@ function ParticipantService($q, logger) {
   }
 
   function createRecord(dataSetName, record) {
-    return $q.when(LabKeyAPI.insertRow('study', dataSetName, record))
+    return $q.when(LabKeyAPI.insertRow(dataSetName, record))
       .then(function(response) {
         var participantId = response.rows[0].ParticipantId;
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
-        logger.success("Record saved");
+        logger.success('Record saved');
         return $q.when();
       })
       .catch(function(errors){
-        logger.error(errors.exception, "Save failed");
+        logger.error(errors.exception, 'Save failed');
         return $q.reject(errors);
       });
-
-  };
+  }
 
   function fail(error) {
     var msg = 'query failed. ' + error.data.description;
