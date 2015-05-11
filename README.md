@@ -1,6 +1,8 @@
 # LabKing :crown:
 _Rule over your subjects in LabKey_
 
+[![Build Status](https://travis-ci.org/spikeheap/labking.svg)](https://travis-ci.org/spikeheap/labking)
+
 ## Building the project
 
 The build process does a few things:
