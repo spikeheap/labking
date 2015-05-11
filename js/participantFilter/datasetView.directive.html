@@ -8,7 +8,11 @@
         <td>
           <input class="form-control" type="date" ng-model="entry.Date" required autofocus>
         </td>
-        <td ng-repeat="row in participant.dataSets[dataset.Name]"/>
+        <td ng-class="{'col-xs-1': !dataset.DemographicData, 'border-left': !$first}"
+            ng-repeat="row in participant.dataSets[dataset.Name]">
+          <span class="form-control-static labking-form-element text-with-newlines"
+                ng-bind="getValueAsDate(row.date)"></span>
+        </td>
       </tr>
 
       <tr ng-repeat="column in dataset.columns">
@@ -23,7 +27,7 @@
               {{option.Label}}
             </option>
           </select>
-          
+
           <input class="form-control" type="number"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#int'"
               ng-pattern="/^\d*$/"
@@ -47,7 +51,7 @@
                  ng-model="$parent.$parent.entry[column.Name]"
                  ui-indeterminate="$parent.$parent.entry[column.Name] === undefined">
           </div>
-          
+
           <input class="form-control" type="text"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#string'"
               ng-model="$parent.$parent.entry[column.Name]">
@@ -55,10 +59,10 @@
           <textarea class="form-control"
               ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#multiLine'"
               ng-model="$parent.$parent.entry[column.Name]"></textarea>
-           
+
         </td>
 
-        <td ng-class="{'col-xs-1': !dataset.DemographicData, 'border-left': !$first}" 
+        <td ng-class="{'col-xs-1': !dataset.DemographicData, 'border-left': !$first}"
             ng-repeat="row in participant.dataSets[dataset.Name]">
           <span class="form-control-static labking-form-element text-with-newlines"
                 ng-bind="getValue(row, column)"></span>

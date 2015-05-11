@@ -29,10 +29,15 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
           var val = _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
           return val === undefined ? '' : val.Label;
         }else if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
-          return new Date(row[column.Name]).toLocaleDateString('en-GB');
+          return getValueAsDate(row[column.Name]);
         }else{
           return row[column.Name];
         }
+      }
+
+      scope.getValueAsDate = getValueAsDate;
+      function getValueAsDate(value) {
+        return new Date(value).toLocaleDateString('en-GB');
       }
 
       scope.createEntry = function(record) {
