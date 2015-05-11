@@ -35,8 +35,7 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
         }
       }
 
-      scope.createEntry = function(entry) {
-        var record = Object.assign({}, entry);
+      scope.createEntry = function(record) {
         record.ParticipantId = scope.participant.ParticipantId;
 
         ParticipantService.createRecord(scope.dataset.Name, record).then(function() {
