@@ -41,10 +41,12 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
+    <a class="btn btn-default" ng-class="{disabled: !canAddEntries()}" ng-click="openEditModal()">Add entry</a>
     <dataset-view
         participant="participant"
         dataset="selectedDataSet">
     </dataset-view>
+
   </div>
 </div>
 

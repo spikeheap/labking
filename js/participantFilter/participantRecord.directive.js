@@ -54,6 +54,12 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
             self.lookups = lookups;
           });
         }
+
+        scope.canAddEntries = canAddEntries;
+        function canAddEntries() {
+          return !(scope.selectedDataSet && scope.selectedDataSet.DemographicData &&
+                  scope.participant && scope.participant.dataSets[scope.selectedDataSet.Name].length);
+        }
       }
     };
   }

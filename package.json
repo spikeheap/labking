@@ -37,6 +37,8 @@
     "angular": "./bower_components/angular/angular.js",
     "ui.router": "./bower_components/angular-ui-router/release/angular-ui-router.js",
     "ui.utils": "./bower_components/angular-ui-utils/ui-utils.js",
+    "ui.grid": "./bower_components/angular-ui-grid/ui-grid.js",
+    "angular-bootstrap": "./bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
     "angular-utils-pagination": "./bower_components/angular-utils-pagination/dirPagination.js",
     "angular-utils-pagination-tpls": "./bower_components/angular-utils-pagination/dirPagination.tpl.js",
     "toastr.tpls": "./bower_components/angular-toastr/dist/angular-toastr.tpls.js"
@@ -80,7 +82,7 @@
     "karma-cli": "0.0.4",
     "karma-mocha": "^0.1.10",
     "karma-osx-reporter": "^0.2.0",
-    "karma-phantomjs2-launcher": "^0.1.5",
+    "karma-phantomjs2-launcher": "^0.1.6",
     "lodash": "^3.6.0",
     "mocha": "^2.2.1",
     "mustache": "^1.2.0",

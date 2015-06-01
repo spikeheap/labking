@@ -17,12 +17,6 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
         scope.lookups = lookupSet;
       });
 
-      scope.isFormShown = isFormShown;
-      function isFormShown() {
-        return !(scope.dataset && scope.dataset.DemographicData &&
-                scope.participant && scope.participant.dataSets[scope.dataset.Name].length);
-      }
-
       scope.getValue = getValue;
       function getValue(row, column){
         if (column.LookupQuery && scope.lookups[column.LookupQuery]) {
@@ -39,34 +33,6 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
       function getValueAsDate(value) {
         return new Date(value).toLocaleDateString('en-GB');
       }
-
-      scope.createEntry = function(record) {
-        record.ParticipantId = scope.participant.ParticipantId;
-
-        ParticipantService.createRecord(scope.dataset.Name, record).then(function() {
-          scope.reset();
-        });
-      };
-
-      scope.reset = function(form) {
-        if (form) {
-          form.$setPristine();
-          form.$setUntouched();
-        }else{
-          scope.reset(scope.form);
-        }
-        scope.entry = {};
-      };
-
-      // Watch the dataset and clear the form on change
-      scope.$watch('dataset', function() {
-        scope.reset();
-      });
-
-      // Watch the participant and clear the form on change
-      scope.$watch('participant', function() {
-        scope.reset();
-      });
     }
   };
 }
