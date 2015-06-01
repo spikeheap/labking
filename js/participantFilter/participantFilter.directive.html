@@ -36,7 +36,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-class="{'list-group-item-info': isParticipantSelected(participant)}"
+          <tr
+              ng-class="{'list-group-item-info': isParticipantSelected(participant)}"
               dir-paginate="participant in filteredParticipants | filter: participantSearchFilter | itemsPerPage: 10"
               ng-click="selectParticipant(participant)"
               role="button">

@@ -17,11 +17,11 @@
   <div class="col-xs-12">
 
     <ul class="nav nav-tabs nav-justified">
-      <li role="presentation" 
+      <li role="presentation"
           ng-class="{active: selectedCategory == category}"
           ng-repeat="(categoryName, category) in categories" >
-        <a aria-controls="home" role="tab" 
-            ng-bind="categoryName" 
+        <a aria-controls="home" role="tab"
+            ng-bind="categoryName"
             ng-click="selectCategory(category)"></a>
       </li>
     </ul>
@@ -30,7 +30,7 @@
       <li role="presentation"
             ng-class="{active: selectedDataSet == dataSet}"
             ng-repeat="dataSet in selectedCategory">
-          <a aria-controls="home" role="tab" 
+          <a aria-controls="home" role="tab"
             ng-bind="dataSet.Label"
             ng-click="selectDataSet(dataSet)"></a>
       </li>
