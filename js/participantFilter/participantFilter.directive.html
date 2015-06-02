@@ -3,12 +3,12 @@
     <h4>Cohort list</h4>
     <ul class="list-group">
       <li class="list-group-item"
-            ng-class="{'list-group-item-info': isCohortSelected(cohort), 'text-muted': !isCohortSelected(cohort)}"
-            ng-repeat="cohort in cohorts"
-            ng-click="toggleCohort(cohort)"
+            ng-class="{'list-group-item-info': vm.isCohortSelected(cohort), 'text-muted': !vm.isCohortSelected(cohort)}"
+            ng-repeat="cohort in vm.cohorts"
+            ng-click="vm.toggleCohort(cohort)"
             role="button">
           <span ng-bind="cohort.label"></span>
-          <span ng-bind="participantCount(cohort)" class="badge pull-right"></span>
+          <span ng-bind="vm.participantCount(cohort)" class="badge pull-right"></span>
         </li>
     </ul>
   </div>
@@ -19,7 +19,7 @@
         <div class="form-inline">
           <div class="form-group">
             <label for="labking-participant-search">Search</label>
-            <input type="search" class="form-control" id="labking-participant-search" placeholder="NHS #, MRN or name" autofocus ng-model="participantSearchText">
+            <input type="search" class="form-control" id="labking-participant-search" placeholder="NHS #, MRN or name" autofocus ng-model="vm.participantSearchText">
           </div>
         </div>
       <div>
@@ -37,9 +37,9 @@
         </thead>
         <tbody>
           <tr
-              ng-class="{'list-group-item-info': isParticipantSelected(participant)}"
-              dir-paginate="participant in filteredParticipants | filter: participantSearchFilter | itemsPerPage: 10"
-              ng-click="selectParticipant(participant)"
+              ng-class="{'list-group-item-info': vm.isParticipantSelected(participant)}"
+              dir-paginate="participant in vm.filteredParticipants | filter: vm.participantSearchFilter | itemsPerPage: 10"
+              ng-click="vm.selectParticipant(participant)"
               role="button">
             <td><span class="label label-primary" ng-bind="participant.ParticipantId"></span></td>
             <td><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>

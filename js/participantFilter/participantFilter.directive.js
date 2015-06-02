@@ -9,45 +9,47 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       },
       templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
 
-      link: function (scope) {
-
-        scope.allParticipants = [];
+      controllerAs: 'vm',
+      bindToController: true,
+      controller: function () {
+        var self = this;
+        self.allParticipants = [];
         $q.all([
           ParticipantService.getParticipantList(),
           ParticipantService.getParticipantKeyInfo()
         ]).then(function(responses) {
           var [participants, participantsKeyInfo] = responses;
-          scope.allParticipants = participants.map(function(participant) {
+          self.allParticipants = participants.map(function(participant) {
             participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
             return participant;
           });
           filterParticipants();
         });
 
-        scope.selectedParticipant = {};
-        scope.selectParticipant = function(participant) {
-          scope.selectedParticipant = participant;
-          scope.onParticipantSelect({participant: participant.ParticipantId});
+        self.selectedParticipant = {};
+        self.selectParticipant = function(participant) {
+          self.selectedParticipant = participant;
+          self.onParticipantSelect({participantId: participant.ParticipantId});
         };
 
-        scope.isParticipantSelected = function(participant){
-          return participant && participant.ParticipantId && scope.selectedParticipant.ParticipantId === participant.ParticipantId;
+        self.isParticipantSelected = function(participant){
+          return participant && participant.ParticipantId && self.selectedParticipant.ParticipantId === participant.ParticipantId;
         };
 
         function filterParticipants(){
-          scope.filteredParticipants = scope.allParticipants.filter(function(candidateParticipant) {
-            return scope.selectedCohorts[candidateParticipant.Cohort];
+          self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
+            return self.selectedCohorts[candidateParticipant.Cohort];
           });
         }
 
-        scope.participantSearchText = '';
-        scope.participantSearchFilter = function(participant) {
+        self.participantSearchText = '';
+        self.participantSearchFilter = function(participant) {
           return (
-            fieldMatches(participant.ParticipantId, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.NHSNumber, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.MRNNumber, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.FirstName, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.LastName, scope.participantSearchText)
+            fieldMatches(participant.ParticipantId, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.NHSNumber, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.MRNNumber, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.FirstName, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.LastName, self.participantSearchText)
           );
         };
 
@@ -61,26 +63,26 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
          If a cohort is IN the filter this will remove the e
         **/
 
-        scope.selectedCohorts = {};
+        self.selectedCohorts = {};
 
-        scope.toggleCohort = function(cohort) {
-          scope.selectedCohorts[cohort.rowid] = !scope.selectedCohorts[cohort.rowid];
+        self.toggleCohort = function(cohort) {
+          self.selectedCohorts[cohort.rowid] = !self.selectedCohorts[cohort.rowid];
           filterParticipants();
         };
-        scope.isCohortSelected = function(cohort) {
-          return scope.selectedCohorts[cohort.rowid];
+        self.isCohortSelected = function(cohort) {
+          return self.selectedCohorts[cohort.rowid];
         };
 
         CohortService.getCohorts().then(function(cohorts) {
-          scope.cohorts = cohorts;
-          scope.cohorts.forEach(function(cohort) {
-            scope.selectedCohorts[cohort.rowid] = true;
+          self.cohorts = cohorts;
+          self.cohorts.forEach(function(cohort) {
+            self.selectedCohorts[cohort.rowid] = true;
           });
         });
 
-        scope.participantCount = participantCount;
+        self.participantCount = participantCount;
         function participantCount(cohort){
-          return scope.allParticipants.filter(function(participant) {
+          return self.allParticipants.filter(function(participant) {
             return participant.Cohort === cohort.rowid;
           }).length;
         }

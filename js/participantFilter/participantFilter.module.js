@@ -19,5 +19,5 @@ require('angular')
   .directive('participantFilter', require('./participantFilter.directive'))
   .directive('participantRecord', require('./participantRecord.directive'))
   .directive('datasetView', require('./datasetView.directive'))
-  .controller('datasetEditModalController', require('./datasetEditModal.controller'))
+  .controller('DatasetEditModalController', require('./datasetEditModal.controller'))
   ;
