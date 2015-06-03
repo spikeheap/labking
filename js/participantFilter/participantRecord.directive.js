@@ -74,7 +74,8 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
             controller: 'DatasetEditModalController as vm',
             resolve: {
               entry: function () {
-                return entry;
+                // We clone the entry because if the action is cancelled we don't want the changes to persist.
+                return _.cloneDeep(entry);
               },
               selectedDataset: function () {
                 return self.selectedDataSet;
