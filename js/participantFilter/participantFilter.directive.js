@@ -20,6 +20,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
         self.toggleCohort = toggleCohort;
 
         self.participantSearchText = '';
+        self.clearSearch = clearSearch;
         self.participantSearchFilter = participantSearchFilter;
 
         self.allParticipants = [];
@@ -64,6 +65,11 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
             return self.selectedCohorts[candidateParticipant.Cohort];
           });
+        }
+
+        function clearSearch(){
+          console.log('Clearing', self.participantSearchText);
+          self.participantSearchText = '';
         }
 
         function participantSearchFilter(participant) {

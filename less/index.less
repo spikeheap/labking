@@ -1,4 +1,20 @@
 
+// FontAwesome – we need to override the font base so load it in one by one
+/** MUST BE LOADED BEFORE BOOTSTRAP – otherwise FA breaks input feedback styling, https://github.com/FortAwesome/Font-Awesome/issues/4313#issuecomment-75190960 **/
+@import "../bower_components/fontawesome/less/variables.less";
+@fa-font-path:   "../fonts";
+@import "../bower_components/fontawesome/less/mixins.less";
+@import "../bower_components/fontawesome/less/path.less";
+@import "../bower_components/fontawesome/less/core.less";
+@import "../bower_components/fontawesome/less/larger.less";
+@import "../bower_components/fontawesome/less/fixed-width.less";
+@import "../bower_components/fontawesome/less/list.less";
+@import "../bower_components/fontawesome/less/bordered-pulled.less";
+@import "../bower_components/fontawesome/less/animated.less";
+@import "../bower_components/fontawesome/less/rotated-flipped.less";
+@import "../bower_components/fontawesome/less/stacked.less";
+@import "../bower_components/fontawesome/less/icons.less";
+
 @import "../bower_components/bootstrap/less/variables";
 @font-family-sans-serif:  Verdana,Arial,Helvetica,sans serif;
 @font-family-base:        @font-family-sans-serif;
@@ -53,22 +69,6 @@
 @import "../bower_components/bootstrap/less/utilities.less";
 @import "../bower_components/bootstrap/less/responsive-utilities.less";
 
-
-// FontAwesome – we need to override the font base so load it in one by one
-@import "../bower_components/fontawesome/less/variables.less";
-@fa-font-path:   "../fonts";
-@import "../bower_components/fontawesome/less/mixins.less";
-@import "../bower_components/fontawesome/less/path.less";
-@import "../bower_components/fontawesome/less/core.less";
-@import "../bower_components/fontawesome/less/larger.less";
-@import "../bower_components/fontawesome/less/fixed-width.less";
-@import "../bower_components/fontawesome/less/list.less";
-@import "../bower_components/fontawesome/less/bordered-pulled.less";
-@import "../bower_components/fontawesome/less/animated.less";
-@import "../bower_components/fontawesome/less/rotated-flipped.less";
-@import "../bower_components/fontawesome/less/stacked.less";
-@import "../bower_components/fontawesome/less/icons.less";
-
 @import (less) "../bower_components/angular-toastr/dist/angular-toastr.css";
 
 body {
@@ -87,6 +87,11 @@ body {
 
   .form-element {
     display: inline-block;
+  }
+
+  // Override Bootstrap's modification to make feedback elements unclickable.
+  .form-control-feedback {
+      pointer-events: auto;
   }
 
   .validated-form {

@@ -17,13 +17,15 @@
         <button class="btn btn-large btn-primary pull-right" type="button" disabled="disabled">Add participant</button>
 
         <div class="form-inline">
-          <div class="form-group">
+          <div class="form-group has-feedback">
             <label for="labking-participant-search">Search</label>
             <input type="search" class="form-control" id="labking-participant-search" placeholder="NHS #, MRN or name" autofocus ng-model="vm.participantSearchText">
+            <a ng-show="vm.participantSearchText" ng-click="vm.clearSearch()" class="text-muted">
+              <span class="fa fa-remove form-control-feedback"></span>
+            </a>
           </div>
         </div>
       <div>
-      <h4>Participants</h4>
 
       <table class="table table-condensed">
         <thead>
