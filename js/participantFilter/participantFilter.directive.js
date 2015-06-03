@@ -68,7 +68,6 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
         }
 
         function clearSearch(){
-          console.log('Clearing', self.participantSearchText);
           self.participantSearchText = '';
         }
 

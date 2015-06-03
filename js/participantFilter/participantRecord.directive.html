@@ -8,7 +8,7 @@
           <dt>MRN #:</dt>
           <dd ng-bind="vm.getEnrolmentDataSet().MRNNumber"></dd>
           <dt>Date of birth:</dt>
-          <dd ng-bind="vm.getEnrolmentDataSet().DOB"></dd>
+          <dd ng-bind="vm.getEnrolmentDataSet().DOB | limitTo: 'dd-MM-yyyy'.length"></dd>
         </dl>
     </div>
   </div>
