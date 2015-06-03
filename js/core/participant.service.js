@@ -1,6 +1,7 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI');
+var LabKeyAPI = require('../lib/LabKeyAPI'),
+    _ = require('lodash');
 
 function ParticipantService($q, logger) {
 
@@ -15,7 +16,8 @@ function ParticipantService($q, logger) {
     getParticipantKeyInfo: getParticipantKeyInfo,
     getParticipantRecord: getParticipantRecord,
     getParticipantList: getParticipantList,
-    createRecord: createRecord
+    createRecord: createRecord,
+    updateRecord: updateRecord
   };
 
   function getParticipantList() {
@@ -99,7 +101,7 @@ function ParticipantService($q, logger) {
       .then(function(response) {
         var participantId = response.rows[0].ParticipantId;
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
-        logger.success('Record saved');
+        logger.success('Record created');
         return $q.when();
       })
       .catch(function(errors){
@@ -109,11 +111,13 @@ function ParticipantService($q, logger) {
   }
 
   function updateRecord(dataSetName, record) {
-    return $q.when(LabKeyAPI.insertRow(dataSetName, record))
+    return $q.when(LabKeyAPI.updateDataSetRow(dataSetName, record))
       .then(function(response) {
         var participantId = response.rows[0].ParticipantId;
-        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
-        logger.success('Record saved');
+        var dataset = resultsCache.participants[participantId].dataSets[dataSetName];
+        var i = _.findIndex(dataset, { 'lsid': record.lsid});
+        dataset[i] = record;
+        logger.success('Record updated');
         return $q.when();
       })
       .catch(function(errors){
@@ -123,7 +127,7 @@ function ParticipantService($q, logger) {
   }
 
   function fail(error) {
-    var msg = 'query failed. '
+    var msg = 'query failed. ';
     if(error.data !== undefined){
       msg = msg + error.data.description;
     }

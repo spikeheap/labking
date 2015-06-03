@@ -67,41 +67,27 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         }
 
         function openEditModal(entry) {
-          var isCreateAction = (entry === undefined);
-          var modalInstance = $modal.open({
+          $modal.open({
             animation: true,
             templateUrl: '../../labking/js/participantFilter/datasetEditModal.html',
             controller: 'DatasetEditModalController as vm',
             resolve: {
-              entry: function () {
+              participantId: function() {
+                return self.participant.ParticipantId;
+              },
+              entry: function() {
                 // We clone the entry because if the action is cancelled we don't want the changes to persist.
                 return _.cloneDeep(entry);
               },
               selectedDataset: function () {
                 return self.selectedDataSet;
               },
-              lookups: function () {
-                return DatasetMetadataService.getLookups();
+              onSave: function() {
+                return (entry === undefined) ? ParticipantService.createRecord : ParticipantService.updateRecord;
               }
             }
           });
-
-          if(isCreateAction){
-            modalInstance.result.then(createRecord);
-          }else{
-            modalInstance.result.then(updateRecord);
-          }
         }
-
-        function createRecord(record){
-          record.ParticipantId = self.participant.ParticipantId;
-          return ParticipantService.createRecord(self.selectedDataSet.Name, record);
-        }
-
-        function updateRecord(record){
-          return ParticipantService.updateRecord(self.selectedDataSet.Name, record);
-        }
-
       }
     };
   }
