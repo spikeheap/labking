@@ -46,51 +46,61 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           }else{
             return {};
           }
-        };
+        }
 
         function getParticipantName() {
           return `${self.getEnrolmentDataSet().FirstName} ${self.getEnrolmentDataSet().LastName}`;
-        };
+        }
 
         function selectCategory(category) {
           self.selectedCategory = category;
           selectDataSet(self.selectedCategory[0]);
-        };
+        }
 
         function selectDataSet(dataSet) {
           self.selectedDataSet = dataSet;
-        };
+        }
 
         function canAddEntries() {
           return !(self.selectedDataSet && self.selectedDataSet.DemographicData &&
                   self.participant && self.participant.dataSets[self.selectedDataSet.Name].length);
         }
 
-        function openEditModal(create=true) {
+        function openEditModal(entry) {
+          var isCreateAction = (entry === undefined);
           var modalInstance = $modal.open({
             animation: true,
             templateUrl: '../../labking/js/participantFilter/datasetEditModal.html',
             controller: 'DatasetEditModalController as vm',
             resolve: {
-              isCreate: function () {
-                return create;
+              entry: function () {
+                return entry;
               },
               selectedDataset: function () {
                 return self.selectedDataSet;
               },
               lookups: function () {
                 return DatasetMetadataService.getLookups();
-              },
+              }
             }
           });
 
-          modalInstance.result.then(function (entry) {
-            entry.ParticipantId = self.participant.ParticipantId;
-
-            return ParticipantService.createRecord(self.selectedDataSet.Name, entry)
-
-          });
+          if(isCreateAction){
+            modalInstance.result.then(createRecord);
+          }else{
+            modalInstance.result.then(updateRecord);
+          }
         }
+
+        function createRecord(record){
+          record.ParticipantId = self.participant.ParticipantId;
+          return ParticipantService.createRecord(self.selectedDataSet.Name, record);
+        }
+
+        function updateRecord(record){
+          return ParticipantService.updateRecord(self.selectedDataSet.Name, record);
+        }
+
       }
     };
   }

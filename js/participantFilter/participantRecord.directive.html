@@ -43,9 +43,10 @@
   <div class="col-xs-12">
     <dataset-view
         participant="vm.participant"
-        dataset="vm.selectedDataSet">
+        dataset="vm.selectedDataSet"
+        on-edit="vm.openEditModal(entry)">
     </dataset-view>
-    <a class="btn btn-primary" ng-class="{disabled: !vm.canAddEntries()}" ng-click="vm.openEditModal(true)">Add entry</a>
+    <a class="btn btn-primary" ng-class="{disabled: !vm.canAddEntries()}" ng-click="vm.openEditModal()">Add entry</a>
   </div>
 </div>
 

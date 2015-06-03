@@ -2,19 +2,41 @@
 
 module.exports = DatasetEditModalController;
 
-/* @ngInject */
-function DatasetEditModalController($modalInstance, isCreate, selectedDataset, lookups) {
+/**
+ * Controller for the dataset editor Bootstrap modal.
+ *
+ * @param $modalInstance the associated modal.
+ * @param entry the entry to edit, or undefined if a new entry is being created
+ * @param selectedDataset the metadata for the entry.
+ * @param lookups the options for `select` elements.
+ * @ngInject
+ **/
+function DatasetEditModalController($modalInstance, entry, selectedDataset, lookups) {
   var self = this;
 
-  self.editTypeLabel = isCreate ? 'Create' : 'Edit';
+  self.editTypeLabel = 'Edit';
+  self.entry = entry;
   self.dataset = selectedDataset;
   self.lookups = lookups;
 
-  self.submit = function () {
-    $modalInstance.close(self.entry);
-  };
+  self.submit = submit;
+  self.cancel = cancel;
 
-  self.cancel = function () {
+  activate();
+
+
+  function activate(){
+    if(entry === undefined || entry === {}){
+      self.editTypeLabel = 'Create';
+      self.entry = {};
+    }
+  }
+
+  function submit() {
+    $modalInstance.close(self.entry);
+  }
+
+  function cancel() {
     $modalInstance.dismiss('cancel');
-  };
+  }
 }

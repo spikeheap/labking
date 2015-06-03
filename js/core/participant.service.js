@@ -108,6 +108,20 @@ function ParticipantService($q, logger) {
       });
   }
 
+  function updateRecord(dataSetName, record) {
+    return $q.when(LabKeyAPI.insertRow(dataSetName, record))
+      .then(function(response) {
+        var participantId = response.rows[0].ParticipantId;
+        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
+        logger.success('Record saved');
+        return $q.when();
+      })
+      .catch(function(errors){
+        logger.error(errors.exception, 'Save failed');
+        return $q.reject(errors);
+      });
+  }
+
   function fail(error) {
     var msg = 'query failed. '
     if(error.data !== undefined){
