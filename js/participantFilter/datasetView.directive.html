@@ -1,33 +1,22 @@
 
 <h3 ng-show="!vm.participant.dataSets[vm.dataset.Name].length">No entries available</h3>
-<table ng-show="!!vm.participant.dataSets[vm.dataset.Name].length" class="table table-striped table-condensed">
+
+<table ng-show="!!vm.participant.dataSets[vm.dataset.Name].length" class="table table-bordered table-hover table-condensed">
+
+  <thead>
+    <th ng-if="!vm.dataset.DemographicData">Result Date</th>
+    <th ng-repeat="column in vm.dataset.columns" ng-bind="column.Label"></th>
+    <th>Actions</th>
+  </thead>
+
   <tbody>
-    <tr ng-if="!vm.dataset.DemographicData">
-      <th class="col-xs-1 text-right" scope="row">
-        <label class="control-label form-control-static">Record Date</label>
-      </th>
-      <td ng-class="{'col-xs-1': !vm.dataset.DemographicData, 'border-left': !$first}"
-          ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
-        <span class="form-control-static labking-form-element text-with-newlines"
-              ng-bind="vm.getValueAsDate(row.date)"></span>
-      </td>
-    </tr>
-
-    <tr ng-repeat="column in vm.dataset.columns">
-      <th class="col-xs-1 text-right" scope="row">
-        <label class="control-label form-control-static" ng-bind="column.Label"></label>
-      </th>
-
-      <td ng-class="{'col-xs-1': !vm.dataset.DemographicData, 'border-left': !$first}"
-          ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
-        <span class="form-control-static labking-form-element text-with-newlines"
-              ng-bind="vm.getValue(row, column)"></span>
-      </td>
-    </tr>
-    <tr>
-      <td ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
-        <a class="btn btn-primary" ng-class="{disabled: false}" ng-click="vm.onEdit({entry: row})">Edit</a>
+    <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
+      <td ng-if="!vm.dataset.DemographicData" ng-bind="vm.getValueAsDate(row.date)"></td>
+      <td ng-repeat="column in vm.dataset.columns" ng-bind="vm.getValue(row, column)"></td>
+      <td>
+        <a class="btn btn-xs" ng-class="{disabled: false}" ng-click="vm.onEdit({entry: row})"><span class="fa fa-fw fa-edit"></span>Edit</a>
       </td>
     </tr>
   </tbody>
+
 </table>

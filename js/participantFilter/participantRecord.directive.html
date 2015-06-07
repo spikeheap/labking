@@ -26,7 +26,8 @@
       </li>
     </ul>
 
-    <ul class="nav nav-pills nav-justified">
+    <h3 class="nav-header">Dataset:</h3>
+    <ul class="nav nav-pills nav-padded">
       <li role="presentation"
             ng-class="{active: vm.selectedDataSet == dataSet}"
             ng-repeat="dataSet in vm.selectedCategory">
@@ -46,7 +47,7 @@
         dataset="vm.selectedDataSet"
         on-edit="vm.openEditModal(entry)">
     </dataset-view>
-    <a class="btn btn-primary" ng-class="{disabled: !vm.canAddEntries()}" ng-click="vm.openEditModal()">Add entry</a>
+    <a class="btn btn-success" ng-if="vm.canAddEntries()" ng-click="vm.openEditModal()">Add entry</a>
   </div>
 </div>
 

@@ -14,7 +14,7 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
 
     controllerAs: 'vm',
     bindToController: true,
-    controller: function($modal) {
+    controller: function() {
       var self = this;
 
       self.lookups = {};

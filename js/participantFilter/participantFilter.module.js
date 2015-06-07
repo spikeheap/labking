@@ -5,7 +5,7 @@ require('../blocks/logger/logger.module');
 
 require('angular-utils-pagination');
 require('angular-bootstrap');
-require('ui.grid');
+
 require('ui.utils');
 
 require('angular')
@@ -13,8 +13,7 @@ require('angular')
     'labking.core',
     'angularUtils.directives.dirPagination',
     'ui.indeterminate',
-    'ui.bootstrap',
-    'ui.grid'
+    'ui.bootstrap'
   ])
   .directive('participantFilter', require('./participantFilter.directive'))
   .directive('participantRecord', require('./participantRecord.directive'))
