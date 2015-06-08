@@ -52,11 +52,11 @@ zip -r labking_0.0.1.zip labking
 Finally we can push this up to GitHub using the following:
 
 ```
-git release create -a labking_0.0.1.zip -m "Preview release of participant search, view and record creation" 0.0.1
+hub release create -a labking_0.0.1.zip -m "Preview release of participant search, view and record creation" 0.0.1
 ```
 
 If you've added the changes, you can use the changelog instead:
 
 ```
-git release create -a labking_0.0.1.zip -f CHANGELOG.md 0.0.1
+hub release create -a labking_0.0.1.zip -f CHANGELOG.md 0.0.1
 ```
