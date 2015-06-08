@@ -13,6 +13,7 @@ Then do the Git Flow release:
 
 ```
 git flow release start 0.0.1
+# Bump the version in package.json now!
 git flow release finish 0.0.1
 ```
 
