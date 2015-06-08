@@ -9,47 +9,77 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       },
       templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
 
-      link: function (scope) {
+      controllerAs: 'vm',
+      bindToController: true,
+      controller: function () {
+        var self = this;
 
-        scope.allParticipants = [];
-        $q.all([
-          ParticipantService.getParticipantList(),
-          ParticipantService.getParticipantKeyInfo()
-        ]).then(function(responses) {
-          var [participants, participantsKeyInfo] = responses;
-          scope.allParticipants = participants.map(function(participant) {
-            participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
-            return participant;
+        self.selectedCohorts = {};
+        self.participantCount = participantCount;
+        self.isCohortSelected = isCohortSelected;
+        self.toggleCohort = toggleCohort;
+
+        self.participantSearchText = '';
+        self.clearSearch = clearSearch;
+        self.participantSearchFilter = participantSearchFilter;
+
+        self.allParticipants = [];
+        self.selectedParticipant = {};
+        self.selectParticipant = selectParticipant;
+        self.isParticipantSelected = isParticipantSelected;
+
+        activate();
+
+        function activate(){
+          $q.all([
+            ParticipantService.getParticipantList(),
+            ParticipantService.getParticipantKeyInfo()
+          ]).then(function(responses) {
+            var [participants, participantsKeyInfo] = responses;
+            self.allParticipants = participants.map(function(participant) {
+              participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
+              return participant;
+            });
+            filterParticipants();
           });
-          filterParticipants();
-        });
 
-        scope.selectedParticipant = {};
-        scope.selectParticipant = function(participant) {
-          scope.selectedParticipant = participant;
-          scope.onParticipantSelect({participant: participant.ParticipantId});
-        };
-
-        scope.isParticipantSelected = function(participant){
-          return participant && participant.ParticipantId && scope.selectedParticipant.ParticipantId === participant.ParticipantId;
-        };
-
-        function filterParticipants(){
-          scope.filteredParticipants = scope.allParticipants.filter(function(candidateParticipant) {
-            return scope.selectedCohorts[candidateParticipant.Cohort];
+          CohortService.getCohorts().then(function(cohorts) {
+            self.cohorts = cohorts;
+            self.cohorts.forEach(function(cohort) {
+              self.selectedCohorts[cohort.rowid] = true;
+            });
+            filterParticipants();
           });
         }
 
-        scope.participantSearchText = '';
-        scope.participantSearchFilter = function(participant) {
+        function selectParticipant(participant) {
+          self.selectedParticipant = participant;
+          self.onParticipantSelect({participantId: participant.ParticipantId});
+        }
+
+        function isParticipantSelected(participant){
+          return participant && participant.ParticipantId && self.selectedParticipant.ParticipantId === participant.ParticipantId;
+        }
+
+        function filterParticipants(){
+          self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
+            return self.selectedCohorts[candidateParticipant.Cohort];
+          });
+        }
+
+        function clearSearch(){
+          self.participantSearchText = '';
+        }
+
+        function participantSearchFilter(participant) {
           return (
-            fieldMatches(participant.ParticipantId, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.NHSNumber, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.MRNNumber, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.FirstName, scope.participantSearchText) ||
-            fieldMatches(participant.keyInfo.LastName, scope.participantSearchText)
+            fieldMatches(participant.ParticipantId, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.NHSNumber, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.MRNNumber, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.FirstName, self.participantSearchText) ||
+            fieldMatches(participant.keyInfo.LastName, self.participantSearchText)
           );
-        };
+        }
 
         function fieldMatches(field, term){
           return field && field.toUpperCase().indexOf(term.toUpperCase()) > -1;
@@ -61,26 +91,17 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
          If a cohort is IN the filter this will remove the e
         **/
 
-        scope.selectedCohorts = {};
-
-        scope.toggleCohort = function(cohort) {
-          scope.selectedCohorts[cohort.rowid] = !scope.selectedCohorts[cohort.rowid];
+        function toggleCohort(cohort) {
+          self.selectedCohorts[cohort.rowid] = !self.selectedCohorts[cohort.rowid];
           filterParticipants();
-        };
-        scope.isCohortSelected = function(cohort) {
-          return scope.selectedCohorts[cohort.rowid];
-        };
+        }
 
-        CohortService.getCohorts().then(function(cohorts) {
-          scope.cohorts = cohorts;
-          scope.cohorts.forEach(function(cohort) {
-            scope.selectedCohorts[cohort.rowid] = true;
-          });
-        });
+        function isCohortSelected(cohort) {
+          return self.selectedCohorts[cohort.rowid];
+        }
 
-        scope.participantCount = participantCount;
         function participantCount(cohort){
-          return scope.allParticipants.filter(function(participant) {
+          return self.allParticipants.filter(function(participant) {
             return participant.Cohort === cohort.rowid;
           }).length;
         }

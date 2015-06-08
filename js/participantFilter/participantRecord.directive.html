@@ -1,14 +1,14 @@
 <div class="row">
   <div class="jumbotron">
     <div class="container">
-        <h2>{{getParticipantName()}}</h2>
+        <h2>{{vm.getParticipantName()}}</h2>
         <dl class="dl-horizontal">
           <dt>NHS #:</dt>
-          <dd ng-bind="getEnrolmentDataSet().NHSNumber"></dd>
+          <dd ng-bind="vm.getEnrolmentDataSet().NHSNumber"></dd>
           <dt>MRN #:</dt>
-          <dd ng-bind="getEnrolmentDataSet().MRNNumber"></dd>
+          <dd ng-bind="vm.getEnrolmentDataSet().MRNNumber"></dd>
           <dt>Date of birth:</dt>
-          <dd ng-bind="getEnrolmentDataSet().DOB"></dd>
+          <dd ng-bind="vm.getEnrolmentDataSet().DOB | limitTo: 'dd-MM-yyyy'.length"></dd>
         </dl>
     </div>
   </div>
@@ -17,22 +17,23 @@
   <div class="col-xs-12">
 
     <ul class="nav nav-tabs nav-justified">
-      <li role="presentation" 
-          ng-class="{active: selectedCategory == category}"
-          ng-repeat="(categoryName, category) in categories" >
-        <a aria-controls="home" role="tab" 
-            ng-bind="categoryName" 
-            ng-click="selectCategory(category)"></a>
+      <li role="presentation"
+          ng-class="{active: vm.selectedCategory == category}"
+          ng-repeat="(categoryName, category) in vm.categories" >
+        <a aria-controls="home" role="tab"
+            ng-bind="categoryName"
+            ng-click="vm.selectCategory(category)"></a>
       </li>
     </ul>
 
-    <ul class="nav nav-pills nav-justified">
+    <h3 class="nav-header">Dataset:</h3>
+    <ul class="nav nav-pills nav-padded">
       <li role="presentation"
-            ng-class="{active: selectedDataSet == dataSet}"
-            ng-repeat="dataSet in selectedCategory">
-          <a aria-controls="home" role="tab" 
+            ng-class="{active: vm.selectedDataSet == dataSet}"
+            ng-repeat="dataSet in vm.selectedCategory">
+          <a aria-controls="home" role="tab"
             ng-bind="dataSet.Label"
-            ng-click="selectDataSet(dataSet)"></a>
+            ng-click="vm.selectDataSet(dataSet)"></a>
       </li>
     </ul>
 
@@ -42,9 +43,11 @@
 <div class="row">
   <div class="col-xs-12">
     <dataset-view
-        participant="participant"
-        dataset="selectedDataSet">
+        participant="vm.participant"
+        dataset="vm.selectedDataSet"
+        on-edit="vm.openEditModal(entry)">
     </dataset-view>
+    <a class="btn btn-success" ng-if="vm.canAddEntries()" ng-click="vm.openEditModal()">Add entry</a>
   </div>
 </div>
 

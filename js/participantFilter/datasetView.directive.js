@@ -7,62 +7,39 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
   return {
     scope: {
       participant: '=',
-      dataset: '='
+      dataset: '=',
+      onEdit: '&'
     },
     templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
 
-    link: function (scope) {
-      scope.lookups = {};
+    controllerAs: 'vm',
+    bindToController: true,
+    controller: function() {
+      var self = this;
+
+      self.lookups = {};
+      self.getValueAsDate = getValueAsDate;
+      self.getValue = getValue;
+
       DatasetMetadataService.getLookups().then(function(lookupSet) {
-        scope.lookups = lookupSet;
+        self.lookups = lookupSet;
       });
 
-      scope.isFormShown = isFormShown;
-      function isFormShown() {
-        return !(scope.dataset && scope.dataset.DemographicData &&
-                scope.participant && scope.participant.dataSets[scope.dataset.Name].length);
-      }
 
-      scope.getValue = getValue;
       function getValue(row, column){
-        if (column.LookupQuery && scope.lookups[column.LookupQuery]) {
-          var val = _.find(scope.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
+        if (column.LookupQuery && self.lookups[column.LookupQuery]) {
+          var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
           return val === undefined ? '' : val.Label;
         }else if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
-          return new Date(row[column.Name]).toLocaleDateString('en-GB');
+          return getValueAsDate(row[column.Name]);
         }else{
           return row[column.Name];
         }
       }
 
-      scope.createEntry = function(entry) {
-        var record = Object.assign({}, entry);
-        record.ParticipantId = scope.participant.ParticipantId;
-
-        ParticipantService.createRecord(scope.dataset.Name, record).then(function() {
-          scope.reset();
-        });
-      };
-
-      scope.reset = function(form) {
-        if (form) {
-          form.$setPristine();
-          form.$setUntouched();
-        }else{
-          scope.reset(scope.form);
-        }
-        scope.entry = {};
-      };
-
-      // Watch the dataset and clear the form on change
-      scope.$watch('dataset', function() {
-        scope.reset();
-      });
-
-      // Watch the participant and clear the form on change
-      scope.$watch('participant', function() {
-        scope.reset();
-      });
+      function getValueAsDate(value) {
+        return new Date(value).toLocaleDateString('en-GB');
+      }
     }
   };
 }

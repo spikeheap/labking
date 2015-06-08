@@ -1,4 +1,20 @@
 
+// FontAwesome – we need to override the font base so load it in one by one
+/** MUST BE LOADED BEFORE BOOTSTRAP – otherwise FA breaks input feedback styling, https://github.com/FortAwesome/Font-Awesome/issues/4313#issuecomment-75190960 **/
+@import "../bower_components/fontawesome/less/variables.less";
+@fa-font-path:   "../fonts";
+@import "../bower_components/fontawesome/less/mixins.less";
+@import "../bower_components/fontawesome/less/path.less";
+@import "../bower_components/fontawesome/less/core.less";
+@import "../bower_components/fontawesome/less/larger.less";
+@import "../bower_components/fontawesome/less/fixed-width.less";
+@import "../bower_components/fontawesome/less/list.less";
+@import "../bower_components/fontawesome/less/bordered-pulled.less";
+@import "../bower_components/fontawesome/less/animated.less";
+@import "../bower_components/fontawesome/less/rotated-flipped.less";
+@import "../bower_components/fontawesome/less/stacked.less";
+@import "../bower_components/fontawesome/less/icons.less";
+
 @import "../bower_components/bootstrap/less/variables";
 @font-family-sans-serif:  Verdana,Arial,Helvetica,sans serif;
 @font-family-base:        @font-family-sans-serif;
@@ -53,22 +69,6 @@
 @import "../bower_components/bootstrap/less/utilities.less";
 @import "../bower_components/bootstrap/less/responsive-utilities.less";
 
-
-// FontAwesome – we need to override the font base so load it in one by one
-@import "../bower_components/fontawesome/less/variables.less";
-@fa-font-path:   "../fonts";
-@import "../bower_components/fontawesome/less/mixins.less";
-@import "../bower_components/fontawesome/less/path.less";
-@import "../bower_components/fontawesome/less/core.less";
-@import "../bower_components/fontawesome/less/larger.less";
-@import "../bower_components/fontawesome/less/fixed-width.less";
-@import "../bower_components/fontawesome/less/list.less";
-@import "../bower_components/fontawesome/less/bordered-pulled.less";
-@import "../bower_components/fontawesome/less/animated.less";
-@import "../bower_components/fontawesome/less/rotated-flipped.less";
-@import "../bower_components/fontawesome/less/stacked.less";
-@import "../bower_components/fontawesome/less/icons.less";
-
 @import (less) "../bower_components/angular-toastr/dist/angular-toastr.css";
 
 body {
@@ -82,15 +82,50 @@ body {
 **/
 
 .labking {
-  
+  // Restore bootstrap styling for `a` elements without `href`s
+  .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
   .form-element {
     display: inline-block;
+  }
+
+  .nav-padded {
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+  }
+  .nav-header {
+    padding-top: 3px;
+    float: left;
+  }
+  .nav-tabs.nav-justified>li>a {
+    // double line height for tricksy longer titles
+    height: 3.75em;
+  }
+
+  // Override Bootstrap's modification to make feedback elements unclickable.
+  .form-control-feedback {
+      pointer-events: auto;
+  }
+
+  .validated-form {
+    input.ng-invalid.ng-touched {
+      background-color: #fee9ea;
+      border-left: 2px solid #881820;
+    }
+
+    // input.ng-valid.ng-touched {
+    //   background-color: #78FA89;
+    // }
+  }
+
+  select.form-control {
+    padding: 4px 12px;
   }
 
   .text-with-newlines {
     white-space: pre;
   }
-  
+
   .border-left {
     border-left: 1px solid #ddd;
   }
@@ -99,6 +134,11 @@ body {
   .jumbotron {
     padding: 10px 0;
   }
+
+  /**
+    Angular animations to smooth transitions
+   **/
+
 
 }
 

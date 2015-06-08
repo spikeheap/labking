@@ -5,7 +5,10 @@ var LabKeyAPI = require('../lib/LabKeyAPI');
 function CohortService($q, logger) {
 
   function fail(error) {
-    var msg = 'query failed. ' + error.data.description;
+    var msg = 'query failed. '
+    if(error.data !== undefined){
+      msg = msg + error.data.description;
+    }
     logger.error(msg);
     return $q.reject(msg);
   }

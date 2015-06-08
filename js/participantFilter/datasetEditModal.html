@@ -1,0 +1,79 @@
+<div class="labking">
+  
+  <form name="form" class="validated-form" novalidate>
+
+    <div class="modal-header">
+      <h3 class="modal-title">{{vm.editTypeLabel}} participant</h3>
+    </div>
+
+    <div class="modal-body form-horizontal">
+      <div ng-if="!vm.dataset.DemographicData" class="form-group">
+        <label class="control-label col-sm-4" >Record Date</label>
+        <div class="col-sm-8">
+          <input class="form-control" type="date" ng-model="vm.entry.Date" required autofocus>
+        </div>
+      </div>
+
+      <div ng-repeat="column in vm.dataset.columns" class="form-group">
+        <label class="control-label col-sm-4" ng-bind="column.Label"></label>
+
+        <div class="col-sm-8">
+          <select ng-model="vm.entry[column.Name]"
+                  ng-if="column.LookupQuery"
+                  class="form-control">
+            <option ng-repeat="option in vm.lookups[column.LookupQuery].rows" value="{{option.Key}}">
+              {{option.Label}}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-sm-8">
+          <input class="form-control" type="number"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#int'"
+              ng-pattern="/^\d*$/"
+              ng-model="vm.entry[column.Name]"
+              placeholder="Requires whole numbers only">
+        </div>
+
+        <div class="col-sm-8">
+          <input class="form-control" type="number"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#double'"
+              ng-pattern="/^\d{0,}\.{0,1}\d{0,}$/"
+              ng-model="vm.entry[column.Name]"
+              placeholder="Decimal places allowed"
+              step="any">
+        </div>
+
+        <div class="col-sm-8">
+          <input class="form-control" type="date"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'"
+              ng-model="vm.entry[column.Name]">
+        </div>
+
+        <div class="col-sm-8">
+          <div class="checkbox"  ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#boolean'">
+            <input type="checkbox"
+                  ng-model="vm.entry[column.Name]"
+                  ui-indeterminate="vm.entry[column.Name] === undefined">
+          </div>
+        </div>
+
+        <div class="col-sm-8">
+          <input class="form-control" type="text"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#string'"
+              ng-model="vm.entry[column.Name]">
+        </div>
+
+        <div class="col-sm-8">
+          <textarea class="form-control"
+              ng-if="!column.LookupQuery && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#multiLine'"
+              ng-model="vm.entry[column.Name]"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" ng-click="vm.submit(vm.entry)">{{vm.editTypeLabel}}</button>
+      <button class="pull-left btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

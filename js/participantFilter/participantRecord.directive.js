@@ -10,48 +10,82 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
       },
       templateUrl: '../../labking/js/participantFilter/participantRecord.directive.html',
 
-      link: function (scope) {
+      controllerAs: 'vm',
+      bindToController: true,
+      controller: function($modal) {
+        var self = this;
+
+        self.selectedCategory = {};
+        self.selectedDataSet = {};
+        self.canAddEntries = canAddEntries;
+        self.openEditModal = openEditModal;
+        self.getEnrolmentDataSet = getEnrolmentDataSet;
+        self.getParticipantName = getParticipantName;
+        self.selectCategory = selectCategory;
+        self.selectDataSet = selectDataSet;
+
+        DatasetMetadataService.getMetaData().then(function(metadata) {
+
+          self.metadata = _.sortBy(metadata, 'DisplayOrder').filter(function(dataSet) { return dataSet.ShowByDefault; });
+          self.categories = _.groupBy(self.metadata, function(dataset) {
+            return dataset['CategoryId/Label'];
+          });
+          selectCategory(self.categories[_.keys(self.categories)[0]]);
+        });
+
+        DatasetMetadataService.getLookups().then(function(lookups) {
+          self.lookups = lookups;
+        });
+
+
 
         // Utility to get at demographic data for the headers
-        scope.getEnrolmentDataSet = function() {
-          if(scope.participant && scope.participant.dataSets){
-            return scope.participant.dataSets.Database_Enrollment[0];
+        function getEnrolmentDataSet() {
+          if(self.participant && self.participant.dataSets){
+            return self.participant.dataSets.Database_Enrollment[0];
           }else{
             return {};
           }
-        };
+        }
 
-        scope.getParticipantName = function() {
-          return `${scope.getEnrolmentDataSet().FirstName} ${scope.getEnrolmentDataSet().LastName}`;
-        };
+        function getParticipantName() {
+          return `${self.getEnrolmentDataSet().FirstName} ${self.getEnrolmentDataSet().LastName}`;
+        }
 
-        scope.selectCategory = function(category) {
-          scope.selectedCategory = category;
-          scope.selectDataSet(scope.selectedCategory[0]);
-        };
+        function selectCategory(category) {
+          self.selectedCategory = category;
+          selectDataSet(self.selectedCategory[0]);
+        }
 
-        scope.selectDataSet = function(dataSet) {
-          scope.selectedDataSet = dataSet;
-        };
+        function selectDataSet(dataSet) {
+          self.selectedDataSet = dataSet;
+        }
 
-        activate();
+        function canAddEntries() {
+          return !(self.selectedDataSet && self.selectedDataSet.DemographicData &&
+                  self.participant && self.participant.dataSets[self.selectedDataSet.Name].length);
+        }
 
-        function activate() {
-          scope.selectedCategory = {};
-          scope.selectedDataSet = {};
-
-          DatasetMetadataService.getMetaData().then(function(metadata) {
-
-            scope.metadata = _.sortBy(metadata, 'DisplayOrder')
-              .filter(function(dataSet) { return dataSet.ShowByDefault; });
-            scope.categories = _.groupBy(scope.metadata, function(dataset) {
-              return dataset['CategoryId/Label'];
-            });
-            scope.selectCategory(scope.categories[_.keys(scope.categories)[0]]);
-          });
-
-          DatasetMetadataService.getLookups().then(function(lookups) {
-            self.lookups = lookups;
+        function openEditModal(entry) {
+          $modal.open({
+            animation: true,
+            templateUrl: '../../labking/js/participantFilter/datasetEditModal.html',
+            controller: 'DatasetEditModalController as vm',
+            resolve: {
+              participantId: function() {
+                return self.participant.ParticipantId;
+              },
+              entry: function() {
+                // We clone the entry because if the action is cancelled we don't want the changes to persist.
+                return _.cloneDeep(entry);
+              },
+              selectedDataset: function () {
+                return self.selectedDataSet;
+              },
+              onSave: function() {
+                return (entry === undefined) ? ParticipantService.createRecord : ParticipantService.updateRecord;
+              }
+            }
           });
         }
       }

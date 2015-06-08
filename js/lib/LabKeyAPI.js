@@ -43,6 +43,20 @@
     });
   }
 
+  function labkeyUpdateRow(schemaName, dataSetName, entry) {
+    return new Promise(function(resolve, reject) {
+      LABKEY.requiresExt3ClientAPI(true, function() {
+        LABKEY.Query.updateRows({
+          schemaName: schemaName,
+          queryName: dataSetName,
+          rows: [entry],
+          success: resolve,
+          failure: reject
+        });
+      });
+    });
+  }
+
   function createLabKeyFilter(field, value){
     return LABKEY.Filter.create(field, value);
   }
@@ -102,6 +116,10 @@
     return labkeyInsertRow('study', dataSetName, entry);
   }
 
+  function updateDataSetRow(dataSetName, entry){
+    return labkeyUpdateRow('study', dataSetName, entry);
+  }
+
   // Get all the available lookups (valid select-items)
   function getLookups() {
     return getLabkeyQueries('lists')
@@ -124,6 +142,7 @@
     getDataSet: getDataSet,
     getParticipantDataSet: getParticipantDataSet,
     getLookups: getLookups,
-    insertRow: addDataSetRow
+    insertRow: addDataSetRow,
+    updateDataSetRow: updateDataSetRow
   };
 })(window.LABKEY);
