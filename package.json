@@ -4,6 +4,7 @@
   "description": "A LabKey module to allow creation and editing of Study module datasets in a subject-centric way",
   "main": "Gulpfile.js",
   "scripts": {
+    "postinstall": "./node_modules/.bin/bower",
     "build": "gulp",
     "test": "./node_modules/.bin/karma start --single-run",
     "watch": "gulp watch"
@@ -29,8 +30,16 @@
   },
   "browserify": {
     "transform": [
-      ["babelify", { "ignore": ["bower_components"] }],
-      "browserify-shim"
+      [
+        "babelify",
+        {
+          "ignore": [
+            "bower_components"
+          ]
+        }
+      ],
+      "browserify-shim",
+      "browserify-ngannotate"
     ]
   },
   "browser": {
@@ -52,6 +61,7 @@
   "devDependencies": {
     "babel-eslint": "^3.0.1",
     "babelify": "^5.0.4",
+    "bower": "^1.4.1",
     "browserify": "^9.0.3",
     "browserify-shim": "^3.8.6",
     "chai": "^2.2.0",
@@ -91,5 +101,8 @@
     "node-notifier": "^4.1.2",
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0"
+  },
+  "dependencies": {
+    "browserify-ngannotate": "^1.0.1"
   }
 }
