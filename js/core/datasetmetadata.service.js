@@ -83,7 +83,7 @@ function DatasetMetadataService($q, logger) {
   }
 
   function fail(error) {
-    var msg = 'query failed. '
+    var msg = 'query failed. ';
     if(error.data !== undefined){
       msg = msg + error.data.description;
     }

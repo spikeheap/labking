@@ -39,21 +39,6 @@ module.exports = function(config) {
 
     logLevel: 'LOG_DEBUG',
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    browserify: {
-      watch: true,
-      debug: true,
-      transform: [
-        'babelify',
-        'debowerify',
-        // ngAnnotate,
-        // // 'brfs',
-        // // 'bulkify'
-      ],
-      extensions: ['.js']
-    },
-
     preprocessors: {
       'js/labking.module.js': ['browserify']
     },

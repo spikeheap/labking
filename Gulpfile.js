@@ -34,6 +34,7 @@
         debowerify = require('debowerify'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
+    var templateCache = require('gulp-angular-templatecache');
 
     var browserified = transform(function(filename) {
       var b = browserify({entries: filename, debug: true});
@@ -99,7 +100,9 @@
     gulp.task('scripts:test', function (done) {
       karma.start({
         configFile: __dirname + '/karma.conf.js',
-        singleRun: true
+        singleRun: true,
+        // 'osx' reporter hangs this test
+        reporters: ['progress']
       }, done);
     });
 
@@ -108,79 +111,78 @@
       return gulp.src(['./js/**/*.js'])
         .pipe(eslint())
         .pipe(eslint.format())
-        //.pipe(eslint.failOnError());
-        //.pipe(jscs());
+        .pipe(eslint.failOnError());
     });
 
-    // Build JavaScript
-    gulp.task('scripts:build', function() {
 
-      var bundler = browserify('./js/labking.module.js', {standalone: 'noscope'});
-
-      return bundler
+    // Build JavaScript with Browserify to index.js
+    gulp.task('scripts:compile',  function() {
+      return browserify('./js/labking.module.js', {
+            standalone: 'noscope',
+            debug: true
+          })
         .bundle()
-        .pipe(source('index.js'))
+        .pipe(source('application.js'))
         .pipe(buffer())
-
-        .pipe(sourcemaps.init({loadMaps: true}))
-          //.pipe(uglify())
-        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
         .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
 
-    gulp.task('copy-partials', function() {
-      return gulp.src(['./js/**/*.html'])
-      .pipe(gulp.dest(path.join(distWebPath, 'js')));
+    // Concatenates and compiles the templates to templates.js
+    gulp.task('scripts:templates', function() {
+      return gulp.src('./js/**/*.html')
+        .pipe(templateCache({
+          standalone: true,
+          // moduleSystem: 'browserify'
+          moduleSystem: 'IIFE'
+        }))
+        .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
+
+    // Optimises the JS into a single minified file
+    gulp.task('scripts:concatenate', ['scripts:compile', 'scripts:templates'], function() {
+      return gulp.src(path.join(distWebPath, 'js', 'application.js'))
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(concat('all.js'))
+        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
+        .pipe(gulp.dest(path.join(distWebPath, 'js')))
+        ;
+    });
+
+    // Optimises the JS into a single minified file
+    gulp.task('scripts:optimise', ['scripts:concatenate'], function() {
+      return gulp.src(path.join(distWebPath, 'js', 'all.js'))
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
+        .pipe(rename("all.min.js"))
+        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
+        .pipe(gulp.dest(path.join(distWebPath, 'js')))
+        ;
+    });
+
 
     // Clean
     gulp.task('clean', function(cb) {
       del(['dist/**'], cb);
     });
 
-    // // Deploy
-    // gulp.task('deploy', ['default'], function() {
-    //   if(project.deployPath){
-    //     return gulp.src(path.join(__dirname, 'dist', '**'))
-    //         .pipe(gulp.dest(path.join(project.deployPath, project.name)));
-    //     // if(!fs.existsSync(project.deployPath)){
-    //     //   gutil.log('The `deployDir` specified in package.json does not exist.');
-    //     // }else{
-    //     //   // remove deploy directory contents
-    //     //   //del([path.join(project.deployPath, project.name, '**')],{force: true});
-    //     //   // copy dist into it
-    //     //   return gulp.src(path.join(__dirname, 'dist', '**'))
-    //     //     .pipe(gulp.dest(path.join(project.deployPath, project.name)));
-    //     // }
-    //   }else{
-    //     gutil.log('No deploy path specified. Please set `deployDir` in package.json and try again');
-    //   }
-    // });
-
     gulp.task('build:quick', function() {
-      gulp.start('scripts:build',
-        'copy-partials',
+      gulp.start(
         'styles',
         'fonts',
         'labkey:module',
-        'views');
+        'scripts:concatenate',
+        'views'
+      );
     });
 
     // Default task
-    gulp.task('default', ['clean'], function() {
+    gulp.task('default', ['build:quick'], function() {
         gulp.start(
-          'styles', 'fonts',
-          'scripts:test','scripts:validate', 'scripts:build', 'copy-partials',
-          'labkey:module',
-          'views');
+          'scripts:test',
+          'scripts:validate',
+          'scripts:optimise'
+        );
     });
-
-    // Watch
-    // gulp.task('watch', function() {
-    //   gulp.watch('less/**/*.less', ['styles']);
-    //   gulp.watch('js/**/*.js', ['scripts']);
-    //   gulp.watch('views/**/*.html', ['views']);
-    // });
 
 
 }(require));
