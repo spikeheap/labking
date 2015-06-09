@@ -34,10 +34,6 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
           selectCategory(self.categories[_.keys(self.categories)[0]]);
         });
 
-        DatasetMetadataService.getLookups().then(function(lookups) {
-          self.lookups = lookups;
-        });
-
 
 
         // Utility to get at demographic data for the headers
