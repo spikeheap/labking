@@ -3,6 +3,7 @@
 var _ = require('lodash');
 module.exports = ParticipantRecord;
 
+/** @ngInject **/
 function ParticipantRecord(ParticipantService, DatasetMetadataService) {
     return {
       scope: {

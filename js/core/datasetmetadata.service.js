@@ -3,6 +3,7 @@
 var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
+/** @ngInject **/
 function DatasetMetadataService($q, logger) {
 
   // We only need to do this request once, and it's quite heavy

@@ -2,6 +2,7 @@
 
 var LabKeyAPI = require('../lib/LabKeyAPI');
 
+/** @ngInject **/
 function CohortService($q, logger) {
 
   function fail(error) {

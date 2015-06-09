@@ -3,6 +3,7 @@
 var _ = require('lodash');
 module.exports = DatasetView;
 
+/** @ngInject **/
 function DatasetView(ParticipantService, DatasetMetadataService) {
   return {
     scope: {
