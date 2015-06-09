@@ -4,7 +4,7 @@
   "description": "A LabKey module to allow creation and editing of Study module datasets in a subject-centric way",
   "main": "Gulpfile.js",
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower",
+    "postinstall": "./node_modules/.bin/bower install",
     "build": "gulp",
     "test": "./node_modules/.bin/karma start --single-run",
     "watch": "gulp watch"
