@@ -1,18 +1,18 @@
 'use strict';
 (function(LABKEY){
 
-  // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
-  function getLabkeyQueries(schemaName){
-    return new Promise(function(resolve, reject) {
-      LABKEY.requiresExt3ClientAPI(true, function() {
-        LABKEY.Query.getQueries({
-          schemaName: schemaName,
-          success: resolve,
-          failure: reject
-        });
-      });
-    });
-  }
+  // // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
+  // function getLabkeyQueries(schemaName){
+  //   return new Promise(function(resolve, reject) {
+  //     LABKEY.requiresExt3ClientAPI(true, function() {
+  //       LABKEY.Query.getQueries({
+  //         schemaName: schemaName,
+  //         success: resolve,
+  //         failure: reject
+  //       });
+  //     });
+  //   });
+  // }
 
   function labkeyQuery(schemaName, queryName, filterArray=[], columns=[]){
     return new Promise(function(resolve, reject) {
@@ -121,13 +121,8 @@
   }
 
   // Get all the available lookups (valid select-items)
-  function getLookups() {
-    return getLabkeyQueries('lists')
-      .then(function(response) {
-        return Promise.all(response.queries.map(function(lookupName){
-          return labkeyQuery('lists', lookupName.name);
-        }));
-      });
+  function getLookups(listName) {
+    return labkeyQuery('lists', listName);
   }
 
   module.exports = {

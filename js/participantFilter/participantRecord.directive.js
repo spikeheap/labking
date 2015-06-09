@@ -67,7 +67,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         function openEditModal(entry) {
           $modal.open({
             animation: true,
-            templateUrl: '../../labking/js/participantFilter/datasetEditModal.html',
+            templateUrl: 'participantFilter/datasetEditModal.html',
             controller: 'DatasetEditModalController as vm',
             resolve: {
               participantId: function() {

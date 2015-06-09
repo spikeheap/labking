@@ -7,12 +7,13 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
 function DatasetMetadataService($q, logger) {
 
   // We only need to do this request once, and it's quite heavy
-  var resultsCache = {};
+  var resultsCache = {
+    lookups: {},
+  };
 
   return {
     getMetaData: getMetaData,
-    getLookups: getLookups,
-    getCohortCategories: getCohortCategories
+    getLookups: getLookups
   };
 
   function getMetaData() {
@@ -44,42 +45,19 @@ function DatasetMetadataService($q, logger) {
     }
   }
 
-  function getLookups() {
-    var getFromCacheIfPossible;
-    if(resultsCache.lookups){
-      getFromCacheIfPossible = $q.when();
-    }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getLookups()).then(updateLookupCache);
+
+  function getLookups(lookupName) {
+    if(resultsCache.lookups[lookupName]){
+      return $q.when(resultsCache.lookups[lookupName]);
     }
 
-    return getFromCacheIfPossible
-      .then(function(){ return $q.when(resultsCache.lookups); })
+    return $q.when(LabKeyAPI.getLookups(lookupName))
+      .then(updateLookupCache)
       .catch(fail);
 
     function updateLookupCache(lookups){
-      resultsCache.lookups = {};
-      lookups.forEach(function(lookupResponse) {
-        resultsCache.lookups[lookupResponse.queryName] = lookupResponse;
-      });
-    }
-  }
-
-  function getCohortCategories() {
-    var getFromCacheIfPossible;
-    if(resultsCache.cohortCategories){
-      getFromCacheIfPossible = $q.when();
-    }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getLookups().then(updateCohortCategoriesCache));
-    }
-
-    return getFromCacheIfPossible
-      .then(function(){ return resultsCache.cohortCategories; })
-      .catch(fail);
-
-    function updateCohortCategoriesCache(cohortCategories){
-      resultsCache.cohortCategories = cohortCategories.map(function(response) {
-        return response.rows;
-      });
+      resultsCache.lookups[lookupName] = lookups;
+      return resultsCache.lookups[lookupName];
     }
   }
 
@@ -87,6 +65,8 @@ function DatasetMetadataService($q, logger) {
     var msg = 'query failed. ';
     if(error.data !== undefined){
       msg = msg + error.data.description;
+    }else{
+      msg = msg + error;
     }
     logger.error(msg);
     return $q.reject(msg);

@@ -124,6 +124,9 @@
         .bundle()
         .pipe(source('application.js'))
         .pipe(buffer())
+        .pipe(gulp.dest(path.join(distWebPath, 'js')))
+        // Hack so we can develop against non-minified scripts
+        .pipe(rename('application.min.js'))
         .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
 

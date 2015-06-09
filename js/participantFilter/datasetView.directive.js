@@ -4,7 +4,7 @@ var _ = require('lodash');
 module.exports = DatasetView;
 
 /** @ngInject **/
-function DatasetView(ParticipantService, DatasetMetadataService) {
+function DatasetView() {
   return {
     scope: {
       participant: '=',
@@ -21,11 +21,6 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
       self.lookups = {};
       self.getValueAsDate = getValueAsDate;
       self.getValue = getValue;
-
-      DatasetMetadataService.getLookups().then(function(lookupSet) {
-        self.lookups = lookupSet;
-      });
-
 
       function getValue(row, column){
         if (column.LookupQuery && self.lookups[column.LookupQuery]) {
