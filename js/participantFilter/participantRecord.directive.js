@@ -9,10 +9,11 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
       scope: {
         participant: '='
       },
-      templateUrl: '../../labking/js/participantFilter/participantRecord.directive.html',
+      templateUrl: 'participantFilter/participantRecord.directive.html',
 
       controllerAs: 'vm',
       bindToController: true,
+      /* @ngInject */
       controller: function($modal) {
         var self = this;
 

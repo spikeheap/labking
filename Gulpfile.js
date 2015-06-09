@@ -116,7 +116,7 @@
 
 
     // Build JavaScript with Browserify to index.js
-    gulp.task('scripts:compile',  function() {
+    gulp.task('scripts:compile', ['scripts:templates'], function() {
       return browserify('./js/labking.module.js', {
             standalone: 'noscope',
             debug: true
@@ -132,28 +132,17 @@
       return gulp.src('./js/**/*.html')
         .pipe(templateCache({
           standalone: true,
-          // moduleSystem: 'browserify'
-          moduleSystem: 'IIFE'
+          moduleSystem: 'browserify'
         }))
-        .pipe(gulp.dest(path.join(distWebPath, 'js')));
+        .pipe(gulp.dest(path.join('tmp')));
     });
 
-    // Optimises the JS into a single minified file
-    gulp.task('scripts:concatenate', ['scripts:compile', 'scripts:templates'], function() {
+    // Optimises the JS
+    gulp.task('scripts:optimise', ['scripts:compile'], function() {
       return gulp.src(path.join(distWebPath, 'js', 'application.js'))
         .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(concat('all.js'))
-        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
-        .pipe(gulp.dest(path.join(distWebPath, 'js')))
-        ;
-    });
-
-    // Optimises the JS into a single minified file
-    gulp.task('scripts:optimise', ['scripts:concatenate'], function() {
-      return gulp.src(path.join(distWebPath, 'js', 'all.js'))
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify())
-        .pipe(rename("all.min.js"))
+        .pipe(uglify({mangle: true}))
+        .pipe(rename('application.min.js'))
         .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
         .pipe(gulp.dest(path.join(distWebPath, 'js')))
         ;
@@ -170,7 +159,7 @@
         'styles',
         'fonts',
         'labkey:module',
-        'scripts:concatenate',
+        'scripts:compile',
         'views'
       );
     });

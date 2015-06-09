@@ -8,7 +8,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       scope: {
         onParticipantSelect: '&'
       },
-      templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
+      templateUrl: 'participantFilter/participantFilter.directive.html',
 
       controllerAs: 'vm',
       bindToController: true,

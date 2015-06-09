@@ -11,7 +11,7 @@ function DatasetView(ParticipantService, DatasetMetadataService) {
       dataset: '=',
       onEdit: '&'
     },
-    templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
+    templateUrl: 'participantFilter/datasetView.directive.html',
 
     controllerAs: 'vm',
     bindToController: true,
