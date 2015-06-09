@@ -2,6 +2,7 @@
 var _ = require('lodash');
 module.exports = ParticipantFilter;
 
+/** @ngInject **/
 function ParticipantFilter($q, CohortService, ParticipantService) {
     return {
       scope: {
