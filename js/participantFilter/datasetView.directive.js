@@ -34,7 +34,12 @@ function DatasetView() {
       }
 
       function getValueAsDate(value) {
-        return new Date(value).toLocaleDateString('en-GB');
+        if(!!value){
+          return new Date(value).toLocaleDateString('en-GB');
+        }else{
+          return null;
+        }
+
       }
     }
   };
