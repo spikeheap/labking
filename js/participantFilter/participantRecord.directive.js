@@ -9,8 +9,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
       scope: {
         participant: '='
       },
-      templateUrl: 'participantFilter/participantRecord.directive.html',
-
+      template: require('./participantRecord.directive.html'),
       controllerAs: 'vm',
       bindToController: true,
       /* @ngInject */
@@ -67,7 +66,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         function openEditModal(entry) {
           $modal.open({
             animation: true,
-            templateUrl: 'participantFilter/datasetEditModal.html',
+            template: require('./datasetEditModal.html'),
             controller: 'DatasetEditModalController as vm',
             resolve: {
               participantId: function() {

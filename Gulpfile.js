@@ -34,7 +34,6 @@
         debowerify = require('debowerify'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
-    var templateCache = require('gulp-angular-templatecache');
 
     var browserified = transform(function(filename) {
       var b = browserify({entries: filename, debug: true});
@@ -116,7 +115,7 @@
 
 
     // Build JavaScript with Browserify to index.js
-    gulp.task('scripts:compile', ['scripts:templates'], function() {
+    gulp.task('scripts:compile', function() {
       return browserify('./js/labking.module.js', {
             standalone: 'noscope',
             debug: true
@@ -128,16 +127,6 @@
         // Hack so we can develop against non-minified scripts
         .pipe(rename('application.min.js'))
         .pipe(gulp.dest(path.join(distWebPath, 'js')));
-    });
-
-    // Concatenates and compiles the templates to templates.js
-    gulp.task('scripts:templates', function() {
-      return gulp.src('./js/**/*.html')
-        .pipe(templateCache({
-          standalone: true,
-          moduleSystem: 'browserify'
-        }))
-        .pipe(gulp.dest(path.join('tmp')));
     });
 
     // Optimises the JS

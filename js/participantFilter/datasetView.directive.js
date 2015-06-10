@@ -11,7 +11,7 @@ function DatasetView() {
       dataset: '=',
       onEdit: '&'
     },
-    templateUrl: 'participantFilter/datasetView.directive.html',
+    template: require('./DatasetView.directive.html'),
 
     controllerAs: 'vm',
     bindToController: true,
@@ -34,7 +34,7 @@ function DatasetView() {
       }
 
       function getValueAsDate(value) {
-        if(!!value){
+        if(value){
           return new Date(value).toLocaleDateString('en-GB');
         }else{
           return null;

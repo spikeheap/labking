@@ -8,7 +8,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
       scope: {
         onParticipantSelect: '&'
       },
-      templateUrl: 'participantFilter/participantFilter.directive.html',
+      template: require('./participantFilter.directive.html'),
 
       controllerAs: 'vm',
       bindToController: true,
