@@ -5,7 +5,7 @@
 
   <thead>
     <th ng-if="!vm.dataset.DemographicData">Result Date</th>
-    <th ng-repeat="column in vm.dataset.columns" ng-bind="column.Label"></th>
+    <th ng-repeat="column in vm.dataset.columns" ng-bind="column.Label || column.Name"></th>
     <th>Actions</th>
   </thead>
 

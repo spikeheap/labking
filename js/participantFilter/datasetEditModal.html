@@ -1,5 +1,5 @@
 <div class="labking">
-  
+
   <form name="form" class="validated-form" novalidate>
 
     <div class="modal-header">
@@ -15,14 +15,14 @@
       </div>
 
       <div ng-repeat="column in vm.dataset.columns" class="form-group">
-        <label class="control-label col-sm-4" ng-bind="column.Label"></label>
+        <label class="control-label col-sm-4" ng-bind="column.Label || column.Name"></label>
 
         <div class="col-sm-8">
           <select ng-model="vm.entry[column.Name]"
                   ng-if="column.LookupQuery"
                   class="form-control">
             <option ng-repeat="option in vm.lookups[column.LookupQuery].rows" value="{{option.Key}}">
-              {{option.Label}}
+              {{option.Label || option.Key}}
             </option>
           </select>
         </div>
