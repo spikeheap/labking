@@ -64,8 +64,8 @@
     "babelify": "^5.0.4",
     "bower": "^1.4.1",
     "browserify": "^9.0.3",
-    "browserify-shim": "^3.8.6",
     "browserify-ngannotate": "^1.0.1",
+    "browserify-shim": "^3.8.6",
     "chai": "^2.2.0",
     "debowerify": "^1.2.1",
     "del": "^1.1.1",
@@ -97,6 +97,7 @@
     "karma-phantomjs2-launcher": "^0.1.6",
     "lodash": "^3.6.0",
     "mocha": "^2.2.1",
+    "moment": "^2.10.3",
     "mustache": "^1.2.0",
     "newforms": "^0.12.1",
     "node-notifier": "^4.1.2",
@@ -104,7 +105,5 @@
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

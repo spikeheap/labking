@@ -16,6 +16,7 @@ module.exports = DatasetEditModalController;
  **/
 function DatasetEditModalController(DatasetMetadataService, $modalInstance, participantId, entry, selectedDataset, onSave) {
   var self = this;
+  var moment = require('moment');
 
   self.lookups = {};
 
@@ -51,10 +52,11 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
     }
 
     // LabKey inconsistently uppercases the date field for creation/retrieval.
-    self.entry.Date = self.entry.date;
+    self.entry.Date = self.entry.date = moment(self.entry.date, 'yyyy/MM/dd hh:mm:ss').toDate();
   }
 
   function submit() {
+    self.entry.date = self.entry.Date;
     onSave(self.dataset.Name, self.entry).then($modalInstance.close);
   }
 
