@@ -11,7 +11,7 @@ function DatasetView() {
       dataset: '=',
       onEdit: '&'
     },
-    template: require('./DatasetView.directive.html'),
+    template: require('./datasetView.directive.html'),
 
     controllerAs: 'vm',
     bindToController: true,
