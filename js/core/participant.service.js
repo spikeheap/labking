@@ -98,10 +98,16 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
   }
 
   function createRecord(dataSetName, record) {
-    return $q.when(LabKeyAPI.insertRow(dataSetName, record))
-      .then(function(response) {
+    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, record)])
+      .then(function(responses) {
+        var [metadata, response] = responses;
         var participantId = response.rows[0].ParticipantId;
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
+
+        response.rows = response.rows.map(function(row) {
+          return LabKeyAPI.coerceToType(metadata, row);
+        });
+
         logger.success('Record created');
         return $q.when();
       })
@@ -119,8 +125,6 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName];
 
         response.rows = response.rows.map(function(row) {
-          console.log('metadata', metadata);
-          console.log('response', response);
           return LabKeyAPI.coerceToType(metadata, row);
         });
 
