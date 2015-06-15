@@ -2,7 +2,7 @@
   'use strict';
   describe('ParticipantService', function() {
 
-    var LabKeyAPI;// = require('./LabKeyAPI');
+    var LabKeyAPI = require('./LabKeyAPI');
 
     describe('coerceDates', function () {
 

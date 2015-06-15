@@ -34,6 +34,7 @@
         debowerify = require('debowerify'),
         uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
+    var runSequence = require('run-sequence');
 
     var browserified = transform(function(filename) {
       var b = browserify({entries: filename, debug: true});
@@ -157,13 +158,13 @@
     });
 
     // Default task
-    gulp.task('default', ['build:quick'], function() {
-        gulp.start(
+    gulp.task('default', ['build:quick'], function (cb) {
+      runSequence(
           'scripts:test',
           'scripts:validate',
-          'scripts:optimise'
-        );
+          'scripts:optimise',
+          cb
+      );
     });
-
 
 }(require));

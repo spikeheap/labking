@@ -7,6 +7,7 @@ module.exports = function(config) {
       'karma-browserify',
       'karma-mocha',
       'karma-chai',
+      'karma-chai-datetime',
       'karma-osx-reporter',
       'karma-phantomjs2-launcher'
     ],
@@ -17,7 +18,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai'],
 
 
     // list of files / patterns to load in the browser
@@ -34,14 +35,15 @@ module.exports = function(config) {
 
       'bower_components/angular-mocks/angular-mocks.js',
       // Finally, the tests
-      'js/**/*.spec.js',
+      'js/**/*.spec.js'
     ],
 
 
     logLevel: 'LOG_DEBUG',
 
     preprocessors: {
-      'js/labking.module.js': ['browserify']
+      'js/labking.module.js': ['browserify'],
+      'js/**/*.spec.js': ['browserify']
     },
 
 

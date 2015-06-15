@@ -103,6 +103,7 @@
     "newforms": "^0.12.1",
     "node-notifier": "^4.1.2",
     "partialify": "^3.1.3",
+    "run-sequence": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0"
   },
