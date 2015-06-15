@@ -24,7 +24,7 @@ module.exports = function(config) {
     files: [
 
       // Test utilities
-      // 'bower_components/angular-mocks/angular-mocks.js',
+
       // 'bower_components/bardjs/dist/bard.js',
       // 'bower_components/bardjs/dist/bard-ngRouteTester.js',
       // 'node_modules/bardjs/dist/bard.js',
@@ -32,6 +32,7 @@ module.exports = function(config) {
       // Then our app for testing
       'js/labking.module.js',
 
+      'bower_components/angular-mocks/angular-mocks.js',
       // Finally, the tests
       'js/**/*.spec.js',
     ],
