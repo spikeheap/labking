@@ -4,7 +4,7 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
 /** @ngInject **/
-function ParticipantService($q, logger) {
+function ParticipantService(DatasetMetadataService, $q, logger) {
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -112,10 +112,18 @@ function ParticipantService($q, logger) {
   }
 
   function updateRecord(dataSetName, record) {
-    return $q.when(LabKeyAPI.updateDataSetRow(dataSetName, record))
-      .then(function(response) {
+    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, record)])
+      .then(function(responses) {
+        var [metadata, response] = responses;
         var participantId = response.rows[0].ParticipantId;
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName];
+
+        response.rows = response.rows.map(function(row) {
+          console.log('metadata', metadata);
+          console.log('response', response);
+          return LabKeyAPI.coerceToType(metadata, row);
+        });
+
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;
         logger.success('Record updated');

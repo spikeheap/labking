@@ -120,7 +120,6 @@
   function addDataSetRow(dataSetName, entry){
     return labkeyInsertRow('study', dataSetName, entry)
       .then(function (response) {
-        console.log(response);
         // LabKey inconsistently uppercases the date field for creation/retrieval.
         response.rows.forEach(function (row) {
           row.Date = row.date = new Date(row.date);
@@ -132,7 +131,6 @@
   function updateDataSetRow(dataSetName, entry){
     return labkeyUpdateRow('study', dataSetName, entry)
       .then(function (response) {
-        console.log(response);
         // LabKey inconsistently uppercases the date field for creation/retrieval.
         response.rows.forEach(function (row) {
           row.Date = row.date = new Date(row.date);
