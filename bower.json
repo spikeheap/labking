@@ -24,7 +24,8 @@
     "angular-toastr": "~1.3.0",
     "angular-formly": "~6.11.0",
     "angular-bootstrap": "~0.13.0",
-    "angular-ui-grid": "~3.0.0-rc.21"
+    "angular-ui-grid": "~3.0.0-rc.21",
+    "angular-i18n": "~1.4.0"
   },
   "resolutions": {
     "angular": "~1.4.0"
