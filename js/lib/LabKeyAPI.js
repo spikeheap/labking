@@ -118,27 +118,27 @@
   }
 
   function addDataSetRow(dataSetName, entry){
-    return labkeyInsertRow('study', dataSetName, entry);
-      // .then(function (response) {
-      //   // LabKey inconsistently uppercases the date field for creation/retrieval.
-      //   response.rows = response.rows.map(function (row) {
-      //     row.entry.Date = row.entry.date = new Date(row.entry.date);
-      //     return row;
-      //   });
-      //   return response;
-      // });
+    return labkeyInsertRow('study', dataSetName, entry)
+      .then(function (response) {
+        console.log(response);
+        // LabKey inconsistently uppercases the date field for creation/retrieval.
+        response.rows.forEach(function (row) {
+          row.Date = row.date = new Date(row.date);
+        });
+        return response;
+      });
   }
 
   function updateDataSetRow(dataSetName, entry){
-    return labkeyUpdateRow('study', dataSetName, entry);
-    //   .then(function (response) {
-    //     // LabKey inconsistently uppercases the date field for creation/retrieval.
-    //     response.rows = response.rows.map(function (row) {
-    //       row.entry.Date = row.entry.date = new Date(row.entry.date);
-    //       return row;
-    //     });
-    //     return response;
-    //   });
+    return labkeyUpdateRow('study', dataSetName, entry)
+      .then(function (response) {
+        console.log(response);
+        // LabKey inconsistently uppercases the date field for creation/retrieval.
+        response.rows.forEach(function (row) {
+          row.Date = row.date = new Date(row.date);
+        });
+        return response;
+      });
   }
 
   // Get all the available lookups (valid select-items)
