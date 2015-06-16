@@ -32,14 +32,14 @@ To create the release in the [LabKing project releases](https://github.com/spike
 First lets clean our development environment and get the released version:
 
 ```
-git checkout 0.0.1
+git checkout master
 rm -rf dist
 ```
 
 Then we can build the project:
 
 ```
-gulp build:quick
+gulp
 ```
 
 We need a distribution zip file with `labking` as the base directory:
