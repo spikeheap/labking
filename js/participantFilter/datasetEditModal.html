@@ -19,11 +19,9 @@
 
         <div class="col-sm-8">
           <select ng-model="vm.entry[column.Name]"
+                  ng-options="item.Key as item.Label for item in vm.lookups[column.LookupQuery].rows"
                   ng-if="column.LookupQuery"
                   class="form-control">
-            <option ng-repeat="option in vm.lookups[column.LookupQuery].rows" value="{{option.Key}}">
-              {{option.Label || option.Key}}
-            </option>
           </select>
         </div>
 
