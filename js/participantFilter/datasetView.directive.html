@@ -5,13 +5,13 @@
 
   <thead>
     <th ng-if="!vm.dataset.DemographicData">Result Date</th>
-    <th ng-repeat="column in vm.dataset.columns" ng-bind="column.Label"></th>
+    <th ng-repeat="column in vm.dataset.columns" ng-bind="column.Label || column.Name"></th>
     <th>Actions</th>
   </thead>
 
   <tbody>
     <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
-      <td ng-if="!vm.dataset.DemographicData" ng-bind="vm.getValueAsDate(row.date)"></td>
+      <td ng-if="!vm.dataset.DemographicData" ng-bind="row.date | date: 'shortDate'"></td>
       <td ng-repeat="column in vm.dataset.columns" ng-bind="vm.getValue(row, column)"></td>
       <td>
         <a class="btn btn-xs" ng-class="{disabled: false}" ng-click="vm.onEdit({entry: row})"><span class="fa fa-fw fa-edit"></span>Edit</a>

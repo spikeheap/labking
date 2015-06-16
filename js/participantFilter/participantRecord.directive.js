@@ -3,15 +3,16 @@
 var _ = require('lodash');
 module.exports = ParticipantRecord;
 
+/** @ngInject **/
 function ParticipantRecord(ParticipantService, DatasetMetadataService) {
     return {
       scope: {
         participant: '='
       },
-      templateUrl: '../../labking/js/participantFilter/participantRecord.directive.html',
-
+      template: require('./participantRecord.directive.html'),
       controllerAs: 'vm',
       bindToController: true,
+      /* @ngInject */
       controller: function($modal) {
         var self = this;
 
@@ -31,10 +32,6 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
             return dataset['CategoryId/Label'];
           });
           selectCategory(self.categories[_.keys(self.categories)[0]]);
-        });
-
-        DatasetMetadataService.getLookups().then(function(lookups) {
-          self.lookups = lookups;
         });
 
 
@@ -69,7 +66,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         function openEditModal(entry) {
           $modal.open({
             animation: true,
-            templateUrl: '../../labking/js/participantFilter/datasetEditModal.html',
+            template: require('./datasetEditModal.html'),
             controller: 'DatasetEditModalController as vm',
             resolve: {
               participantId: function() {

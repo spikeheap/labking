@@ -2,12 +2,13 @@
 var _ = require('lodash');
 module.exports = ParticipantFilter;
 
+/** @ngInject **/
 function ParticipantFilter($q, CohortService, ParticipantService) {
     return {
       scope: {
         onParticipantSelect: '&'
       },
-      templateUrl: '../../labking/js/participantFilter/participantFilter.directive.html',
+      template: require('./participantFilter.directive.html'),
 
       controllerAs: 'vm',
       bindToController: true,

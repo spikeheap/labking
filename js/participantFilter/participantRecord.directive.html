@@ -8,7 +8,7 @@
           <dt>MRN #:</dt>
           <dd ng-bind="vm.getEnrolmentDataSet().MRNNumber"></dd>
           <dt>Date of birth:</dt>
-          <dd ng-bind="vm.getEnrolmentDataSet().DOB | limitTo: 'dd-MM-yyyy'.length"></dd>
+          <dd ng-bind="vm.getEnrolmentDataSet().DOB | date: 'shortDate'"></dd>
         </dl>
     </div>
   </div>
@@ -43,6 +43,7 @@
 <div class="row">
   <div class="col-xs-12">
     <dataset-view
+        class="scrolling-content-x"
         participant="vm.participant"
         dataset="vm.selectedDataSet"
         on-edit="vm.openEditModal(entry)">

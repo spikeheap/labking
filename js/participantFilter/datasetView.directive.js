@@ -1,44 +1,36 @@
 'use strict';
 
-var _ = require('lodash');
 module.exports = DatasetView;
 
-function DatasetView(ParticipantService, DatasetMetadataService) {
+/** @ngInject **/
+function DatasetView() {
   return {
     scope: {
       participant: '=',
       dataset: '=',
       onEdit: '&'
     },
-    templateUrl: '../../labking/js/participantFilter/datasetView.directive.html',
+    template: require('./datasetView.directive.html'),
 
     controllerAs: 'vm',
     bindToController: true,
-    controller: function() {
+    /** @ngInject **/
+    controller: function($filter) {
       var self = this;
 
-      self.lookups = {};
-      self.getValueAsDate = getValueAsDate;
       self.getValue = getValue;
 
-      DatasetMetadataService.getLookups().then(function(lookupSet) {
-        self.lookups = lookupSet;
-      });
-
-
       function getValue(row, column){
-        if (column.LookupQuery && self.lookups[column.LookupQuery]) {
-          var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
-          return val === undefined ? '' : val.Label;
-        }else if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
-          return getValueAsDate(row[column.Name]);
+        // if (column.LookupQuery && self.lookups[column.LookupQuery]) {
+        //   var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
+        //   return val === undefined ? '' : val.Label;
+        // }else
+
+        if (column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
+          return $filter('date')(row[column.Name], 'shortDate');
         }else{
           return row[column.Name];
         }
-      }
-
-      function getValueAsDate(value) {
-        return new Date(value).toLocaleDateString('en-GB');
       }
     }
   };

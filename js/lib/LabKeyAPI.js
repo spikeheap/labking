@@ -1,18 +1,21 @@
 'use strict';
 (function(LABKEY){
 
-  // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
-  function getLabkeyQueries(schemaName){
-    return new Promise(function(resolve, reject) {
-      LABKEY.requiresExt3ClientAPI(true, function() {
-        LABKEY.Query.getQueries({
-          schemaName: schemaName,
-          success: resolve,
-          failure: reject
-        });
-      });
-    });
-  }
+  var _ = require('lodash');
+  let coerceFields = true;
+
+  // // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
+  // function getLabkeyQueries(schemaName){
+  //   return new Promise(function(resolve, reject) {
+  //     LABKEY.requiresExt3ClientAPI(true, function() {
+  //       LABKEY.Query.getQueries({
+  //         schemaName: schemaName,
+  //         success: resolve,
+  //         failure: reject
+  //       });
+  //     });
+  //   });
+  // }
 
   function labkeyQuery(schemaName, queryName, filterArray=[], columns=[]){
     return new Promise(function(resolve, reject) {
@@ -70,11 +73,13 @@
   }
 
   function getDataSet(dataSetId){
-    return labkeyQuery('study', dataSetId);
+    return labkeyQuery('study', dataSetId)
+      .then(processResponseTypes);
   }
 
   function getParticipantDataSet(participantId, dataSetId){
-    return labkeyQuery('study', dataSetId, [createLabKeyFilter('ParticipantId', participantId)]);
+    return labkeyQuery('study', dataSetId, [createLabKeyFilter('ParticipantId', participantId)])
+      .then(processResponseTypes);
   }
 
   function getCohorts(){
@@ -113,21 +118,62 @@
   }
 
   function addDataSetRow(dataSetName, entry){
-    return labkeyInsertRow('study', dataSetName, entry);
+    return labkeyInsertRow('study', dataSetName, entry)
+      .then(function (response) {
+        // LabKey inconsistently uppercases the date field for creation/retrieval.
+        response.rows.forEach(function (row) {
+          row.Date = row.date = new Date(row.date);
+        });
+        return response;
+      });
   }
 
   function updateDataSetRow(dataSetName, entry){
-    return labkeyUpdateRow('study', dataSetName, entry);
+    return labkeyUpdateRow('study', dataSetName, entry)
+      .then(function (response) {
+        // LabKey inconsistently uppercases the date field for creation/retrieval.
+        response.rows.forEach(function (row) {
+          row.Date = row.date = new Date(row.date);
+        });
+        return response;
+      });
   }
 
   // Get all the available lookups (valid select-items)
-  function getLookups() {
-    return getLabkeyQueries('lists')
-      .then(function(response) {
-        return Promise.all(response.queries.map(function(lookupName){
-          return labkeyQuery('lists', lookupName.name);
-        }));
+  function getLookups(listName) {
+    return labkeyQuery('lists', listName);
+  }
+
+  /* Internal utilities */
+  function processResponseTypes(response){
+    if(coerceFields){
+      response.rows = response.rows.map(function (row) {
+        return coerceToType(row, response.metaData.fields);
       });
+    }
+    return response;
+  }
+
+  function coerceToType (dataFields, metadata) {
+    let coercedFields = {};
+    _.forEach(dataFields, function (value, key) {
+      let recordMetadata = _.find(metadata, {fieldKey: key});
+
+      if(!recordMetadata || value === null || value === undefined){
+        coercedFields[key] = value;
+      }
+      else{
+        switch(_.find(metadata, {fieldKey: key}).type){
+          case 'date':
+            coercedFields[key] = new Date(value);
+            break;
+          default:
+            coercedFields[key] = value;
+            break;
+        }
+      }
+    });
+    return coercedFields;
   }
 
   module.exports = {
@@ -143,6 +189,7 @@
     getParticipantDataSet: getParticipantDataSet,
     getLookups: getLookups,
     insertRow: addDataSetRow,
-    updateDataSetRow: updateDataSetRow
+    updateDataSetRow: updateDataSetRow,
+    coerceToType: coerceToType
   };
 })(window.LABKEY);

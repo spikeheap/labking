@@ -7,6 +7,7 @@ module.exports = function(config) {
       'karma-browserify',
       'karma-mocha',
       'karma-chai',
+      'karma-chai-datetime',
       'karma-osx-reporter',
       'karma-phantomjs2-launcher'
     ],
@@ -17,14 +18,14 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai'],
 
 
     // list of files / patterns to load in the browser
     files: [
 
       // Test utilities
-      // 'bower_components/angular-mocks/angular-mocks.js',
+
       // 'bower_components/bardjs/dist/bard.js',
       // 'bower_components/bardjs/dist/bard-ngRouteTester.js',
       // 'node_modules/bardjs/dist/bard.js',
@@ -32,30 +33,17 @@ module.exports = function(config) {
       // Then our app for testing
       'js/labking.module.js',
 
+      'bower_components/angular-mocks/angular-mocks.js',
       // Finally, the tests
-      'js/**/*.spec.js',
+      'js/**/*.spec.js'
     ],
 
 
     logLevel: 'LOG_DEBUG',
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    browserify: {
-      watch: true,
-      debug: true,
-      transform: [
-        'babelify',
-        'debowerify',
-        // ngAnnotate,
-        // // 'brfs',
-        // // 'bulkify'
-      ],
-      extensions: ['.js']
-    },
-
     preprocessors: {
-      'js/labking.module.js': ['browserify']
+      'js/labking.module.js': ['browserify'],
+      'js/**/*.spec.js': ['browserify']
     },
 
 

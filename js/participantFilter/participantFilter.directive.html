@@ -47,7 +47,7 @@
             <td><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>
             <td><span class="label label-info" ng-bind="participant.keyInfo.MRNNumber"></span></td>
             <td>{{participant.keyInfo.FirstName}} {{participant.keyInfo.LastName}}</td>
-            <td ng-bind="participant.keyInfo.DOB | limitTo: 'dd-MM-yyyy'.length"</td>
+            <td ng-bind="participant.keyInfo.DOB | date: 'shortDate'"</td>
           </tr>
         </tbody>
       </table>

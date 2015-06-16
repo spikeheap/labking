@@ -17,6 +17,8 @@ module.exports = DatasetEditModalController;
 function DatasetEditModalController(DatasetMetadataService, $modalInstance, participantId, entry, selectedDataset, onSave) {
   var self = this;
 
+  self.lookups = {};
+
   self.editTypeLabel = 'Edit';
   self.entry = entry;
   self.dataset = selectedDataset;
@@ -29,9 +31,17 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
 
 
   function activate(){
-    DatasetMetadataService.getLookups().then(function(lookups) {
-      self.lookups = lookups;
-    });
+    self.dataset.columns
+      .filter(function(column) {
+        return !!column.LookupQuery;
+      })
+      .forEach(function (column) {
+        var lookupQuery = column.LookupQuery;
+        DatasetMetadataService.getLookups(lookupQuery)
+          .then(function (lookup) {
+            self.lookups[lookupQuery] = lookup;
+          });
+      });
 
     if(entry === undefined || entry === {}){
       self.editTypeLabel = 'Create';
@@ -39,12 +49,10 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
         ParticipantId: participantId
       };
     }
-
-    // LabKey inconsistently uppercases the date field for creation/retrieval.
-    self.entry.Date = self.entry.date;
   }
 
   function submit() {
+    self.entry.date = self.entry.Date;
     onSave(self.dataset.Name, self.entry).then($modalInstance.close);
   }
 

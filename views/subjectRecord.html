@@ -1,6 +1,10 @@
-<div class="labking" ng-app="labking">
-  <div ng-include="'<%=contextPath%>/labking/js/layout/participantEditor.html'"></div>
-</div>
+<table class="labking table-fullwidth" ng-app="labking" ng-strict-di="true">
+  <tr>
+    <td>
+      <participant-editor></participant-editor>
+    </td>
+  </tr>
+</table>
 
 <link rel="stylesheet" type="text/css" href="<%=contextPath%>/labking/styles/index.min.css">
-<script src="<%=contextPath%>/labking/js/index.js"></script>
+<script src="<%=contextPath%>/labking/js/application.min.js"></script>
