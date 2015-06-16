@@ -90,7 +90,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
     function updateParticipantCache(responsesArray){
       var dataSets = {};
       responsesArray.forEach((response) => {
-        dataSets[response.queryName] = response.rows;
+        dataSets[response.queryName] = response;
       });
 
       resultsCache.participants[participantId] = { ParticipantId: participantId, dataSets: dataSets };
@@ -102,7 +102,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0].ParticipantId;
-        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName], response.rows);
+        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
 
         response.rows = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(metadata, row);
@@ -122,7 +122,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0].ParticipantId;
-        var dataset = resultsCache.participants[participantId].dataSets[dataSetName];
+        var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
         response.rows = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(metadata, row);

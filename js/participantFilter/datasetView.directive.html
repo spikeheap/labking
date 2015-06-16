@@ -1,7 +1,7 @@
 
-<h3 ng-show="!vm.participant.dataSets[vm.dataset.Name].length">No entries available</h3>
+<h3 ng-show="!vm.participant.dataSets[vm.dataset.Name].rows.length">No entries available</h3>
 
-<table ng-show="!!vm.participant.dataSets[vm.dataset.Name].length" class="table table-bordered table-hover table-condensed">
+<table ng-show="!!vm.participant.dataSets[vm.dataset.Name].rows.length" class="table table-bordered table-hover table-condensed">
 
   <thead>
     <th ng-if="!vm.dataset.DemographicData">Result Date</th>
@@ -10,7 +10,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name]">
+    <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name].rows">
       <td ng-if="!vm.dataset.DemographicData" ng-bind="row.date | date: 'shortDate'"></td>
       <td ng-repeat="column in vm.dataset.columns" ng-bind="vm.getValue(row, column)"></td>
       <td>
