@@ -39,7 +39,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         // Utility to get at demographic data for the headers
         function getEnrolmentDataSet() {
           if(self.participant && self.participant.dataSets){
-            return self.participant.dataSets.Database_Enrollment[0];
+            return self.participant.dataSets.Database_Enrollment.rows[0];
           }else{
             return {};
           }
@@ -60,7 +60,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
 
         function canAddEntries() {
           return !(self.selectedDataSet && self.selectedDataSet.DemographicData &&
-                  self.participant && self.participant.dataSets[self.selectedDataSet.Name].length);
+                  self.participant && self.participant.dataSets[self.selectedDataSet.Name].rows.length);
         }
 
         function openEditModal(entry) {

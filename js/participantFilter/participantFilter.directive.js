@@ -73,12 +73,13 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
         }
 
         function participantSearchFilter(participant) {
+          var keyInfo = participant.keyInfo || {};
           return (
             fieldMatches(participant.ParticipantId, self.participantSearchText) ||
-            fieldMatches(participant.keyInfo.NHSNumber, self.participantSearchText) ||
-            fieldMatches(participant.keyInfo.MRNNumber, self.participantSearchText) ||
-            fieldMatches(participant.keyInfo.FirstName, self.participantSearchText) ||
-            fieldMatches(participant.keyInfo.LastName, self.participantSearchText)
+            fieldMatches(keyInfo.NHSNumber, self.participantSearchText) ||
+            fieldMatches(keyInfo.MRNNumber, self.participantSearchText) ||
+            fieldMatches(keyInfo.FirstName, self.participantSearchText) ||
+            fieldMatches(keyInfo.LastName, self.participantSearchText)
           );
         }
 

@@ -102,7 +102,7 @@
   }
 
   function getDataSets(){
-    return labkeyQuery('study', 'DataSets', [], ['CategoryId/Label', 'CategoryId', 'DataSetId', 'DemographicData', 'DisplayOrder', 'Label', 'Name', 'ProtocolId', 'ShowByDefault', 'Type', 'cohortid']);
+    return labkeyQuery('study', 'DataSets', [], ['CategoryId/Label', 'CategoryId', 'DataSetId', 'DemographicData', 'QuerySnapshot', 'DisplayOrder', 'Label', 'Name', 'ProtocolId', 'ShowByDefault', 'Type', 'cohortid']);
   }
 
   // Returns all column names for all datasets.
