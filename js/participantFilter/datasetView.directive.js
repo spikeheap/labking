@@ -26,6 +26,7 @@ function DatasetViewController($filter, $scope, DatasetMetadataService) {
   self.lookups = {};
   self.getValue = getValue;
   self.showColumn = showColumn;
+  self.showEditButton = showEditButton;
 
   $scope.$watch(function () {
     return self.dataset;
@@ -74,5 +75,9 @@ function DatasetViewController($filter, $scope, DatasetMetadataService) {
     }else{
       return true;
     }
+  }
+
+  function showEditButton(){
+    return self.dataset.QuerySnapshot !== true;
   }
 }
