@@ -1,8 +1,8 @@
 {
   "name": "labking",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A LabKey module to allow creation and editing of Study module datasets in a subject-centric way",
-  "main": "Gulpfile.js",
+  "main": "js/labking.module.js",
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "build": "gulp",
