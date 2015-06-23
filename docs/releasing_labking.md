@@ -12,9 +12,10 @@ git checkout develop && git pull
 Then do the Git Flow release:
 
 ```
-git flow release start 0.0.1
+LK_VERSION=0.0.5
+git flow release start $LK_VERSION
 # Bump the version in package.json now!
-git flow release finish 0.0.1
+git flow release finish $LK_VERSION
 ```
 
 Now we need to push the release commits and tags to GitHub:
@@ -46,17 +47,17 @@ We need a distribution zip file with `labking` as the base directory:
 
 ```
 mv dist labking
-zip -r labking_0.0.1.zip labking
+zip -r labking_$LK_VERSION.zip labking
 ```
 
 Finally we can push this up to GitHub using the following:
 
 ```
-hub release create -a labking_0.0.1.zip -m "Preview release of participant search, view and record creation" 0.0.1
+hub release create -a labking_$LK_VERSION.zip -m "Preview release of participant search, view and record creation" $LK_VERSION
 ```
 
 If you've added the changes, you can use the changelog instead:
 
 ```
-hub release create -a labking_0.0.1.zip -f CHANGELOG.md 0.0.1
+hub release create -a labking_$LK_VERSION.zip -f CHANGELOG.md $LK_VERSION
 ```
