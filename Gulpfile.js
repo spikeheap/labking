@@ -18,7 +18,6 @@
         mustache = require('mustache'),
         gulpstache = require("gulp-mustache"),
         less = require('gulp-less'),
-        minifycss = require('gulp-minify-css'),
         rename = require('gulp-rename'),
         concat = require('gulp-concat'),
         del = require('del'),
@@ -32,9 +31,18 @@
         browserify = require('browserify'),
         babelify = require('babelify'),
         debowerify = require('debowerify'),
-        uglify = require('gulp-uglify'),
         sourcemaps = require('gulp-sourcemaps');
     var runSequence = require('run-sequence');
+    var replace = require('gulp-replace');
+
+    // Optimisers
+    var useref = require('gulp-useref');
+    var gulpif = require('gulp-if');
+    var uglify = require('gulp-uglify');
+    var minifyHtml = require('gulp-minify-html');
+    var minifyCss = require('gulp-minify-css');
+    var rev = require('gulp-rev');
+    var revReplace = require('gulp-rev-replace');
 
     var browserified = transform(function(filename) {
       var b = browserify({entries: filename, debug: true});
@@ -79,6 +87,7 @@
 
     gulp.task('views', ['labkey:webParts'], function() {
       return gulp.src("./views/**/*.html")
+        .pipe(replace('/labking/', '<%=contextPath%>/labking/'))
         .pipe(gulp.dest(path.join(outputPath, 'views')));
     });
 
@@ -86,8 +95,6 @@
     gulp.task('styles', function() {
       return gulp.src('./less/**/*.less')
         .pipe(less())
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(minifycss())
         .pipe(gulp.dest(path.join(distWebPath, 'styles')));
     });
 
@@ -125,44 +132,60 @@
         .pipe(source('application.js'))
         .pipe(buffer())
         .pipe(gulp.dest(path.join(distWebPath, 'js')))
-        // Hack so we can develop against non-minified scripts
-        .pipe(rename('application.min.js'))
-        .pipe(gulp.dest(path.join(distWebPath, 'js')));
     });
 
-    // Optimises the JS
-    gulp.task('scripts:optimise', ['scripts:compile'], function() {
-      return gulp.src(path.join(distWebPath, 'js', 'application.js'))
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify({mangle: true}))
-        .pipe(rename('application.min.js'))
-        .pipe(sourcemaps.write('./', {sourceMappingURLPrefix: '/labkey/labking/js/' }))
-        .pipe(gulp.dest(path.join(distWebPath, 'js')))
-        ;
-    });
+    gulp.task('useref', [
+          'styles',
+          'scripts:compile'
+        ], function() {
 
+      var userefAssets = useref.assets({
+        searchPath: 'dist/labking/web'
+      });
+
+      var pipeline = gulp.src("views/**/*.html")
+        .pipe(userefAssets)      // Concatenate with gulp-useref
+
+        .pipe(gulpif('*.js', uglify({mangle: true})))
+        .pipe(gulpif('*.css', minifyCss()))
+
+        .pipe(rev())                // Rename the concatenated files
+        .pipe(userefAssets.restore())
+        .pipe(useref())
+        .pipe(revReplace())         // Substitute in new filenames
+        .pipe(replace('../web/', '<%=contextPath%>/'))
+        .pipe(gulp.dest(path.join(outputPath, 'views')));
+    });
 
     // Clean
     gulp.task('clean', function(cb) {
       del(['dist/**'], cb);
     });
 
-    gulp.task('build:quick', function() {
+    gulp.task('build:develop', function() {
       gulp.start(
-        'styles',
         'fonts',
         'labkey:module',
+        'styles',
         'scripts:compile',
         'views'
       );
     });
 
+    gulp.task('build:optimised', function() {
+      gulp.start(
+        'fonts',
+        'labkey:module',
+        'useref'
+      );
+    });
+
     // Default task
-    gulp.task('default', ['build:quick'], function (cb) {
+    gulp.task('default', function (cb) {
       runSequence(
           'scripts:test',
           'scripts:validate',
-          'scripts:optimise',
+          'build:optimised',
           cb
       );
     });
