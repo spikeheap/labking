@@ -8,7 +8,8 @@ function DatasetView() {
     scope: {
       participant: '=',
       dataset: '=',
-      onEdit: '&'
+      onEdit: '&',
+      onDelete: '&'
     },
     template: require('./datasetView.directive.html'),
 

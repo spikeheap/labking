@@ -20,6 +20,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         self.selectedDataSet = {};
         self.canAddEntries = canAddEntries;
         self.openEditModal = openEditModal;
+        self.removeRecord = ParticipantService.removeRecord;
         self.getEnrolmentDataSet = getEnrolmentDataSet;
         self.getParticipantName = getParticipantName;
         self.selectCategory = selectCategory;

@@ -18,7 +18,8 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
     getParticipantRecord: getParticipantRecord,
     getParticipantList: getParticipantList,
     createRecord: createRecord,
-    updateRecord: updateRecord
+    updateRecord: updateRecord,
+    removeRecord: removeRecord
   };
 
   function getParticipantList() {
@@ -137,6 +138,20 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         logger.error(errors.exception, 'Save failed');
         return $q.reject(errors);
       });
+  }
+
+  function removeRecord(dataSetName, record) {
+    return $q.when(LabKeyAPI.removeDataSetRow(dataSetName, record))
+      .then(function () {
+        var dataset = resultsCache.participants[record.ParticipantId].dataSets[dataSetName].rows;
+        var i = _.findIndex(dataset, { 'lsid': record.lsid});
+        dataset.splice(i, 1);
+      })
+      .catch(function(errors){
+        logger.error(errors.exception, 'Delete failed');
+        return $q.reject(errors);
+      });
+
   }
 
   function fail(error) {

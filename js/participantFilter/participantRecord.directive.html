@@ -46,7 +46,8 @@
         class="scrolling-content-x"
         participant="vm.participant"
         dataset="vm.selectedDataSet"
-        on-edit="vm.openEditModal(entry)">
+        on-edit="vm.openEditModal(entry)"
+        on-delete="vm.removeRecord(vm.selectedDataSet.Name, entry)">
     </dataset-view>
     <a class="btn btn-success" ng-if="vm.canAddEntries()" ng-click="vm.openEditModal()">Add entry</a>
   </div>
