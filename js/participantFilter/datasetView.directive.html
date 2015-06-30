@@ -12,7 +12,8 @@
   <tbody>
     <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name].rows">
       <td ng-repeat="column in vm.participant.dataSets[vm.dataset.Name].columnModel | filter: vm.showColumn"
-          ng-bind="vm.getValue(row, column.dataIndex)"></td>
+          ng-bind="vm.getValue(row, column.dataIndex)">
+      </td>
       <td>
         <a class="btn btn-xs btn-default" ng-class="{disabled: !vm.showEditButton()}" ng-click="vm.onEdit({entry: row})"><span class="fa fa-fw fa-pencil"></span></a>
         <a class="btn btn-xs btn-danger"

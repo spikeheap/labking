@@ -77,8 +77,8 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
                 // We clone the entry because if the action is cancelled we don't want the changes to persist.
                 return _.cloneDeep(entry);
               },
-              selectedDataset: function () {
-                return self.selectedDataSet;
+              datasetName: function () {
+                return self.selectedDataSet.Name;
               },
               onSave: function() {
                 return (entry === undefined) ? ParticipantService.createRecord : ParticipantService.updateRecord;

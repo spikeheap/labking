@@ -14,14 +14,14 @@ module.exports = DatasetEditModalController;
  * @param onSave the function to call when the form is submitted. This function must take the parameters `datasetName, record`.
  * @ngInject
  **/
-function DatasetEditModalController(DatasetMetadataService, $modalInstance, participantId, entry, selectedDataset, onSave) {
+function DatasetEditModalController(DatasetMetadataService, $modalInstance, participantId, entry, datasetName, onSave) {
+  var _ = require('lodash');
   var self = this;
 
   self.lookups = {};
-
+  self.isNewSubject = participantId === undefined;
   self.editTypeLabel = 'Edit';
   self.entry = entry;
-  self.dataset = selectedDataset;
   self.onSave = onSave;
 
   self.submit = submit;
@@ -31,17 +31,20 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
 
 
   function activate(){
-    self.dataset.columns
-      .filter(function(column) {
-        return !!column.LookupQuery;
-      })
-      .forEach(function (column) {
-        var lookupQuery = column.LookupQuery;
-        DatasetMetadataService.getLookups(lookupQuery)
-          .then(function (lookup) {
-            self.lookups[lookupQuery] = lookup;
-          });
-      });
+    DatasetMetadataService.getMetaData().then(function (metadata) {
+      self.dataset = _.find(metadata, {Name: 'Database_Enrollment'});
+      self.dataset.columns
+        .filter(function(column) {
+          return !!column.LookupQuery;
+        })
+        .forEach(function (column) {
+          var lookupQuery = column.LookupQuery;
+          DatasetMetadataService.getLookups(lookupQuery)
+            .then(function (lookup) {
+              self.lookups[lookupQuery] = lookup;
+            });
+        });
+    });
 
     if(entry === undefined || entry === {}){
       self.editTypeLabel = 'Create';
@@ -52,7 +55,6 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
   }
 
   function submit() {
-    self.entry.date = self.entry.Date;
     onSave(self.dataset.Name, self.entry).then($modalInstance.close);
   }
 

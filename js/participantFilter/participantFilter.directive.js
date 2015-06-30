@@ -3,7 +3,7 @@ var _ = require('lodash');
 module.exports = ParticipantFilter;
 
 /** @ngInject **/
-function ParticipantFilter($q, CohortService, ParticipantService) {
+function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
     return {
       scope: {
         onParticipantSelect: '&'
@@ -29,6 +29,8 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
         self.selectParticipant = selectParticipant;
         self.isParticipantSelected = isParticipantSelected;
         self.keyFieldsPercentageComplete = keyFieldsPercentageComplete;
+
+        self.openAddParticipantModal = openAddParticipantModal;
 
         activate();
 
@@ -118,6 +120,24 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
             return value === null;
           });
           return (_.keys(completedFields).length / _.keys(userEditableFields).length) * 100;
+        }
+
+        function openAddParticipantModal() {
+          $modal.open({
+            animation: true,
+            template: require('./datasetEditModal.html'),
+            controller: 'DatasetEditModalController as vm',
+            resolve: {
+              participantId: function() {},
+              entry: function () {},
+              datasetName: function () {
+                return 'Dataset_Enrollment';
+              },
+              onSave: function() {
+                return ParticipantService.createRecord;
+              }
+            }
+          });
         }
       }
     };

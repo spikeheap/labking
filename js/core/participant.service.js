@@ -99,14 +99,33 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
   }
 
   function createRecord(dataSetName, record) {
+    record = _.cloneDeep(record);
+    if(record.date){
+      record.date = record.date.toLocaleString();
+    }
+
     return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, record)])
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0].ParticipantId;
+
+        if(resultsCache.participants[participantId] === undefined){
+          resultsCache.participants[participantId] = {
+            ParticipantId: participantId,
+            dataSets: {}
+          };
+        }
+
+        if(resultsCache.participants[participantId].dataSets[dataSetName] === undefined){
+          resultsCache.participants[participantId].dataSets[dataSetName] = {
+            rows: []
+          };
+        }
+
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
 
         response.rows = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(metadata, row);
+          return LabKeyAPI.coerceToType(row, metadata);
         });
 
         logger.success('Record created');
@@ -119,6 +138,8 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
   }
 
   function updateRecord(dataSetName, record) {
+    record = _.cloneDeep(record);
+    record.date = record.date.toLocaleString();
     return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, record)])
       .then(function(responses) {
         var [metadata, response] = responses;
@@ -126,7 +147,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
         response.rows = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(metadata, row);
+          return LabKeyAPI.coerceToType(row, metadata);
         });
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});

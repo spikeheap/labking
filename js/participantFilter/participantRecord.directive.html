@@ -49,7 +49,7 @@
         on-edit="vm.openEditModal(entry)"
         on-delete="vm.removeRecord(vm.selectedDataSet.Name, entry)">
     </dataset-view>
-    <a class="btn btn-success" ng-if="vm.canAddEntries()" ng-click="vm.openEditModal()">Add entry</a>
+    <a class="btn btn-success" ng-if="vm.canAddEntries()" ng-click="vm.openEditModal()"><span class="fa fa-fw fa-plus"></span>Add entry</a>
   </div>
 </div>
 
