@@ -22,6 +22,7 @@
                   ng-options="item.Key as item.Label for item in vm.lookups[column.LookupQuery].rows"
                   ng-if="column.LookupQuery"
                   class="form-control">
+            <option value="">-- not selected --</option>
           </select>
         </div>
 
