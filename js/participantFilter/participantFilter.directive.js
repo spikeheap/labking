@@ -28,6 +28,7 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
         self.selectedParticipant = {};
         self.selectParticipant = selectParticipant;
         self.isParticipantSelected = isParticipantSelected;
+        self.keyFieldsPercentageComplete = keyFieldsPercentageComplete;
 
         activate();
 
@@ -106,6 +107,17 @@ function ParticipantFilter($q, CohortService, ParticipantService) {
           return self.allParticipants.filter(function(participant) {
             return participant.Cohort === cohort.rowid;
           }).length;
+        }
+
+        function keyFieldsPercentageComplete(participant){
+          var userEditableFields = _.omit(participant.keyInfo, function(value, key){
+            return key.startsWith('_') || key === 'date' || key === 'lsid ' || key === 'ParticipantId';
+          });
+
+          var completedFields = _.omit(userEditableFields, function(value){
+            return value === null;
+          });
+          return (_.keys(completedFields).length / _.keys(userEditableFields).length) * 100;
         }
       }
     };
