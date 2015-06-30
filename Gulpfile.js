@@ -168,6 +168,7 @@
         'labkey:module',
         'styles',
         'scripts:compile',
+        'scripts:validate',
         'views'
       );
     });
@@ -176,6 +177,7 @@
       gulp.start(
         'fonts',
         'labkey:module',
+        'scripts:validate',
         'useref'
       );
     });
@@ -184,7 +186,6 @@
     gulp.task('default', function (cb) {
       runSequence(
           'scripts:test',
-          'scripts:validate',
           'build:optimised',
           cb
       );
