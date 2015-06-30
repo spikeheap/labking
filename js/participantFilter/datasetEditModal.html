@@ -3,14 +3,14 @@
   <form name="form" class="validated-form" novalidate>
 
     <div class="modal-header">
-      <h3 class="modal-title">{{vm.editTypeLabel}} participant</h3>
+      <h3 class="modal-title">{{vm.editTypeLabel}} {{vm.dataset.Label}} Record</h3>
     </div>
 
     <div class="modal-body form-horizontal">
       <div ng-if="!vm.dataset.DemographicData" class="form-group">
         <label class="control-label col-sm-4" >Record Date</label>
         <div class="col-sm-8">
-          <input class="form-control" type="date" ng-model="vm.entry.Date" required autofocus>
+          <input class="form-control" type="date" ng-model="vm.entry.date" required autofocus>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-success" ng-click="vm.submit(vm.entry)">{{vm.editTypeLabel}}</button>
+      <button class="btn btn-success" ng-click="vm.submit(vm.entry)">Save</button>
       <button class="pull-left btn btn-default" ng-click="vm.cancel()">Cancel</button>
     </div>
   </form>
