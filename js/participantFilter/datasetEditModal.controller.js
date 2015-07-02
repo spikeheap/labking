@@ -14,15 +14,19 @@ module.exports = DatasetEditModalController;
  * @param onSave the function to call when the form is submitted. This function must take the parameters `datasetName, record`.
  * @ngInject
  **/
-function DatasetEditModalController(DatasetMetadataService, $modalInstance, participantId, entry, datasetName, onSave) {
+function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, participantId, entry, datasetName, onSave) {
   var _ = require('lodash');
   var self = this;
 
   self.lookups = {};
+  self.getLookup = getLookup
   self.isNewSubject = participantId === undefined;
+  self.columnType = columnType;
+  self.isColumnShown = isColumnShown;
   self.editTypeLabel = 'Edit';
   self.entry = entry;
   self.onSave = onSave;
+  self.fieldTypes = Object.freeze({INT: 0, DOUBLE: 1, BOOLEAN: 2, STRING: 3, MULTILINE: 4, LOOKUP: 5, DATETIME: 6});
 
   self.submit = submit;
   self.cancel = cancel;
@@ -31,10 +35,13 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
 
 
   function activate(){
-    DatasetMetadataService.getMetaData().then(function (metadata) {
-      self.dataset = _.find(metadata, {Name: 'Database_Enrollment'});
-      self.dataset.columns
-        .filter(function(column) {
+    $q.all([DatasetMetadataService.getMetaData(), DatasetMetadataService.getColumnOrder(datasetName)]).then(function (responses) {
+      var [metadata, columnModel] = responses;
+
+      self.dataset = _.find(metadata, {Name: datasetName});
+      self.dataset.columnModel = columnModel;
+
+      _.filter(self.dataset.columns, function(column) {
           return !!column.LookupQuery;
         })
         .forEach(function (column) {
@@ -60,5 +67,67 @@ function DatasetEditModalController(DatasetMetadataService, $modalInstance, part
 
   function cancel() {
     $modalInstance.dismiss('cancel');
+  }
+
+  function isColumnShown(column) {
+
+    var isShown = false;
+
+    if(column.dataIndex === 'ParticipantId'){
+      isShown = !self.dataset.DemographicData;
+    }else if(column.dataIndex === 'date'){
+      isShown = !self.dataset.DemographicData;
+    }else if(column && !column.hidden){
+      isShown = true;
+    }
+    return isShown;
+  }
+
+  function columnType(columnName) {
+    var column = _.find(self.dataset.columns, {Name: columnName});
+
+    // Special cases where no metadata exists
+    if(!column){
+      if(columnName === 'date'){
+        return self.fieldTypes.DATETIME;
+      }else{
+        return self.fieldTypes.STRING;
+      }
+    }
+
+    var type;
+    if(column.LookupQuery){
+      return self.fieldTypes.LOOKUP;
+    }else{
+      switch(column.RangeURI) {
+        case 'http://www.w3.org/2001/XMLSchema#int':
+          type = self.fieldTypes.INT;
+          break;
+        case 'http://www.w3.org/2001/XMLSchema#double':
+          type = self.fieldTypes.DOUBLE;
+          break;
+        case 'http://www.w3.org/2001/XMLSchema#boolean':
+          type = self.fieldTypes.BOOLEAN;
+          break;
+        case 'http://www.w3.org/2001/XMLSchema#string':
+          type = self.fieldTypes.STRING;
+          break;
+        case 'http://www.w3.org/2001/XMLSchema#dateTime':
+          type = self.fieldTypes.DATETIME;
+          break;
+        case 'http://www.w3.org/2001/XMLSchema#multiLine':
+          type = self.fieldTypes.MULTILINE;
+          break;
+        default:
+          type = 'self.fieldTypes.STRING;';
+      }
+    }
+
+    return type;
+  }
+
+  function getLookup(columnName) {
+    var column = _.find(self.dataset.columns, {Name: columnName});
+    return self.lookups[column.LookupQuery];
   }
 }

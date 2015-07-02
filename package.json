@@ -103,6 +103,7 @@
     "karma-mocha": "^0.1.10",
     "karma-osx-reporter": "^0.2.0",
     "karma-phantomjs2-launcher": "^0.1.6",
+    "karma-sinon-chai": "^1.0.0",
     "lodash": "^3.6.0",
     "mocha": "^2.2.1",
     "moment": "^2.10.3",

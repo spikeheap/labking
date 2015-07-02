@@ -8,6 +8,7 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-chai',
       'karma-chai-datetime',
+      'karma-sinon-chai',
       'karma-osx-reporter',
       'karma-phantomjs2-launcher'
     ],
@@ -18,7 +19,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai', 'sinon-chai'],
 
 
     // list of files / patterns to load in the browser
@@ -34,6 +35,7 @@ module.exports = function(config) {
       'js/labking.module.js',
 
       'bower_components/angular-mocks/angular-mocks.js',
+
       // Finally, the tests
       'js/**/*.spec.js'
     ],
@@ -42,10 +44,16 @@ module.exports = function(config) {
     logLevel: 'LOG_DEBUG',
 
     preprocessors: {
-      'js/labking.module.js': ['browserify'],
+      'js/**/!(*.spec).js': ['browserify'],
       'js/**/*.spec.js': ['browserify']
     },
 
+    browserify: {
+      debug: true,
+      transform: [
+        ['babelify', {ignore: ['bower_components']}]
+      ]
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
