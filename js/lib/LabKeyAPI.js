@@ -158,16 +158,23 @@
     return response;
   }
 
-  function coerceToType (dataFields, metadata) {
+  function coerceToType (dataFields, metadata, idKey='fieldKey') {
     let coercedFields = {};
     _.forEach(dataFields, function (value, key) {
-      let recordMetadata = _.find(metadata, {fieldKey: key});
+      let recordMetadata = _.find(metadata, idKey, key);
 
-      if(!recordMetadata || value === null || value === undefined){
-        coercedFields[key] = value;
+      if(recordMetadata === null || recordMetadata === undefined || value === null || value === undefined){
+        switch(key){
+          case 'date':
+            coercedFields[key] = new Date(value);
+            break;
+          default:
+            coercedFields[key] = value;
+            break;
+        }
       }
       else{
-        switch(_.find(metadata, {fieldKey: key}).type){
+        switch(recordMetadata.type){
           case 'date':
             coercedFields[key] = new Date(value);
             break;

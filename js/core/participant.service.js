@@ -122,11 +122,12 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
           };
         }
 
-        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
-
+        var datasetMetadata = _.find(metadata, {Name: dataSetName}).columns;
         response.rows = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(row, metadata);
+          return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
+
+        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
 
         logger.success('Record created');
         return $q.when();
@@ -146,8 +147,9 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         var participantId = response.rows[0].ParticipantId;
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
+        var datasetMetadata = _.find(metadata, {Name: dataSetName}).columns;
         response.rows = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(row, metadata);
+          return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});

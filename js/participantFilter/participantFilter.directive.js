@@ -131,12 +131,13 @@ function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
               participantId: function() {},
               entry: function () {},
               datasetName: function () {
-                return 'Dataset_Enrollment';
+                return 'Database_Enrollment';
               },
               onSave: function() {
                 return ParticipantService.createRecord;
               }
             }
+
           });
         }
       }

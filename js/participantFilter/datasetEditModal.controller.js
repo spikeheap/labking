@@ -19,7 +19,7 @@ function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, 
   var self = this;
 
   self.lookups = {};
-  self.getLookup = getLookup
+  self.getLookup = getLookup;
   self.isNewSubject = participantId === undefined;
   self.columnType = columnType;
   self.isColumnShown = isColumnShown;
@@ -74,7 +74,7 @@ function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, 
     var isShown = false;
 
     if(column.dataIndex === 'ParticipantId'){
-      isShown = !self.dataset.DemographicData;
+      isShown = self.isNewSubject;
     }else if(column.dataIndex === 'date'){
       isShown = !self.dataset.DemographicData;
     }else if(column && !column.hidden){
