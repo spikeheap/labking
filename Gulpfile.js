@@ -115,7 +115,7 @@
 
     // Validate JavaScript
     gulp.task('scripts:validate', function() {
-      return gulp.src(['./js/**/*.js'])
+      return gulp.src(['./js/**/*(!spec).js'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failOnError());

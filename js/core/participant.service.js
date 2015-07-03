@@ -92,6 +92,8 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
       var dataSets = {};
       responsesArray.forEach((response) => {
         dataSets[response.queryName] = response;
+        // Push the columnModel so we can cache the metadata
+        DatasetMetadataService.cacheColumnModel(response.queryName, response.columnModel);
       });
 
       resultsCache.participants[participantId] = { ParticipantId: participantId, dataSets: dataSets };

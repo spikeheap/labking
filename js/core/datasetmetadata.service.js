@@ -17,6 +17,7 @@ function DatasetMetadataService($q, logger) {
   return {
     getMetaData: getMetaData,
     getColumnOrder: getColumnOrder,
+    cacheColumnModel: cacheColumnModel,
     getLookups: getLookups
   };
 
@@ -66,26 +67,28 @@ function DatasetMetadataService($q, logger) {
     }
   }
 
+  function cacheColumnModel(dataSetName, columnModel){
+    if(resultsCache.metadata[dataSetName] === undefined){
+      resultsCache.metadata[dataSetName] = {};
+    }
+    resultsCache.metadata[dataSetName].columnOrder = columnModel;
+  }
+
   function getColumnOrder(dataSetName) {
     var getFromCacheIfPossible;
     if(resultsCache.metadata[dataSetName] && resultsCache.metadata[dataSetName].columnOrder){
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(dataSetName))
-        .then(updateMetaDataCache);
+        .then(function(response){
+          cacheColumnModel(dataSetName, response.columnModel);
+          return resultsCache.metadata[dataSetName].columnOrder;
+        });
     }
 
     return getFromCacheIfPossible
       .then(function(){ return resultsCache.metadata[dataSetName].columnOrder; })
       .catch(fail);
-
-    function updateMetaDataCache(response){
-      if(resultsCache.metadata[dataSetName] === undefined){
-        resultsCache.metadata[dataSetName] = {};
-      }
-      resultsCache.metadata[dataSetName].columnOrder = response.columnModel;
-      return resultsCache.metadata[dataSetName].columnOrder;
-    }
   }
 
   function fail(error) {
