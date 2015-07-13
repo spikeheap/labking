@@ -3,7 +3,7 @@ var _ = require('lodash');
 module.exports = ParticipantFilter;
 
 /** @ngInject **/
-function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
+function ParticipantFilter($q, $modal, config, CohortService, ParticipantService) {
     return {
       scope: {
         onParticipantSelect: '&'
@@ -140,7 +140,7 @@ function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
               participantId: function() {},
               entry: function () {},
               datasetName: function () {
-                return 'Database_Enrollment';
+                return config.demographicDataset;
               },
               onSave: function() {
                 return ParticipantService.createRecord;

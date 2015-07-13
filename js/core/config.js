@@ -9,7 +9,8 @@ function toastrConfig(toastr) {
 
 var config = {
   appErrorPrefix: '[labKing Error] ',
-  appTitle: 'labKing'
+  appTitle: 'labKing',
+  demographicDataset: 'Database_Enrollment'
 };
 
 /* @ngInject */

@@ -4,7 +4,7 @@ var _ = require('lodash');
 module.exports = ParticipantRecord;
 
 /** @ngInject **/
-function ParticipantRecord(ParticipantService, DatasetMetadataService) {
+function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
     return {
       scope: {
         participant: '='
@@ -40,7 +40,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         // Utility to get at demographic data for the headers
         function getEnrolmentDataSet() {
           if(self.participant && self.participant.dataSets){
-            return self.participant.dataSets.Database_Enrollment.rows[0];
+            return self.participant.dataSets[config.demographicDataset].rows[0];
           }else{
             return {};
           }

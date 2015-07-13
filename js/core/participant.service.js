@@ -4,7 +4,7 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
 /** @ngInject **/
-function ParticipantService(DatasetMetadataService, $q, logger, $rootScope) {
+function ParticipantService(config, DatasetMetadataService, $q, logger, $rootScope) {
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -45,12 +45,11 @@ function ParticipantService(DatasetMetadataService, $q, logger, $rootScope) {
 
 
   function getParticipantKeyInfo() {
-    const KEY_INFO_DATASET_NAME = 'Database_Enrollment';
     var getFromCacheIfPossible;
-    if(resultsCache[KEY_INFO_DATASET_NAME]){
+    if(resultsCache[config.demographicDataset]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(KEY_INFO_DATASET_NAME))
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(config.demographicDataset))
         .then(updateParticipantKeyInfoCache);
     }
 
