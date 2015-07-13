@@ -11,7 +11,8 @@ var config = {
   appErrorPrefix: '[labKing Error] ',
   appTitle: 'labKing',
   subjectNoun: 'ParticipantId',
-  demographicDataset: 'Database_Enrollment'
+  demographicDataset: 'Database_Enrollment',
+  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName']
 };
 
 /* @ngInject */
