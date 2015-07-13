@@ -12,7 +12,8 @@ function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
 
       controllerAs: 'vm',
       bindToController: true,
-      controller: function () {
+      // @ngInject
+      controller: function ($scope) {
         var self = this;
 
         self.selectedCohorts = {};
@@ -33,6 +34,14 @@ function ParticipantFilter($q, $modal, CohortService, ParticipantService) {
         self.openAddParticipantModal = openAddParticipantModal;
 
         activate();
+
+        ///////
+
+        $scope.$on('labkey:record:created', activate);
+        $scope.$on('labkey:record:updated', activate);
+        $scope.$on('labkey:record:removed', activate);
+
+        //////
 
         function activate(){
           $q.all([

@@ -4,7 +4,7 @@ var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
 /** @ngInject **/
-function ParticipantService(DatasetMetadataService, $q, logger) {
+function ParticipantService(DatasetMetadataService, $q, logger, $rootScope) {
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -132,6 +132,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
 
         logger.success('Record created');
+        $rootScope.$broadcast('labkey:record:created', resultsCache.participants[participantId]);
         return $q.when();
       })
       .catch(function(errors){
@@ -156,6 +157,8 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;
+
+        $rootScope.$broadcast('labkey:record:updated', resultsCache.participants[participantId]);
         logger.success('Record updated');
         return $q.when();
       })
@@ -171,6 +174,7 @@ function ParticipantService(DatasetMetadataService, $q, logger) {
         var dataset = resultsCache.participants[record.ParticipantId].dataSets[dataSetName].rows;
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset.splice(i, 1);
+        $rootScope.$broadcast('labkey:record:removed', participantId);
       })
       .catch(function(errors){
         logger.error(errors.exception, 'Delete failed');
