@@ -14,7 +14,7 @@ module.exports = DatasetEditModalController;
  * @param onSave the function to call when the form is submitted. This function must take the parameters `datasetName, record`.
  * @ngInject
  **/
-function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, participantId, entry, datasetName, onSave) {
+function DatasetEditModalController($q, config, DatasetMetadataService, $modalInstance, participantId, entry, datasetName, onSave) {
   var _ = require('lodash');
   var self = this;
 
@@ -55,9 +55,8 @@ function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, 
 
     if(entry === undefined || entry === {}){
       self.editTypeLabel = 'Create';
-      self.entry = {
-        ParticipantId: participantId
-      };
+      self.entry = {};
+      self.entry[config.subjectNoun] = participantId;
     }
   }
 
@@ -73,7 +72,7 @@ function DatasetEditModalController($q, DatasetMetadataService, $modalInstance, 
 
     var isShown = false;
 
-    if(column.dataIndex === 'ParticipantId'){
+    if(column.dataIndex === config.subjectNoun){
       isShown = self.isNewSubject;
     }else if(column.dataIndex === 'date'){
       isShown = !self.dataset.DemographicData;

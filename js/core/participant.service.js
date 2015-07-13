@@ -60,7 +60,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     function updateParticipantKeyInfoCache(response){
       var deferred = $q.defer();
       response.rows.forEach(function(record) {
-        resultsCache.participantKeyInfo[record.ParticipantId] = record;
+        resultsCache.participantKeyInfo[record[config.subjectNoun]] = record;
       });
       deferred.resolve();
       return deferred.promise;
@@ -83,7 +83,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       .catch(fail);
 
     function getDataSetsForParticipant(response) {
-        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKeyAPI.getParticipantDataSet(participantId, dataSet.Name)));
+        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKeyAPI.getParticipantDataSet(config.subjectNoun, participantId, dataSet.Name)));
         return $q.all(participantDataSetPromises);
     }
 
@@ -95,7 +95,8 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
         DatasetMetadataService.cacheColumnModel(response.queryName, response.columnModel);
       });
 
-      resultsCache.participants[participantId] = { ParticipantId: participantId, dataSets: dataSets };
+      resultsCache.participants[participantId] = { dataSets: dataSets };
+      resultsCache.participants[participantId][config.subjectNoun] = participantId;
     }
   }
 
@@ -108,13 +109,11 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, record)])
       .then(function(responses) {
         var [metadata, response] = responses;
-        var participantId = response.rows[0].ParticipantId;
+        var participantId = response.rows[0][config.subjectNoun];
 
         if(resultsCache.participants[participantId] === undefined){
-          resultsCache.participants[participantId] = {
-            ParticipantId: participantId,
-            dataSets: {}
-          };
+          resultsCache.participants[participantId] = { dataSets: {} };
+          resultsCache.participants[participantId][config.subjectNoun] = participantId;
         }
 
         if(resultsCache.participants[participantId].dataSets[dataSetName] === undefined){
@@ -146,7 +145,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, record)])
       .then(function(responses) {
         var [metadata, response] = responses;
-        var participantId = response.rows[0].ParticipantId;
+        var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
         var datasetMetadata = _.find(metadata, {Name: dataSetName}).columns;
@@ -170,7 +169,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
   function removeRecord(dataSetName, record) {
     return $q.when(LabKeyAPI.removeDataSetRow(dataSetName, record))
       .then(function () {
-        var dataset = resultsCache.participants[record.ParticipantId].dataSets[dataSetName].rows;
+        var dataset = resultsCache.participants[record[config.subjectNoun]].dataSets[dataSetName].rows;
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset.splice(i, 1);
         $rootScope.$broadcast('labkey:record:removed', participantId);

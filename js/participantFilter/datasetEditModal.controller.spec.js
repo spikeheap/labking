@@ -4,15 +4,17 @@ describe('DatasetEditModalController', function () {
   var $q;
   var $rootScope;
   var $controller;
+  var config;
   var DatasetMetadataService;
   var controller;
 
   beforeEach(angular.mock.module('labking.participantFilter'));
 
-  beforeEach(inject(function(_$rootScope_, _$q_, _$controller_, _DatasetMetadataService_) {
+  beforeEach(inject(function(_$rootScope_, _$q_, _$controller_, _config_, _DatasetMetadataService_) {
     $q = _$q_;
     $rootScope = _$rootScope_;
     $controller = _$controller_;
+    config = _config_;
     DatasetMetadataService = _DatasetMetadataService_;
   }));
 
@@ -66,8 +68,8 @@ describe('DatasetEditModalController', function () {
       expect(controller.isColumnShown({dataIndex: 'shownColumn', hidden: false})).to.equal(true);
     });
 
-    it('hides ParticipantId columns when it is an existing subject', function () {
-      expect(controller.isColumnShown({dataIndex: 'ParticipantId'})).to.equal(false);
+    it('hides subject noun columns when it is an existing subject', function () {
+      expect(controller.isColumnShown({dataIndex: config.subjectNoun})).to.equal(false);
     });
 
     describe('non-demographic datasets', function () {
@@ -75,8 +77,8 @@ describe('DatasetEditModalController', function () {
         expect(controller.isColumnShown({dataIndex: 'date', hidden: false})).to.equal(true);
       });
 
-      it('hides `ParticipantId` columns', function () {
-        expect(controller.isColumnShown({dataIndex: 'ParticipantId', hidden: false})).to.equal(false);
+      it('hides subject noun columns', function () {
+        expect(controller.isColumnShown({dataIndex: config.subjectNoun, hidden: false})).to.equal(false);
       });
     });
 
@@ -96,8 +98,9 @@ describe('DatasetEditModalController', function () {
         expect(controller.isColumnShown({dataIndex: 'date', hidden: false})).to.equal(false);
       });
 
-      it('hides `ParticipantId` columns', function () {
-        expect(controller.isColumnShown({dataIndex: 'ParticipantId', hidden: false})).to.equal(false);
+      it('hides subject noun columns', function () {
+        config.subjectNoun = 'subjectNoun';
+        expect(controller.isColumnShown({dataIndex: config.subjectNoun, hidden: false})).to.equal(false);
       });
     });
 
@@ -113,8 +116,8 @@ describe('DatasetEditModalController', function () {
         $rootScope.$digest();
       });
 
-      it('shows ParticipantId columns when it is a new subject', function () {
-        expect(controller.isColumnShown({dataIndex: 'ParticipantId'})).to.equal(true);
+      it('shows subject noun columns when it is a new subject', function () {
+        expect(controller.isColumnShown({dataIndex: config.subjectNoun})).to.equal(true);
       });
     });
   });

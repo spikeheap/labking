@@ -71,7 +71,7 @@ function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
             controller: 'DatasetEditModalController as vm',
             resolve: {
               participantId: function() {
-                return self.participant.ParticipantId;
+                return self.participant[config.subjectNoun];
               },
               entry: function() {
                 // We clone the entry because if the action is cancelled we don't want the changes to persist.

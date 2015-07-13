@@ -10,6 +10,7 @@ function toastrConfig(toastr) {
 var config = {
   appErrorPrefix: '[labKing Error] ',
   appTitle: 'labKing',
+  subjectNoun: 'ParticipantId',
   demographicDataset: 'Database_Enrollment'
 };
 

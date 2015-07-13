@@ -16,6 +16,8 @@ function ParticipantFilter($q, $modal, config, CohortService, ParticipantService
       controller: function ($scope) {
         var self = this;
 
+        self.subjectNoun = config.subjectNoun;
+
         self.selectedCohorts = {};
         self.participantCount = participantCount;
         self.isCohortSelected = isCohortSelected;
@@ -50,7 +52,7 @@ function ParticipantFilter($q, $modal, config, CohortService, ParticipantService
           ]).then(function(responses) {
             var [participants, participantsKeyInfo] = responses;
             self.allParticipants = participants.map(function(participant) {
-              participant.keyInfo = _.find(participantsKeyInfo, 'ParticipantId', participant.ParticipantId);
+              participant.keyInfo = _.find(participantsKeyInfo, config.subjectNoun, participant[config.subjectNoun]);
               return participant;
             });
             filterParticipants();
@@ -67,11 +69,11 @@ function ParticipantFilter($q, $modal, config, CohortService, ParticipantService
 
         function selectParticipant(participant) {
           self.selectedParticipant = participant;
-          self.onParticipantSelect({participantId: participant.ParticipantId});
+          self.onParticipantSelect({participantId: participant[config.subjectNoun]});
         }
 
         function isParticipantSelected(participant){
-          return participant && participant.ParticipantId && self.selectedParticipant.ParticipantId === participant.ParticipantId;
+          return participant && participant[config.subjectNoun] && self.selectedParticipant[config.subjectNoun] === participant[config.subjectNoun];
         }
 
         function filterParticipants(){
@@ -87,7 +89,7 @@ function ParticipantFilter($q, $modal, config, CohortService, ParticipantService
         function participantSearchFilter(participant) {
           var keyInfo = participant.keyInfo || {};
           return (
-            fieldMatches(participant.ParticipantId, self.participantSearchText) ||
+            fieldMatches(participant[config.subjectNoun], self.participantSearchText) ||
             fieldMatches(keyInfo.NHSNumber, self.participantSearchText) ||
             fieldMatches(keyInfo.MRNNumber, self.participantSearchText) ||
             fieldMatches(keyInfo.FirstName, self.participantSearchText) ||
@@ -122,7 +124,7 @@ function ParticipantFilter($q, $modal, config, CohortService, ParticipantService
 
         function keyFieldsPercentageComplete(participant){
           var userEditableFields = _.omit(participant.keyInfo, function(value, key){
-            return key.startsWith('_') || key === 'date' || key === 'lsid ' || key === 'ParticipantId';
+            return key.startsWith('_') || key === 'date' || key === 'lsid ' || key === config.subjectNoun;
           });
 
           var completedFields = _.omit(userEditableFields, function(value){

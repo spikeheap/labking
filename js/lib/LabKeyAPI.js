@@ -91,8 +91,8 @@
       .then(processResponseTypes);
   }
 
-  function getParticipantDataSet(participantId, dataSetId){
-    return labkeyQuery('study', dataSetId, [createLabKeyFilter('ParticipantId', participantId)])
+  function getParticipantDataSet(subjectNoun, subjectId, dataSetId){
+    return labkeyQuery('study', dataSetId, [createLabKeyFilter(subjectNoun, subjectId)])
       .then(processResponseTypes);
   }
 
