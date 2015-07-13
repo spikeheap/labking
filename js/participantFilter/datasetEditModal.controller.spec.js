@@ -59,20 +59,24 @@ describe('DatasetEditModalController', function () {
 
   describe('isColumnShown', function () {
     it('hides columns with a `hidden` attribute', function () {
-      expect(controller.isColumnShown('hiddenColumn')).to.equal(false);
+      expect(controller.isColumnShown({dataIndex: 'hiddenColumn', hidden: true})).to.equal(false);
     });
 
     it('shows columns with no `hidden` attribute', function () {
-      expect(controller.isColumnShown('shownColumn')).to.equal(true);
+      expect(controller.isColumnShown({dataIndex: 'shownColumn', hidden: false})).to.equal(true);
+    });
+
+    it('hides ParticipantId columns when it is an existing subject', function () {
+      expect(controller.isColumnShown({dataIndex: 'ParticipantId'})).to.equal(false);
     });
 
     describe('non-demographic datasets', function () {
       it('shows `date` columns', function () {
-        expect(controller.isColumnShown('date')).to.equal(true);
+        expect(controller.isColumnShown({dataIndex: 'date', hidden: false})).to.equal(true);
       });
 
-      it('shows `ParticipantId` columns', function () {
-        expect(controller.isColumnShown('ParticipantId')).to.equal(true);
+      it('hides `ParticipantId` columns', function () {
+        expect(controller.isColumnShown({dataIndex: 'ParticipantId', hidden: false})).to.equal(false);
       });
     });
 
@@ -89,11 +93,28 @@ describe('DatasetEditModalController', function () {
       });
 
       it('hides `date` columns', function () {
-        expect(controller.isColumnShown('date')).to.equal(false);
+        expect(controller.isColumnShown({dataIndex: 'date', hidden: false})).to.equal(false);
       });
 
       it('hides `ParticipantId` columns', function () {
-        expect(controller.isColumnShown('ParticipantId')).to.equal(false);
+        expect(controller.isColumnShown({dataIndex: 'ParticipantId', hidden: false})).to.equal(false);
+      });
+    });
+
+    describe('new subjects', function () {
+      beforeEach(function () {
+        controller = $controller('DatasetEditModalController', {
+         '$modalInstance': {},
+         'participantId': undefined,
+         'entry': {},
+         'datasetName': 'test_schema_demographic',
+         'onSave': {}
+        });
+        $rootScope.$digest();
+      });
+
+      it('shows ParticipantId columns when it is a new subject', function () {
+        expect(controller.isColumnShown({dataIndex: 'ParticipantId'})).to.equal(true);
       });
     });
   });
