@@ -44,7 +44,7 @@
               dir-paginate="participant in vm.filteredParticipants | filter: vm.participantSearchFilter | itemsPerPage: 10"
               ng-click="vm.selectParticipant(participant)"
               role="button">
-            <td><span class="label label-primary" ng-bind="participant[subjectNoun]"></span></td>
+            <td><span class="label label-primary" ng-bind="participant[vm.subjectNoun]"></span></td>
             <td><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>
             <td><span class="label label-info" ng-bind="participant.keyInfo.MRNNumber"></span></td>
             <td>{{participant.keyInfo.FirstName}} {{participant.keyInfo.LastName}}</td>
