@@ -23,7 +23,6 @@
         del = require('del'),
 
         eslint = require('gulp-eslint'),
-        jscs = require('gulp-jscs'),
 
         karma = require('karma').server,
         notifier = require('node-notifier'),

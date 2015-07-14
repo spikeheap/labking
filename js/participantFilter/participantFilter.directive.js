@@ -1,5 +1,5 @@
 'use strict';
-var _ = require('lodash');
+
 module.exports = ParticipantFilter;
 
 /** @ngInject **/

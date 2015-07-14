@@ -100,7 +100,7 @@
         "no-unreachable": 2,
         "no-unused-expressions": 2,
         "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],
-        "no-use-before-define": "nofunc",
+        "no-use-before-define": [2,"nofunc"],
         "no-void": 0,
         "no-var": 0,
         "no-warning-comments": [0, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],

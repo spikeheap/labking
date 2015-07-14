@@ -172,7 +172,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
         var dataset = resultsCache.participants[record[config.subjectNoun]].dataSets[dataSetName].rows;
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset.splice(i, 1);
-        $rootScope.$broadcast('labkey:record:removed', participantId);
+        $rootScope.$broadcast('labkey:record:removed', record[config.subjectNoun]);
       })
       .catch(function(errors){
         logger.error(errors.exception, 'Delete failed');
