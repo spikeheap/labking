@@ -2,7 +2,7 @@
 _Rule over your subjects in LabKey_
 
 [![Build Status](https://travis-ci.org/spikeheap/labking.svg)](https://travis-ci.org/spikeheap/labking)
-[![Coverage Status](https://coveralls.io/repos/spikeheap/labking/badge.svg?branch=master&service=github)](https://coveralls.io/github/spikeheap/labking?branch=master)
+[![Coverage Status](https://coveralls.io/repos/spikeheap/labking/badge.svg?branch=develop&service=github)](https://coveralls.io/github/spikeheap/labking?branch=develop)
 
 ## Building the project
 
