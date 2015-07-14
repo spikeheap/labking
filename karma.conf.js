@@ -71,10 +71,17 @@ module.exports = function(config) {
     browsers: ['PhantomJS2'],
     browserNoActivityTimeout: 50000, // default 10k timeout too short for compilation
 
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+
   };
 
   if(process.env.TRAVIS){
-    configuration.browsers = ['Chrome'];
+    configuration.browsers = ['Chrome_travis_ci'];
   }
 
   config.set(configuration);
