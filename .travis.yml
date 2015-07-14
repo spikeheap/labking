@@ -1,5 +1,5 @@
 language: node_js
 sudo: false
 
-install:
-  - ls /usr/local/phantomjs-2.0/bin/phantomjs
+before_script:
+  - export PHANTOMJS2_DOWNLOAD_URL=https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
