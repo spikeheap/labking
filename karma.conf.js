@@ -4,7 +4,7 @@
 module.exports = function(config) {
   var istanbul = require('browserify-istanbul');
 
-  config.set({
+  var configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -71,5 +71,11 @@ module.exports = function(config) {
     browsers: ['PhantomJS2'],
     browserNoActivityTimeout: 50000, // default 10k timeout too short for compilation
 
-  });
+  };
+
+  if(process.env.TRAVIS){
+    configuration.browsers = ['Chromium'];
+  }
+
+  config.set(configuration);
 };
