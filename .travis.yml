@@ -8,3 +8,7 @@ before_install:
 
 before_script:
   - export PHANTOMJS2_DOWNLOAD_URL=https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
+
+script:
+  - npm test
+  - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js

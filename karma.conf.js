@@ -53,6 +53,14 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'osx', 'coverage'],
 
+    coverageReporter: {
+      reporters: [
+        { type: 'lcovonly', dir: 'coverage/' },
+        { type: 'text', dir : 'coverage/', file : 'coverage.txt' },
+        { type: 'text-summary' }
+      ]
+    },
+
     // web server port
     port: 9876,
 
