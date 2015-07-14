@@ -1,7 +1,14 @@
 language: node_js
-sudo: true
+sudo: false
+addons:
+  apt:
+    packages:
+    - libicu
+    - libjpeg8
+    - libfontconfig1
+    - libwebp-dev
+    - libssl1.0.0
 install:
-  - sudo apt-get update && sudo apt-get install libicu52 libjpeg8 libfontconfig1 libwebp5 libssl1.0.0
   - mkdir travis-phantomjs
   - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
   - tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
