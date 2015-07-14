@@ -12,7 +12,9 @@ var config = {
   appTitle: 'labKing',
   subjectNoun: 'ParticipantId',
   demographicDataset: 'Database_Enrollment',
-  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName']
+  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName'],
+  // subjectNameFields: ['FirstName', 'LastName'],
+  // headlineSubjectInfoFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'DOB']
 };
 
 /* @ngInject */
