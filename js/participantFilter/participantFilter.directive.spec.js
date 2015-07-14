@@ -23,6 +23,14 @@ describe('ParticipantFilterController', function () {
   }));
 
 
+  describe('clearSearch', function () {
+    it('clears the search field', function () {
+      controller.participantSearchText = 'some search text';
+      controller.clearSearch();
+      expect(controller.participantSearchText).to.be.empty;
+    })
+  })
+
   describe('participantSearchFilter', function () {
     var participant;
 
