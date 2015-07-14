@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "build": "gulp",
-    "test": "./node_modules/.bin/karma start --single-run --reporters progress && find js -type f -name '*.js' -not -name '*.spec.js' | xargs ./node_modules/.bin/eslint",
+    "test": "./node_modules/.bin/karma start --single-run --reporters progress,coverage && find js -type f -name '*.js' -not -name '*.spec.js' | xargs ./node_modules/.bin/eslint",
     "watch": "gulp watch"
   },
   "deployPath": "/Volumes/LabKey Server/externalModules",
