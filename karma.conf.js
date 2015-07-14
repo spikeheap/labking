@@ -2,16 +2,9 @@
 // Generated on Sat Mar 28 2015 12:50:05 GMT+0000 (GMT)
 
 module.exports = function(config) {
+  var istanbul = require('browserify-istanbul');
+
   config.set({
-     plugins: [
-      'karma-browserify',
-      'karma-mocha',
-      'karma-chai',
-      'karma-chai-datetime',
-      'karma-sinon-chai',
-      'karma-osx-reporter',
-      'karma-phantomjs2-launcher'
-    ],
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -40,9 +33,6 @@ module.exports = function(config) {
       'js/**/*.spec.js'
     ],
 
-
-    logLevel: 'LOG_DEBUG',
-
     preprocessors: {
       'js/**/!(*.spec).js': ['browserify'],
       'js/**/*.spec.js': ['browserify']
@@ -51,14 +41,17 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       transform: [
-        ['babelify', {ignore: ['bower_components']}]
+        ['babelify', {ignore: ['bower_components']}],
+        istanbul({
+            'ignore': ['**/bower_components/**', '**/node_modules/**', '**/*.spec.js', '**/*/*.html']
+        })
       ]
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'osx'],
+    reporters: ['progress', 'osx', 'coverage'],
 
     // web server port
     port: 9876,
@@ -68,7 +61,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DISABLE,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
