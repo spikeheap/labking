@@ -1,2 +1,5 @@
 language: node_js
 sudo: false
+
+install:
+  - ls /usr/local/phantomjs-2.0/bin/phantomjs
