@@ -15,8 +15,11 @@ Then do the Git Flow release:
 LK_VERSION=0.0.5
 git flow release start $LK_VERSION
 # Bump the version in package.json now!
+jq ".version = \"${LK_VERSION}\"" package.json
 git flow release finish $LK_VERSION
 ```
+
+The above `jq` command relies on `jq`, which is available through HomeBrew or [manual download](http://stedolan.github.io/jq/download/). Alternatively you can just update the version number by hand.
 
 Now we need to push the release commits and tags to GitHub:
 
