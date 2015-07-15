@@ -14,8 +14,12 @@ Then do the Git Flow release:
 ```
 LK_VERSION=0.0.5
 git flow release start $LK_VERSION
+
 # Bump the version in package.json now!
 jq ".version = \"${LK_VERSION}\"" package.json > package.json.new && mv package.json.new package.json
+git add package.json
+git commit -m "Update package version number to $LK_VERSION"
+
 git flow release finish $LK_VERSION
 ```
 
