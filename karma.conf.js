@@ -2,15 +2,9 @@
 // Generated on Sat Mar 28 2015 12:50:05 GMT+0000 (GMT)
 
 module.exports = function(config) {
-  config.set({
-     plugins: [
-      'karma-browserify',
-      'karma-mocha',
-      'karma-chai',
-      'karma-chai-datetime',
-      'karma-osx-reporter',
-      'karma-phantomjs2-launcher'
-    ],
+  var istanbul = require('browserify-istanbul');
+
+  var configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -18,7 +12,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai-datetime', 'chai', 'sinon-chai'],
 
 
     // list of files / patterns to load in the browser
@@ -34,23 +28,38 @@ module.exports = function(config) {
       'js/labking.module.js',
 
       'bower_components/angular-mocks/angular-mocks.js',
+
       // Finally, the tests
       'js/**/*.spec.js'
     ],
 
-
-    logLevel: 'LOG_DEBUG',
-
     preprocessors: {
-      'js/labking.module.js': ['browserify'],
+      'js/**/!(*.spec).js': ['browserify'],
       'js/**/*.spec.js': ['browserify']
     },
 
+    browserify: {
+      debug: true,
+      transform: [
+        ['babelify', {ignore: ['bower_components']}],
+        istanbul({
+            'ignore': ['**/bower_components/**', '**/node_modules/**', '**/*.spec.js', '**/*/*.html']
+        })
+      ]
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'osx'],
+    reporters: ['progress', 'osx', 'coverage'],
+
+    coverageReporter: {
+      reporters: [
+        { type: 'lcovonly', dir: 'coverage/' },
+        { type: 'text', dir : 'coverage/', file : 'coverage.txt' },
+        { type: 'text-summary' }
+      ]
+    },
 
     // web server port
     port: 9876,
@@ -60,7 +69,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_WARN,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
@@ -70,5 +79,18 @@ module.exports = function(config) {
     browsers: ['PhantomJS2'],
     browserNoActivityTimeout: 50000, // default 10k timeout too short for compilation
 
-  });
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    }
+
+  };
+
+  if(process.env.TRAVIS){
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(configuration);
 };

@@ -1,20 +1,20 @@
 <div class="row">
   <div class="col-xs-12 col-sm-3">
-    <h4>Cohort list</h4>
-    <ul class="list-group">
-      <li class="list-group-item"
-            ng-class="{'list-group-item-info': vm.isCohortSelected(cohort), 'text-muted': !vm.isCohortSelected(cohort)}"
-            ng-repeat="cohort in vm.cohorts"
-            ng-click="vm.toggleCohort(cohort)"
-            role="button">
-          <span ng-bind="cohort.label"></span>
-          <span ng-bind="vm.participantCount(cohort)" class="badge pull-right"></span>
-        </li>
-    </ul>
+
+    <h5>Cohorts</h5>
+    <div class="btn-group-vertical full-width" role="group" aria-label="Participant Group selector">
+      <button class="btn btn-sm btn-text-left text-wrap" type="button" role="button"
+              ng-class="{'btn-info': vm.isCohortSelected(cohort), 'btn-default': !vm.isCohortSelected(cohort)}"
+              ng-repeat="cohort in vm.cohorts"
+              ng-click="vm.toggleCohort(cohort)">
+        <span ng-bind="cohort.label"></span>
+        <span ng-bind="vm.participantCount(cohort)" class="badge badge-float-right"></span>
+      </button>
+    </div>
   </div>
   <div class="col-xs-12 col-sm-9">
       <div>
-        <button class="btn btn-large btn-primary pull-right" type="button" disabled="disabled">Add participant</button>
+        <button class="btn btn-large btn-primary pull-right" type="button" ng-click="vm.openAddParticipantModal()"><span class="fa fa-fw fa-plus"></span>Add participant</button>
 
         <div class="form-inline">
           <div class="form-group has-feedback">
@@ -35,6 +35,7 @@
             <th class="col-xs-1">MRN #</th>
             <th>Name</th>
             <th>Date of Birth</th>
+            <th>Summary fields completed</th>
           </tr>
         </thead>
         <tbody>
@@ -43,11 +44,18 @@
               dir-paginate="participant in vm.filteredParticipants | filter: vm.participantSearchFilter | itemsPerPage: 10"
               ng-click="vm.selectParticipant(participant)"
               role="button">
-            <td><span class="label label-primary" ng-bind="participant.ParticipantId"></span></td>
+            <td><span class="label label-primary" ng-bind="participant[vm.subjectNoun]"></span></td>
             <td><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>
             <td><span class="label label-info" ng-bind="participant.keyInfo.MRNNumber"></span></td>
             <td>{{participant.keyInfo.FirstName}} {{participant.keyInfo.LastName}}</td>
             <td ng-bind="participant.keyInfo.DOB | date: 'shortDate'"</td>
+            <td class="col-xs-1">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{vm.keyFieldsPercentageComplete(participant)}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vm.keyFieldsPercentageComplete(participant)}}%;">
+                  <span class="sr-only">{{vm.keyFieldsPercentageComplete(participant)}}%</span>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

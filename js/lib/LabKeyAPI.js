@@ -7,7 +7,7 @@
   // // Wraps queries to ensure the LabKey Ext libraries are present and loaded.
   // function getLabkeyQueries(schemaName){
   //   return new Promise(function(resolve, reject) {
-  //     LABKEY.requiresExt3ClientAPI(true, function() {
+  //     LABKEY.requiresExt4ClientAPI(true, function() {
   //       LABKEY.Query.getQueries({
   //         schemaName: schemaName,
   //         success: resolve,
@@ -19,7 +19,7 @@
 
   function labkeyQuery(schemaName, queryName, filterArray=[], columns=[]){
     return new Promise(function(resolve, reject) {
-      LABKEY.requiresExt3ClientAPI(true, function() {
+      LABKEY.requiresExt4ClientAPI(true, function() {
         LABKEY.Query.selectRows({
           schemaName: schemaName,
           queryName: queryName,
@@ -34,7 +34,7 @@
 
   function labkeyInsertRow(schemaName, dataSetName, entry) {
     return new Promise(function(resolve, reject) {
-      LABKEY.requiresExt3ClientAPI(true, function() {
+      LABKEY.requiresExt4ClientAPI(true, function() {
         LABKEY.Query.insertRows({
           schemaName: schemaName,
           queryName: dataSetName,
@@ -48,8 +48,22 @@
 
   function labkeyUpdateRow(schemaName, dataSetName, entry) {
     return new Promise(function(resolve, reject) {
-      LABKEY.requiresExt3ClientAPI(true, function() {
+      LABKEY.requiresExt4ClientAPI(true, function() {
         LABKEY.Query.updateRows({
+          schemaName: schemaName,
+          queryName: dataSetName,
+          rows: [entry],
+          success: resolve,
+          failure: reject
+        });
+      });
+    });
+  }
+
+  function labkeyDeleteRow(schemaName, dataSetName, entry){
+    return new Promise(function(resolve, reject) {
+      LABKEY.requiresExt4ClientAPI(true, function() {
+        LABKEY.Query.deleteRows({
           schemaName: schemaName,
           queryName: dataSetName,
           rows: [entry],
@@ -77,8 +91,8 @@
       .then(processResponseTypes);
   }
 
-  function getParticipantDataSet(participantId, dataSetId){
-    return labkeyQuery('study', dataSetId, [createLabKeyFilter('ParticipantId', participantId)])
+  function getParticipantDataSet(subjectNoun, subjectId, dataSetId){
+    return labkeyQuery('study', dataSetId, [createLabKeyFilter(subjectNoun, subjectId)])
       .then(processResponseTypes);
   }
 
@@ -118,25 +132,15 @@
   }
 
   function addDataSetRow(dataSetName, entry){
-    return labkeyInsertRow('study', dataSetName, entry)
-      .then(function (response) {
-        // LabKey inconsistently uppercases the date field for creation/retrieval.
-        response.rows.forEach(function (row) {
-          row.Date = row.date = new Date(row.date);
-        });
-        return response;
-      });
+    return labkeyInsertRow('study', dataSetName, entry);
   }
 
   function updateDataSetRow(dataSetName, entry){
-    return labkeyUpdateRow('study', dataSetName, entry)
-      .then(function (response) {
-        // LabKey inconsistently uppercases the date field for creation/retrieval.
-        response.rows.forEach(function (row) {
-          row.Date = row.date = new Date(row.date);
-        });
-        return response;
-      });
+    return labkeyUpdateRow('study', dataSetName, entry);
+  }
+
+  function removeDataSetRow(dataSetName, entry){
+    return labkeyDeleteRow('study', dataSetName, entry);
   }
 
   // Get all the available lookups (valid select-items)
@@ -154,16 +158,23 @@
     return response;
   }
 
-  function coerceToType (dataFields, metadata) {
+  function coerceToType (dataFields, metadata, idKey='fieldKey') {
     let coercedFields = {};
     _.forEach(dataFields, function (value, key) {
-      let recordMetadata = _.find(metadata, {fieldKey: key});
+      let recordMetadata = _.find(metadata, idKey, key);
 
-      if(!recordMetadata || value === null || value === undefined){
-        coercedFields[key] = value;
+      if(recordMetadata === null || recordMetadata === undefined || value === null || value === undefined){
+        switch(key){
+          case 'date':
+            coercedFields[key] = new Date(value);
+            break;
+          default:
+            coercedFields[key] = value;
+            break;
+        }
       }
       else{
-        switch(_.find(metadata, {fieldKey: key}).type){
+        switch(recordMetadata.type){
           case 'date':
             coercedFields[key] = new Date(value);
             break;
@@ -190,6 +201,7 @@
     getLookups: getLookups,
     insertRow: addDataSetRow,
     updateDataSetRow: updateDataSetRow,
+    removeDataSetRow: removeDataSetRow,
     coerceToType: coerceToType
   };
 })(window.LABKEY);

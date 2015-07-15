@@ -8,17 +8,22 @@ function DatasetMetadataService($q, logger) {
 
   // We only need to do this request once, and it's quite heavy
   var resultsCache = {
+    metadata: {},
     lookups: {}
   };
 
+  var datasetQueryRun = false;
+
   return {
     getMetaData: getMetaData,
+    getColumnOrder: getColumnOrder,
+    cacheColumnModel: cacheColumnModel,
     getLookups: getLookups
   };
 
   function getMetaData() {
     var getFromCacheIfPossible;
-    if(resultsCache.metadata){
+    if(datasetQueryRun){
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.all([
@@ -33,6 +38,7 @@ function DatasetMetadataService($q, logger) {
       .catch(fail);
 
     function updateMetaDataCache(responses){
+      datasetQueryRun = true;
       var [dataSets, dataSetsColumns] = responses;
       var groupedColumns = _.groupBy(dataSetsColumns.rows, function(row) {
         return row['DataSet/Name'];
@@ -59,6 +65,30 @@ function DatasetMetadataService($q, logger) {
       resultsCache.lookups[lookupName] = lookups;
       return resultsCache.lookups[lookupName];
     }
+  }
+
+  function cacheColumnModel(dataSetName, columnModel){
+    if(resultsCache.metadata[dataSetName] === undefined){
+      resultsCache.metadata[dataSetName] = {};
+    }
+    resultsCache.metadata[dataSetName].columnOrder = columnModel;
+  }
+
+  function getColumnOrder(dataSetName) {
+    var getFromCacheIfPossible;
+    if(resultsCache.metadata[dataSetName] && resultsCache.metadata[dataSetName].columnOrder){
+      getFromCacheIfPossible = $q.when();
+    }else{
+      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(dataSetName))
+        .then(function(response){
+          cacheColumnModel(dataSetName, response.columnModel);
+          return resultsCache.metadata[dataSetName].columnOrder;
+        });
+    }
+
+    return getFromCacheIfPossible
+      .then(function(){ return resultsCache.metadata[dataSetName].columnOrder; })
+      .catch(fail);
   }
 
   function fail(error) {

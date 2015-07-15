@@ -8,7 +8,8 @@ function DatasetView() {
     scope: {
       participant: '=',
       dataset: '=',
-      onEdit: '&'
+      onEdit: '&',
+      onDelete: '&'
     },
     template: require('./datasetView.directive.html'),
 
@@ -19,7 +20,7 @@ function DatasetView() {
 }
 
 /** @ngInject **/
-function DatasetViewController($filter, $scope, DatasetMetadataService) {
+function DatasetViewController($filter, $scope, config, DatasetMetadataService) {
   var self = this;
   var _ = require('lodash');
 
@@ -70,7 +71,7 @@ function DatasetViewController($filter, $scope, DatasetMetadataService) {
       return false; // no hidden fields
     }else if(value.dataIndex === 'date' && self.dataset.DemographicData){
       return false; // no date for demographic fields
-    }else if(value.dataIndex === 'ParticipantId'){
+    }else if(value.dataIndex === config.subjectNoun){
       return false; // no primary identifier
     }else{
       return true;

@@ -4,7 +4,7 @@ var _ = require('lodash');
 module.exports = ParticipantRecord;
 
 /** @ngInject **/
-function ParticipantRecord(ParticipantService, DatasetMetadataService) {
+function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
     return {
       scope: {
         participant: '='
@@ -20,6 +20,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         self.selectedDataSet = {};
         self.canAddEntries = canAddEntries;
         self.openEditModal = openEditModal;
+        self.removeRecord = ParticipantService.removeRecord;
         self.getEnrolmentDataSet = getEnrolmentDataSet;
         self.getParticipantName = getParticipantName;
         self.selectCategory = selectCategory;
@@ -39,7 +40,7 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
         // Utility to get at demographic data for the headers
         function getEnrolmentDataSet() {
           if(self.participant && self.participant.dataSets){
-            return self.participant.dataSets.Database_Enrollment.rows[0];
+            return self.participant.dataSets[config.demographicDataset].rows[0];
           }else{
             return {};
           }
@@ -70,14 +71,14 @@ function ParticipantRecord(ParticipantService, DatasetMetadataService) {
             controller: 'DatasetEditModalController as vm',
             resolve: {
               participantId: function() {
-                return self.participant.ParticipantId;
+                return self.participant[config.subjectNoun];
               },
               entry: function() {
                 // We clone the entry because if the action is cancelled we don't want the changes to persist.
                 return _.cloneDeep(entry);
               },
-              selectedDataset: function () {
-                return self.selectedDataSet;
+              datasetName: function () {
+                return self.selectedDataSet.Name;
               },
               onSave: function() {
                 return (entry === undefined) ? ParticipantService.createRecord : ParticipantService.updateRecord;

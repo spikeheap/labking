@@ -108,7 +108,7 @@ body {
     width: 100%
   }
   .scrolling-content-x {
-    overflow-x: scroll;
+    overflow-x: auto;
     display: block;
   }
 
@@ -145,10 +145,28 @@ body {
     padding: 10px 0;
   }
 
-  /**
-    Angular animations to smooth transitions
-   **/
+  // Standard Bootstrap has a 12px bottom margin, which pushes down condensed tables.
+  .progress {
+    margin-bottom: 0;
+  }
 
+  .full-width {
+    width: 100%;
+  }
 
+  .text-wrap {
+    white-space: normal;
+  }
+
+  .btn.btn-text-left {
+    text-align: left;
+  }
+  .btn.btn-text-right {
+    text-align: right;
+  }
+
+  .badge-float-right {
+    float: right !important;
+    margin-top: 1px; //fixes Bootstrap janking
+  }
 }
-

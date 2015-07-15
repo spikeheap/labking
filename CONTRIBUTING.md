@@ -2,6 +2,16 @@
 
 :+1::+1::+1: First and foremost, thanks for helping! :+1::+1::+1:
 
+## Building for development
+
+The standard `gulp` task builds opmtimised JavaScript, HTML and CSS, which can make debugging tricksy. To build non-optimised output, use the `build:develop` gulp task.
+
+The `build:develop` and `build:optimise` tasks *do not* run the test suite, as you will often want to run this separately, watching for changes and running the tests on every change:
+
+```bash
+karma start
+```
+
 ## Issues
 
 * Issues are appropriate for questions, bug requests, enhancement requests, pretty much anything.

@@ -3,7 +3,7 @@
 module.exports = ParticipantEditor;
 
 /** @ngInject **/
-function ParticipantEditor() {
+function ParticipantEditor(config) {
   return {
     scope: {},
     template: require('./participantEditor.directive.html'),
@@ -21,7 +21,7 @@ function ParticipantEditor() {
         $q.when(ParticipantService.getParticipantRecord(participantId))
           .then(function(participant) {
             // Only update the UI if we've got the latest requested participant
-            if(self.selectedParticipantId === participant.ParticipantId){
+            if(self.selectedParticipantId === participant[config.subjectNoun]){
               self.loadingParticipant = false;
               self.currentParticipant = participant;
             }

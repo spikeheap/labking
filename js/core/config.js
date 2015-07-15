@@ -1,6 +1,5 @@
 'use strict';
 
-//toastrConfig.$inject = ['toastr'];
 /* @ngInject */
 function toastrConfig(toastr) {
   toastr.options.target = '.labking';
@@ -10,10 +9,14 @@ function toastrConfig(toastr) {
 
 var config = {
   appErrorPrefix: '[labKing Error] ',
-  appTitle: 'labKing'
+  appTitle: 'labKing',
+  subjectNoun: 'ParticipantId',
+  demographicDataset: 'Database_Enrollment',
+  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName']
+  // subjectNameFields: ['FirstName', 'LastName'],
+  // headlineSubjectInfoFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'DOB']
 };
 
-configure.$inject = ['$logProvider', 'routerHelperProvider', 'exceptionHandlerProvider'];
 /* @ngInject */
 function configure($logProvider, routerHelperProvider, exceptionHandlerProvider) {
   if ($logProvider.debugEnabled) {
