@@ -11,4 +11,4 @@ before_script:
 
 script:
   - npm test
-  - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true
