@@ -9,7 +9,9 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.subjectNoun = config.subjectNoun;
 
-  self.selectedCohorts = {};
+  self.selectedCohorts = {
+    null: true
+  };
   self.participantCount = participantCount;
   self.isCohortSelected = isCohortSelected;
   self.toggleCohort = toggleCohort;

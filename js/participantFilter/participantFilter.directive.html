@@ -10,6 +10,12 @@
         <span ng-bind="cohort.label"></span>
         <span ng-bind="vm.participantCount(cohort)" class="badge badge-float-right"></span>
       </button>
+      <button class="btn btn-sm btn-text-left text-wrap" type="button" role="button"
+              ng-class="{'btn-info': vm.isCohortSelected({rowid: null}), 'btn-default': !vm.isCohortSelected({rowid: null})}"
+              ng-click="vm.toggleCohort({rowid: null})">
+        <em>No Cohort</em>
+        <span ng-bind="vm.participantCount({rowid: null})" class="badge badge-float-right"></span>
+      </button>
     </div>
   </div>
   <div class="col-xs-12 col-sm-9">
