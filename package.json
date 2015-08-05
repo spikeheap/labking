@@ -67,7 +67,7 @@
     "browserify-istanbul": "^0.2.1",
     "browserify-ngannotate": "^1.0.1",
     "browserify-shim": "^3.8.6",
-    "chai": "^3.0.0",
+    "chai": "^3.2.0",
     "chai-datetime": "^1.4.0",
     "coveralls": "^2.11.2",
     "debowerify": "^1.2.1",
