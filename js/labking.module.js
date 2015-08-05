@@ -10,5 +10,6 @@ require('./layout/layout.module');
 angular
   .module('labking', [
     'labking.core',
-    'labking.layout'
+    'labking.layout',
+    'labking.participantFilter'
   ]);
