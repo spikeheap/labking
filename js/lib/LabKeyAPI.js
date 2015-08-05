@@ -82,8 +82,8 @@
    * API calls, all returning promises
    **/
 
-  function getParticipants(){
-    return labkeyQuery('study', 'Participant');
+  function getParticipants(columns=[]){
+    return labkeyQuery('study', 'Participant', [], columns);
   }
 
   function getDataSet(dataSetId){

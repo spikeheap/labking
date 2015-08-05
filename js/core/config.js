@@ -11,6 +11,9 @@ var config = {
   appErrorPrefix: '[labKing Error] ',
   appTitle: 'labKing',
   subjectNoun: 'ParticipantId',
+  subjectIdPrefix: 'HEP-',
+  subjectIdZeroPadding: 4,
+  subjectIdRegex: /^HEP-([0-9]+)$/,
   demographicDataset: 'Database_Enrollment',
   searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName']
   // subjectNameFields: ['FirstName', 'LastName'],

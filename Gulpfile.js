@@ -134,6 +134,7 @@
     });
 
     gulp.task('useref', [
+          'views',
           'styles',
           'scripts:compile'
         ], function() {
