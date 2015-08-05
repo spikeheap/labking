@@ -38,7 +38,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function activate(){
     $q.all([
-      ParticipantService.getParticipantList(),
+      ParticipantService.getParticipantList(false),
       ParticipantService.getParticipantKeyInfo()
     ]).then(function(responses) {
       var [participants, participantsKeyInfo] = responses;

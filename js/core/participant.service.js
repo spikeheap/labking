@@ -57,9 +57,9 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     return num < 0 ? '-' + zeroString + an : zeroString + an;
   }
 
-  function getParticipantList() {
+  function getParticipantList(useCache=true) {
     var getFromCacheIfPossible;
-    if(resultsCache.participantList){
+    if(resultsCache.participantList && useCache){
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.when(LabKeyAPI.getParticipants())
