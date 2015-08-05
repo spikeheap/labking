@@ -10,7 +10,7 @@
   </thead>
 
   <tbody>
-    <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name].rows">
+    <tr ng-repeat="row in vm.participant.dataSets[vm.dataset.Name].rows | orderBy:'date'">
       <td ng-repeat="column in vm.participant.dataSets[vm.dataset.Name].columnModel | filter: vm.showColumn"
           ng-bind="vm.getValue(row, column.dataIndex)">
       </td>
