@@ -51,7 +51,7 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
       var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
       return val === undefined ? '' : val.Label;
     }else if (isDate(row[columnName], column)){
-      return $filter('date')(row[columnName], 'shortDate');
+      return $filter('date')(new Date(row[columnName]), 'shortDate');
     }else{
       return row[columnName];
     }
