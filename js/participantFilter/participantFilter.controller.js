@@ -9,7 +9,9 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.subjectNoun = config.subjectNoun;
 
-  self.selectedCohorts = {};
+  self.selectedCohorts = {
+    null: true
+  };
   self.participantCount = participantCount;
   self.isCohortSelected = isCohortSelected;
   self.toggleCohort = toggleCohort;
@@ -38,7 +40,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function activate(){
     $q.all([
-      ParticipantService.getParticipantList(),
+      ParticipantService.getParticipantList(false),
       ParticipantService.getParticipantKeyInfo()
     ]).then(function(responses) {
       var [participants, participantsKeyInfo] = responses;

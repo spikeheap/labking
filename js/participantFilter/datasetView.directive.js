@@ -50,10 +50,18 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
     if (column && column.LookupQuery && self.lookups[column.LookupQuery]) {
       var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
       return val === undefined ? '' : val.Label;
-    }else if (column && column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime'){
-      return $filter('date')(row[column.Name], 'shortDate');
+    }else if (isDate(row[columnName], column)){
+      return $filter('date')(new Date(row[columnName]), 'shortDate');
     }else{
       return row[columnName];
+    }
+  }
+
+  function isDate (field, column) {
+    if(column && column.RangeURI) {
+      return column.RangeURI === 'http://www.w3.org/2001/XMLSchema#dateTime';
+    }else {
+      return field instanceof Date;
     }
   }
 
