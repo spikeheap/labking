@@ -19,8 +19,43 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     getParticipantList: getParticipantList,
     createRecord: createRecord,
     updateRecord: updateRecord,
-    removeRecord: removeRecord
+    removeRecord: removeRecord,
+    generateID: generateID
   };
+
+  function generateID() {
+    return $q.when(LabKeyAPI.getParticipants([config.subjectNoun]))
+      .then(function (response) {
+
+        // flatten down to an array of IDs
+        var ids = response.rows.map(function (row) {
+          return row[config.subjectNoun];
+        });
+
+        // filter out IDs which don't match our format
+        ids = _.filter(ids, function (participantId) {
+          return config.subjectIdRegex.test(participantId)
+        });
+
+        ids.sort();
+
+        var latestIdSuffix = Number(config.subjectIdRegex.exec(ids[ids.length-1])[1]);
+
+        return config.subjectIdPrefix + zeroPad(latestIdSuffix+1, config.subjectIdZeroPadding);
+      })
+      .catch(fail);
+  }
+
+  // from http://stackoverflow.com/a/1268377/384693
+  function zeroPad (num, numZeros) {
+    var an = Math.abs (num);
+    var digitCount = 1 + Math.floor (Math.log (an) / Math.LN10);
+    if (digitCount >= numZeros) {
+        return num;
+    }
+    var zeroString = Math.pow (10, numZeros - digitCount).toString ().substr (1);
+    return num < 0 ? '-' + zeroString + an : zeroString + an;
+  }
 
   function getParticipantList() {
     var getFromCacheIfPossible;
