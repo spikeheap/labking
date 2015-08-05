@@ -57,14 +57,16 @@ mv dist labking
 zip -r labking_$LK_VERSION.zip labking
 ```
 
-Finally we can push this up to GitHub using the following:
+Finally we can push this up to GitHub and NPM using the following:
 
 ```
 hub release create -a labking_$LK_VERSION.zip -m "Preview release of participant search, view and record creation" $LK_VERSION
+npm publish
 ```
 
 If you've added the changes, you can use the changelog instead:
 
 ```
 hub release create -a labking_$LK_VERSION.zip -f CHANGELOG.md $LK_VERSION
+npm publish
 ```
