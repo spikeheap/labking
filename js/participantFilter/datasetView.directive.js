@@ -50,7 +50,7 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
     if (column && column.LookupQuery && self.lookups[column.LookupQuery]) {
       var val = _.find(self.lookups[column.LookupQuery].rows, 'Key', row[column.Name]);
       return val === undefined ? '' : val.Label;
-    }else if (isDate(row[columnName], column)){
+    }else if (row[columnName] && isDate(row[columnName], column)){
       return $filter('date')(new Date(row[columnName]), 'shortDate');
     }else{
       return row[columnName];
