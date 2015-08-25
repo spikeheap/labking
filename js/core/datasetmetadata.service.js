@@ -44,9 +44,9 @@ function DatasetMetadataService($q, logger) {
         return row['DataSet/Name'];
       });
 
-      resultsCache.metadata = dataSets.rows.map(function(dataSet) {
+      dataSets.rows.forEach(function(dataSet) {
         dataSet.columns = (groupedColumns[dataSet.Name] !== undefined) ? groupedColumns[dataSet.Name] : [];
-        return dataSet;
+        resultsCache.metadata[dataSet.Name] = dataSet;
       });
     }
   }

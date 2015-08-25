@@ -1,7 +1,10 @@
 'use strict';
 
+const LABKEY_DATE_FORMAT = 'MM/DD/YYYY hh:mm:ss';
+
 var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    moment = require('moment');
 
 /** @ngInject **/
 function ParticipantService(config, DatasetMetadataService, $q, logger, $rootScope) {
@@ -136,12 +139,18 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
   }
 
   function createRecord(dataSetName, record) {
-    record = _.cloneDeep(record);
-    if(record.date){
-      record.date = record.date.toLocaleString();
+    var serialisedRecord = _.cloneDeep(record);
+    if(serialisedRecord.date){
+      serialisedRecord.date = moment(serialisedRecord.date).format(LABKEY_DATE_FORMAT);
     }
 
-    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, record)])
+    _.forOwn(serialisedRecord, function(value,key){
+      if(value instanceof Date){
+        serialisedRecord[key] = moment(value).format(LABKEY_DATE_FORMAT);
+      }
+    });
+
+    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, serialisedRecord)])
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0][config.subjectNoun];
@@ -156,13 +165,15 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
             rows: []
           };
         }
-
-        var datasetMetadata = _.find(metadata, {Name: dataSetName}).columns;
-        response.rows = response.rows.map(function(row) {
+console.log("1")
+        var datasetMetadata = metadata[dataSetName].columns;
+        var returnedRecords = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
 
-        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, response.rows);
+        console.log(returnedRecords)
+
+        Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, returnedRecords);
 
         logger.success('Record created');
         $rootScope.$broadcast('labkey:record:created', resultsCache.participants[participantId]);
@@ -175,18 +186,26 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
   }
 
   function updateRecord(dataSetName, record) {
-    record = _.cloneDeep(record);
-    record.date = record.date.toLocaleString();
-    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, record)])
+    var serialisedRecord = _.cloneDeep(record);
+
+    serialisedRecord.date = moment(serialisedRecord.date).format(LABKEY_DATE_FORMAT);
+    _.forOwn(serialisedRecord, function(value,key){
+      if(value instanceof Date){
+        serialisedRecord[key] = moment(value).format(LABKEY_DATE_FORMAT);
+      }
+    });
+
+    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord)])
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
-
-        var datasetMetadata = _.find(metadata, {Name: dataSetName}).columns;
-        response.rows = response.rows.map(function(row) {
+console.log("1")
+        var datasetMetadata = metadata[dataSetName].columns;
+        var returnedRecords = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
+        console.log(returnedRecords)
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;

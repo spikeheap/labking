@@ -174,7 +174,9 @@
         }
       }
       else{
-        switch(recordMetadata.type){
+        var type = recordMetadata.type ? recordMetadata.type : recordMetadata.RangeURI;
+        switch(type){
+          case 'http://www.w3.org/2001/XMLSchema#dateTime':
           case 'date':
             coercedFields[key] = new Date(value);
             break;
