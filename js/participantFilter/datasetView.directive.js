@@ -91,6 +91,7 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
     return self.dataset.QuerySnapshot !== true;
   }
   function showDeleteButton () {
-    return showEditButton() && self.dataset.Name !== config.demographicDataset;
+    return showEditButton();
+    // return showEditButton() && self.dataset.Name !== config.demographicDataset;
   }
 }
