@@ -17,7 +17,7 @@
       <td>
         <a class="btn btn-xs btn-default" ng-class="{disabled: !vm.showEditButton()}" ng-click="vm.onEdit({entry: row})"><span class="fa fa-fw fa-pencil"></span></a>
         <a class="btn btn-xs btn-danger"
-            ng-class="{disabled: !vm.showEditButton()}"
+            ng-class="{disabled: !vm.showDeleteButton()}"
             popover-placement="left"
             popover-template="'confirmDeleteRecord.html'">
           <span class="fa fa-fw fa-trash-o"></span>

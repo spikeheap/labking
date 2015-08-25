@@ -28,6 +28,7 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
   self.getValue = getValue;
   self.showColumn = showColumn;
   self.showEditButton = showEditButton;
+  self.showDeleteButton = showDeleteButton;
 
   $scope.$watch(function () {
     return self.dataset;
@@ -88,5 +89,8 @@ function DatasetViewController($filter, $scope, config, DatasetMetadataService) 
 
   function showEditButton(){
     return self.dataset.QuerySnapshot !== true;
+  }
+  function showDeleteButton () {
+    return showEditButton() && self.dataset.Name !== config.demographicDataset;
   }
 }
