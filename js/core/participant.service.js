@@ -199,7 +199,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
-        var datasetMetadata = metadata[dataSetName].columns;
+        // var datasetMetadata = metadata[dataSetName].columns;
         // var returnedRecords = response.rows.map(function(row) {
         //   return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         // });
