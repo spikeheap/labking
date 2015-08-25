@@ -165,13 +165,11 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
             rows: []
           };
         }
-console.log("1")
+
         var datasetMetadata = metadata[dataSetName].columns;
         var returnedRecords = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
-
-        console.log(returnedRecords)
 
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, returnedRecords);
 
@@ -200,12 +198,11 @@ console.log("1")
         var [metadata, response] = responses;
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
-console.log("1")
+
         var datasetMetadata = metadata[dataSetName].columns;
         var returnedRecords = response.rows.map(function(row) {
           return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
         });
-        console.log(returnedRecords)
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;
