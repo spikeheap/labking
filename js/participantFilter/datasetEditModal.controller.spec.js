@@ -59,6 +59,16 @@ describe('DatasetEditModalController', function () {
     $rootScope.$digest();
   });
 
+  describe('isDisabled', function () {
+    it('is disabled when the column is the participant ID', function () {
+      expect(controller.isDisabled({dataIndex: config.subjectNoun})).to.equal(true);
+    });
+
+    it('returns false when the column is not the participant ID', function () {
+      expect(controller.isDisabled({dataIndex: 'shownColumn', hidden: false})).to.equal(false);
+    });
+  });
+
   describe('isColumnShown', function () {
     it('hides columns with a `hidden` attribute', function () {
       expect(controller.isColumnShown({dataIndex: 'hiddenColumn', hidden: true})).to.equal(false);
