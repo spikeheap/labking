@@ -1,24 +1,27 @@
 <div class="row">
-  <div class="col-xs-12 col-sm-3">
+  <div class="col-sm-3">
 
-    <h5>Cohorts</h5>
-    <div class="btn-group-vertical full-width" role="group" aria-label="Participant Group selector">
-      <button class="btn btn-sm btn-text-left text-wrap" type="button" role="button"
-              ng-class="{'btn-info': vm.isCohortSelected(cohort), 'btn-default': !vm.isCohortSelected(cohort)}"
-              ng-repeat="cohort in vm.cohorts"
-              ng-click="vm.toggleCohort(cohort)">
-        <span ng-bind="cohort.label"></span>
-        <span ng-bind="vm.participantCount(cohort)" class="badge badge-float-right"></span>
-      </button>
-      <button class="btn btn-sm btn-text-left text-wrap" type="button" role="button"
-              ng-class="{'btn-info': vm.isCohortSelected({rowid: null}), 'btn-default': !vm.isCohortSelected({rowid: null})}"
-              ng-click="vm.toggleCohort({rowid: null})">
-        <em>No Cohort</em>
-        <span ng-bind="vm.participantCount({rowid: null})" class="badge badge-float-right"></span>
-      </button>
-    </div>
+    <h4>Cohorts</h4>
+    <ul class="fa-ul">
+      <li class="high-enough-for-labels"
+          ng-repeat="cohort in vm.cohorts"
+          ng-click="vm.toggleCohort(cohort)"
+          role="button">
+        <i class="fa fa-li" ng-class="{'fa-check-square-o': vm.isCohortSelected(cohort), 'fa-square-o': !vm.isCohortSelected(cohort)}"></i>
+        <span ng-class="{'text-muted': !vm.isCohortSelected(cohort)}" ng-bind="vm.participantCount(cohort)" class="label label-default pull-right"></span>
+        <span ng-class="{'text-muted': !vm.isCohortSelected(cohort)}" ng-bind="cohort.label"></span>
+      </li>
+      <li class="high-enough-for-labels"
+          ng-click="vm.toggleCohort({rowid: null})"
+          role="button">
+        <i class="fa fa-li" ng-class="{'fa-check-square-o': vm.isCohortSelected({rowid: null}), 'fa-square-o': !vm.isCohortSelected({rowid: null})}"></i>
+        <span ng-class="{'text-muted': !vm.isCohortSelected({rowid: null})}" ng-bind="vm.participantCount({rowid: null})" class="label label-default pull-right"></span>
+        <em ng-class="{'text-muted': !vm.isCohortSelected({rowid: null})}">No Cohort</em>
+      </li>
+    </ul>
   </div>
-  <div class="col-xs-12 col-sm-9">
+
+  <div class="col-sm-9">
       <div>
         <button class="btn btn-large btn-primary pull-right" type="button" ng-click="vm.openAddParticipantModal()"><span class="fa fa-fw fa-plus"></span>Add participant</button>
 
