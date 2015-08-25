@@ -144,7 +144,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       serialisedRecord.date = moment(serialisedRecord.date).format(LABKEY_DATE_FORMAT);
     }
 
-    _.forOwn(serialisedRecord, function(value,key){
+    _.forOwn(serialisedRecord, function(value, key){
       if(value instanceof Date){
         serialisedRecord[key] = moment(value).format(LABKEY_DATE_FORMAT);
       }
@@ -187,7 +187,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     var serialisedRecord = _.cloneDeep(record);
 
     serialisedRecord.date = moment(serialisedRecord.date).format(LABKEY_DATE_FORMAT);
-    _.forOwn(serialisedRecord, function(value,key){
+    _.forOwn(serialisedRecord, function(value, key){
       if(value instanceof Date){
         serialisedRecord[key] = moment(value).format(LABKEY_DATE_FORMAT);
       }
@@ -200,9 +200,9 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
 
         var datasetMetadata = metadata[dataSetName].columns;
-        var returnedRecords = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
-        });
+        // var returnedRecords = response.rows.map(function(row) {
+        //   return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
+        // });
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;
