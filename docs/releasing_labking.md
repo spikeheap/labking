@@ -60,7 +60,7 @@ zip -r labking_$LK_VERSION.zip labking
 Finally we can push this up to GitHub and NPM using the following:
 
 ```
-hub release create -a labking_$LK_VERSION.zip -m "Preview release of participant search, view and record creation" $LK_VERSION
+hub release create -a labking_$LK_VERSION.zip -m "$LK_VERSION" $LK_VERSION
 npm publish
 ```
 
