@@ -22,6 +22,7 @@ function DatasetEditModalController($q, config, ParticipantService, DatasetMetad
   self.getLookup = getLookup;
   self.isNewSubject = participantId === undefined;
   self.columnType = columnType;
+  self.isDisabled = isDisabled;
   self.isColumnShown = isColumnShown;
   self.editTypeLabel = 'Edit';
   self.entry = entry;
@@ -73,6 +74,11 @@ function DatasetEditModalController($q, config, ParticipantService, DatasetMetad
 
   function cancel() {
     $modalInstance.dismiss('cancel');
+  }
+
+  function isDisabled(column) {
+    // don't allow primary ID to be manipulated.
+    return column.dataIndex === config.subjectNoun;
   }
 
   function isColumnShown(column) {
