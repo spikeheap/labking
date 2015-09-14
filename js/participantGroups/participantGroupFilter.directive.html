@@ -21,6 +21,13 @@
                 <span ng-bind="vm.participantCount(group)" class="label label-default pull-right"></span>
                 <span ng-class="{'text-muted': !vm.isGroupSelected(group)}" ng-bind="group.label"></span>
           </li>
+
+          <li class="high-enough-for-labels"
+              ng-click="vm.toggleNotInCategory(categoryLabel)"
+              role="button">
+            <i class="fa fa-li" ng-class="{'fa-check-square-o': vm.isNotInCategorySelected(categoryLabel), 'fa-square-o': !vm.isNotInCategorySelected(categoryLabel)}"></i>
+            <em ng-class="{'text-muted': !vm.isNotInCategorySelected(categoryLabel)}">No Group</em>
+          </li>
         </ul>
     </li>
   </ul>
