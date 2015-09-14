@@ -9,8 +9,10 @@ require('angular-bootstrap');
 require('ui.utils');
 
 require('angular')
-  .module('labking.participantFilter', ['blocks.logger',
+  .module('labking.participantFilter', [
+    'blocks.logger',
     'labking.core',
+    require('../participantGroups/participantGroups.module'),
     'angularUtils.directives.dirPagination',
     'ui.indeterminate',
     'ui.bootstrap'

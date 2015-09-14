@@ -7,12 +7,12 @@ require('../blocks/router/router.module');
 
 var config = require('./config');
 
+var moduleName = 'labking.core';
+
 require('angular')
-  .module('labking.core', [
-      // 'ngAnimate', 'ngSanitize',
+  .module(moduleName, [
       'blocks.exception', 'blocks.logger', 'blocks.router',
       'ui.router'
-      //, 'ngplus'
   ])
   //.constant('toastr', toastr)
   // .constant('moment', moment)
@@ -23,3 +23,5 @@ require('angular')
   .factory('DatasetMetadataService', require('./datasetmetadata.service'))
   .factory('ParticipantService', require('./participant.service'))
 ;
+
+module.exports = moduleName;

@@ -112,7 +112,7 @@
 
   // This contains the relationships between participants and participant groups
   function getParticipantGroupMaps(){
-    return labkeyQuery('study', 'ParticipantGroupMap');
+    return labkeyQuery('study', 'ParticipantGroupMap', [], ['GroupId/Label', 'GroupId/CategoryId', 'GroupId/CategoryId/Label']);
   }
 
   function getDataSets(){
