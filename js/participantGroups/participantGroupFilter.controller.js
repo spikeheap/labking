@@ -27,6 +27,15 @@ function ParticipantGroupFilterController(ParticipantGroupsService) {
     ParticipantGroupsService.getParticipantGroupCategories()
       .then(function (participantGroupCategories) {
         self.categories = participantGroupCategories;
+
+        // set initial state to selected
+        _.each(self.categories, function (groups) {
+          _.each(groups, function (group) {
+            selectedGroups[group.id] = true;
+          });
+        });
+
+        emitChangeNotification();
       });
   }
 
@@ -35,7 +44,8 @@ function ParticipantGroupFilterController(ParticipantGroupsService) {
   }
 
   function toggleGroup (group) {
-    selectedGroups[group.id] = !selectedGroups[group.id]
+    selectedGroups[group.id] = !selectedGroups[group.id];
+    emitChangeNotification();
   }
 
   /**
@@ -56,6 +66,23 @@ function ParticipantGroupFilterController(ParticipantGroupsService) {
     _.each(groups, function (group) {
       selectedGroups[group.id] = targetState;
     });
+    emitChangeNotification();
+  }
+
+  function emitChangeNotification() {
+    if (typeof self.onFilterChange === 'function') {
+      self.onFilterChange({participantIDs: getSelectedParticipantIDs()});
+    }
+  }
+
+  function getSelectedParticipantIDs () {
+    var idsByGroup = _.map(self.categories, function (groups) {
+      return _.filter(groups, self.isGroupSelected).map(function (group) {
+        return group.participantList;
+      });
+    });
+
+    return _.uniq(_.flattenDeep(idsByGroup));
   }
 }
 

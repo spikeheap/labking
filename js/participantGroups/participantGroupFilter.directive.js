@@ -6,7 +6,7 @@ module.exports = ParticipantGroupFilter;
 function ParticipantGroupFilter() {
   return {
     scope: {
-      onParticipantSelect: '&'
+      onFilterChange: '&'
     },
     template: require('./participantGroupFilter.directive.html'),
     controllerAs: 'vm',

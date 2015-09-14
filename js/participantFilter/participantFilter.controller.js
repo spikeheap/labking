@@ -28,6 +28,8 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.openAddParticipantModal = openAddParticipantModal;
 
+  self.updateParticipantGroupFilter = updateParticipantGroupFilter;
+
   activate();
 
   ///////
@@ -144,5 +146,9 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
       }
 
     });
+  }
+
+  function updateParticipantGroupFilter (participantIDs) {
+    console.log(participantIDs)
   }
 }
