@@ -46,10 +46,8 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
 
         // set initial state to selected
         _.each(self.categories, function (groups, categoryLabel) {
-          _.each(groups, function (group) {
-            selectedGroups[group.id] = true;
-          });
-          selectedGroups[NOT_IN_PREFIX + categoryLabel] = true;
+          selectAllGroups(categoryLabel);
+          ignoredCategories[categoryLabel] = true;
         });
 
         emitChangeNotification();
