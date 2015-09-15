@@ -1,14 +1,20 @@
 <div>
   <h4>Participant Groups</h4>
-  <ul class="fa-ul">
+  <ul class="list-unstyled">
     <!-- categories -->
     <li class="high-enough-for-labels"
         ng-repeat="(categoryLabel, groups) in vm.categories"
         role="button">
-          <div ng-click="vm.toggleCategory(categoryLabel)">
-            <i class="fa fa-li" ng-class="{'fa-check-square-o': vm.isCategorySelected(categoryLabel), 'fa-square-o': !vm.isCategorySelected(categoryLabel)}"></i>
-            <strong ng-bind="categoryLabel"></strong>
-          </div>
+
+        <strong ng-bind="categoryLabel"></strong>
+
+        <small>
+          <a ng-click="vm.selectAllGroups(categoryLabel)">All</a>
+          /
+          <a ng-click="vm.excludeAllGroups(categoryLabel)">None</a>
+          /
+          <a ng-click="vm.ignoreCategory(categoryLabel)">Ignore</a>
+        </small>
 
         <ul class="fa-ul">
           <!-- groups -->

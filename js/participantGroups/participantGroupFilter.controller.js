@@ -10,14 +10,16 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
 
   let selectedGroups = {};
 
-  self.isCategorySelected = isCategorySelected;
-  self.toggleCategory = toggleCategory;
   self.toggleNotInCategory = toggleNotInCategory;
   self.isNotInCategorySelected = isNotInCategorySelected;
 
   self.isGroupSelected = isGroupSelected;
   self.participantCount = participantCount;
   self.toggleGroup = toggleGroup;
+
+  self.selectAllGroups = selectAllGroups;
+  self.excludeAllGroups = excludeAllGroups;
+  self.ignoreCategory = ignoreCategory;
 
   activate();
 
@@ -62,6 +64,31 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
   }
 
 
+
+  function selectAllGroups (categoryLabel) {
+    filterByCategory(categoryLabel, false);
+  }
+
+  function excludeAllGroups (categoryLabel) {
+    filterByCategory(categoryLabel, true);
+  }
+
+  function filterByCategory (categoryLabel, invert) {
+    let groups = self.categories[categoryLabel];
+
+    _.each(groups, function (group) {
+      selectedGroups[group.id] = !invert;
+    });
+    selectedGroups[NOT_IN_PREFIX + categoryLabel] = invert;
+    emitChangeNotification();
+  }
+
+  function ignoreCategory (categoryLabel) {
+    filterByCategory(categoryLabel, false);
+    selectedGroups[NOT_IN_PREFIX + categoryLabel] = true;
+  }
+
+
   function toggleNotInCategory (categoryLabel) {
     selectedGroups[NOT_IN_PREFIX + categoryLabel] = !selectedGroups[NOT_IN_PREFIX + categoryLabel];
     emitChangeNotification();
@@ -71,30 +98,6 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
     return selectedGroups[NOT_IN_PREFIX + categoryLabel];
   }
 
-
-  /**
-   * Determine if the current category is selected. Categories are deemed
-   * to be selected if all the groups within them are selected.
-   * @param  {String}  the name of the category
-   * @return {Boolean}        `true` IFF all groups in the category are selected
-   */
-  function isCategorySelected (categoryLabel) {
-    let groups = self.categories[categoryLabel];
-    return groups
-        && !_.find(groups, function(group){ return !selectedGroups[group.id]; })
-        && isNotInCategorySelected(categoryLabel);
-  }
-
-  function toggleCategory (categoryLabel) {
-    let groups = self.categories[categoryLabel];
-    let targetState = !isCategorySelected(categoryLabel);
-
-    _.each(groups, function (group) {
-      selectedGroups[group.id] = targetState;
-    });
-    selectedGroups[NOT_IN_PREFIX + categoryLabel] = targetState;
-    emitChangeNotification();
-  }
 
   function emitChangeNotification() {
     if (typeof self.onFilterChange === 'function') {
@@ -128,9 +131,6 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
         return !_.includes(excludeList, participant);
       });
     })));
-
-
-
 
     return _.uniq(_.flattenDeep(participantsInSelectedGroups.concat(nonCategoryParticipants)));
   }
