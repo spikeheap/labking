@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _ = require('lodash');
 
@@ -12,7 +12,7 @@ class ParticipantGroup {
 
   addParticipant(participant) {
     if(!_.includes(this.participantList, participant)){
-      this.participantList.push(participant);
+    this.participantList.push(participant);
     }
   }
 

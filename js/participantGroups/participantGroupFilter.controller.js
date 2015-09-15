@@ -81,8 +81,8 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
   function isCategorySelected (categoryLabel) {
     let groups = self.categories[categoryLabel];
     return groups
-        && !_.find(groups, function(group){ return !selectedGroups[group.id] })
-        && isNotInCategorySelected (categoryLabel);
+        && !_.find(groups, function(group){ return !selectedGroups[group.id]; })
+        && isNotInCategorySelected(categoryLabel);
   }
 
   function toggleCategory (categoryLabel) {
@@ -114,14 +114,14 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
       return isNotInCategorySelected(categoryLabel);
     });
 
-    var nonCategoryParticipants = _.uniq(_.flattenDeep(_.map(categoriesSelected, function (groups, categoryLabel) {
+    var nonCategoryParticipants = _.uniq(_.flattenDeep(_.map(categoriesSelected, function (groups) {
       var excludeList = _.uniq(_.flattenDeep(groups.map(function (group) {
         return group.participantList;
       })));
 
       return _.filter(self.allParticipants, function (participant) {
         return !_.includes(excludeList, participant);
-      })
+      });
     })));
 
 

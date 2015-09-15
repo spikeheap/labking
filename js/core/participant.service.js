@@ -193,16 +193,10 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       }
     });
 
-    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord)])
-      .then(function(responses) {
-        var [metadata, response] = responses;
+    return $q.all([LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord)])
+      .then(function(response) {
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
-
-        // var datasetMetadata = metadata[dataSetName].columns;
-        // var returnedRecords = response.rows.map(function(row) {
-        //   return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
-        // });
 
         var i = _.findIndex(dataset, { 'lsid': record.lsid});
         dataset[i] = record;
