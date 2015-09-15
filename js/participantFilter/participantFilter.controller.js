@@ -28,6 +28,8 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.openAddParticipantModal = openAddParticipantModal;
 
+  self.updateParticipantGroupFilter = updateParticipantGroupFilter;
+
   activate();
 
   ///////
@@ -71,7 +73,8 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function filterParticipants(){
     self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
-      return self.selectedCohorts[candidateParticipant.Cohort];
+      return self.selectedCohorts[candidateParticipant.Cohort]
+          && _.contains(self.groupFilterParticipantIDs, candidateParticipant.ParticipantId);
     });
   }
 
@@ -144,5 +147,10 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
       }
 
     });
+  }
+
+  function updateParticipantGroupFilter (participantIDs) {
+    self.groupFilterParticipantIDs = participantIDs;
+    filterParticipants();
   }
 }
