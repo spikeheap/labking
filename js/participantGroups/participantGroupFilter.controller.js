@@ -104,6 +104,11 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
 
   function getSelectedParticipantIDs () {
 
+    // If we have no groups the filter can't be applied, so return everything
+    if(!self.categories || _.keys(self.categories).length === 0){
+      return self.allParticipants;
+    }
+
     var participantsInSelectedGroups = _.map(self.categories, function (groups) {
       return _.filter(groups, self.isGroupSelected).map(function (group) {
         return group.participantList;
