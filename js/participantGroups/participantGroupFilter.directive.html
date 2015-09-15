@@ -1,22 +1,24 @@
 <div>
   <h4>Participant Groups</h4>
-  <ul class="list-unstyled">
+  <ul class="fa-ul">
     <!-- categories -->
     <li class="high-enough-for-labels"
         ng-repeat="(categoryLabel, groups) in vm.categories"
         role="button">
 
+        <i class="fa fa-li"
+            ng-class="{'fa-toggle-off': vm.isCategoryIgnored(categoryLabel), 'fa-toggle-on': !vm.isCategoryIgnored(categoryLabel)}"
+            ng-click="vm.toggleIgnoreCategory(categoryLabel)"></i>
+
         <strong ng-bind="categoryLabel"></strong>
 
-        <small>
+        <small ng-hide="vm.isCategoryIgnored(categoryLabel)">
           <a ng-click="vm.selectAllGroups(categoryLabel)">All</a>
           /
           <a ng-click="vm.excludeAllGroups(categoryLabel)">None</a>
-          /
-          <a ng-click="vm.ignoreCategory(categoryLabel)">Ignore</a>
         </small>
 
-        <ul class="fa-ul">
+        <ul class="fa-ul" ng-hide="vm.isCategoryIgnored(categoryLabel)">
           <!-- groups -->
           <li class="high-enough-for-labels"
               ng-repeat="group in groups track by group.id"
