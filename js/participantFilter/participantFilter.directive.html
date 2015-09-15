@@ -21,6 +21,10 @@
     </ul>
 
     <participant-group-filter on-filter-change="vm.updateParticipantGroupFilter(participantIDs)"></participant-group-filter>
+
+    <div class="well">
+    Showing {{ vm.filteredParticipants.length }} of {{ vm.allParticipants.length }} participants
+    </div>
   </div>
 
   <div class="col-sm-9">
