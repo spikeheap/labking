@@ -7,8 +7,7 @@ exports.service = ParticipantGroupsService;
 /** @ngInject **/
 function ParticipantGroupsService($q, logger) {
   var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash'),
-    moment = require('moment');
+    _ = require('lodash');
 
   var ParticipantGroup = require('../model/participantGroup.model');
   var ParticipantGroupCategory = require('../model/participantGroupCategory.model');
@@ -36,7 +35,7 @@ function ParticipantGroupsService($q, logger) {
     }
 
     return listFromCacheOrServer
-      .then(function(){ return ; })
+      .then(function(){ return participantGroups; })
       .catch(fail);
   }
 
@@ -50,7 +49,7 @@ function ParticipantGroupsService($q, logger) {
     }
 
     return listFromCacheOrServer
-      .then(function(){ return _.groupBy(participantGroups, function(group, key){ return group.category.label }); })
+      .then(function(){ return _.groupBy(participantGroups, function(group){ return group.category.label; }); })
       .catch(fail);
   }
 

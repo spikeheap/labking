@@ -15,6 +15,8 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   self.participantCount = participantCount;
   self.isCohortSelected = isCohortSelected;
   self.toggleCohort = toggleCohort;
+  self.selectAllCohorts = selectAllCohorts;
+  self.selectNoCohorts = selectNoCohorts;
 
   self.participantSearchText = '';
   self.clearSearch = clearSearch;
@@ -106,6 +108,23 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function toggleCohort(cohort) {
     self.selectedCohorts[cohort.rowid] = !self.selectedCohorts[cohort.rowid];
+    filterParticipants();
+  }
+
+  function selectNoCohorts () {
+    toggleAllCohorts(false);
+  }
+
+  function selectAllCohorts () {
+    toggleAllCohorts(true);
+  }
+
+  function toggleAllCohorts(selected=true) {
+    _.each(self.selectedCohorts, function (cohort, key) {
+      if(key !== null){
+        self.selectedCohorts[key] = selected;
+      }
+    });
     filterParticipants();
   }
 

@@ -5,12 +5,20 @@
     <li class="high-enough-for-labels"
         ng-repeat="(categoryLabel, groups) in vm.categories"
         role="button">
-          <div ng-click="vm.toggleCategory(categoryLabel)">
-            <i class="fa fa-li" ng-class="{'fa-check-square-o': vm.isCategorySelected(categoryLabel), 'fa-square-o': !vm.isCategorySelected(categoryLabel)}"></i>
-            <strong ng-bind="categoryLabel"></strong>
-          </div>
 
-        <ul class="fa-ul">
+        <i class="fa fa-li"
+            ng-class="{'fa-toggle-off': vm.isCategoryIgnored(categoryLabel), 'fa-toggle-on': !vm.isCategoryIgnored(categoryLabel)}"
+            ng-click="vm.toggleIgnoreCategory(categoryLabel)"></i>
+
+        <strong ng-bind="categoryLabel"></strong>
+
+        <small ng-hide="vm.isCategoryIgnored(categoryLabel)">
+          <a ng-click="vm.selectAllGroups(categoryLabel)">All</a>
+          /
+          <a ng-click="vm.excludeAllGroups(categoryLabel)">None</a>
+        </small>
+
+        <ul class="fa-ul" ng-hide="vm.isCategoryIgnored(categoryLabel)">
           <!-- groups -->
           <li class="high-enough-for-labels"
               ng-repeat="group in groups track by group.id"
@@ -29,6 +37,10 @@
             <em ng-class="{'text-muted': !vm.isNotInCategorySelected(categoryLabel)}">No Group</em>
           </li>
         </ul>
+    </li>
+
+    <li ng-hide="vm.categories">
+      <em class="text-muted">No categories available</em>
     </li>
   </ul>
 </div>
