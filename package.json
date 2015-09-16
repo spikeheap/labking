@@ -1,6 +1,6 @@
 {
   "name": "labking",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A LabKey module to allow creation and editing of Study module datasets in a subject-centric way",
   "main": "js/labking.module.js",
   "scripts": {
