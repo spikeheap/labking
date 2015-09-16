@@ -193,7 +193,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       }
     });
 
-    return $q.all([LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord)])
+    return $q.when(LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord))
       .then(function(response) {
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
