@@ -36,10 +36,20 @@
               step="any">
         </div>
 
-        <div class="col-sm-8">
-          <input class="form-control" type="date"
-              ng-if="vm.columnType(column.dataIndex) === vm.fieldTypes.DATETIME"
-              ng-model="vm.entry[column.dataIndex]">
+        <div class="col-sm-8" ng-if="vm.columnType(column.dataIndex) === vm.fieldTypes.DATETIME">
+          <div class="input-group">
+            <input type="text" class="form-control"
+              datepicker-popup="dd/MM/yyyy"
+              ng-model="vm.entry[column.dataIndex]"
+              is-open="status.opened"
+              min-date="1753-01-01"
+              datepicker-options="dateOptions"
+              show-button-bar="false"
+              ng-required="true" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="status.opened = true"><i class="fa fa-calendar"></i></button>
+            </span>
+          </div>
         </div>
 
         <div class="col-sm-8">
