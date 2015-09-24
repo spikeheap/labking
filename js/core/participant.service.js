@@ -155,6 +155,8 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
         var [metadata, response] = responses;
         var participantId = response.rows[0][config.subjectNoun];
 
+        resultsCache.participantList.push(response.rows[0]);
+
         if(resultsCache.participants[participantId] === undefined){
           resultsCache.participants[participantId] = { dataSets: {} };
           resultsCache.participants[participantId][config.subjectNoun] = participantId;

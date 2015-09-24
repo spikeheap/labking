@@ -45,21 +45,21 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   function activate(){
     $q.all([
       ParticipantService.getParticipantList(false),
-      ParticipantService.getParticipantKeyInfo()
+      ParticipantService.getParticipantKeyInfo(),
+      CohortService.getCohorts()
     ]).then(function(responses) {
-      var [participants, participantsKeyInfo] = responses;
+      var [participants, participantsKeyInfo, cohorts] = responses;
+
       self.allParticipants = participants.map(function(participant) {
         participant.keyInfo = _.find(participantsKeyInfo, config.subjectNoun, participant[config.subjectNoun]);
         return participant;
       });
-      filterParticipants();
-    });
 
-    CohortService.getCohorts().then(function(cohorts) {
       self.cohorts = cohorts;
       self.cohorts.forEach(function(cohort) {
         self.selectedCohorts[cohort.rowid] = true;
       });
+
       filterParticipants();
     });
   }
