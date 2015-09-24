@@ -1,6 +1,6 @@
 'use strict';
 
-const LABKEY_DATE_FORMAT = 'DD/MM/YYYY hh:mm:ss';
+const LABKEY_DATE_FORMAT = 'YYYY/MM/DD hh:mm:ss';
 
 var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash'),
