@@ -21,14 +21,14 @@ function CohortService($q, logger) {
   };
 
 
-  function getCohorts() {
+  function getCohorts(useCache=true) {
 
     function updateCohortCache(response){
       resultsCache.cohorts = response.rows;
     }
 
     var getFromCacheIfPossible;
-    if(resultsCache.cohorts){
+    if(resultsCache.cohorts && useCache){
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.when(LabKeyAPI.getCohorts())
