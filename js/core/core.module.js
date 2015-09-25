@@ -15,7 +15,7 @@ require('angular')
       'ui.router'
   ])
   //.constant('toastr', toastr)
-  // .constant('moment', moment)
+  .constant('LabKey', require('../lib/LabKeyAPI'))
   .value('config', config.config)
   //.config(config.configure)
   //.config(config.toastrConfig)

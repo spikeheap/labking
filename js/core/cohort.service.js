@@ -1,9 +1,7 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI');
-
 /** @ngInject **/
-function CohortService($q, logger) {
+function CohortService($q, logger, LabKey) {
 
   function fail(error) {
     var msg = 'query failed. ';
@@ -31,7 +29,7 @@ function CohortService($q, logger) {
     if(resultsCache.cohorts && useCache){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getCohorts())
+      getFromCacheIfPossible = $q.when(LabKey.getCohorts())
         .then(updateCohortCache);
     }
 

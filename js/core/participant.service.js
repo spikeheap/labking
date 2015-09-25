@@ -2,12 +2,11 @@
 
 const LABKEY_DATE_FORMAT = 'YYYY/MM/DD hh:mm:ss';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash'),
+var _ = require('lodash'),
     moment = require('moment');
 
 /** @ngInject **/
-function ParticipantService(config, DatasetMetadataService, $q, logger, $rootScope) {
+function ParticipantService(config, DatasetMetadataService, $q, logger, $rootScope, LabKey) {
 
   // Caching the queries reduces server load
   // and makes the UI more responsive
@@ -27,7 +26,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
   };
 
   function generateID() {
-    return $q.when(LabKeyAPI.getParticipants([config.subjectNoun]))
+    return $q.when(LabKey.getParticipants([config.subjectNoun]))
       .then(function (response) {
 
         // flatten down to an array of IDs
@@ -65,7 +64,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     if(resultsCache.participantList && useCache){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getParticipants())
+      getFromCacheIfPossible = $q.when(LabKey.getParticipants())
         .then(updateParticipantListCache);
     }
 
@@ -87,7 +86,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     if(resultsCache[config.demographicDataset]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(config.demographicDataset))
+      getFromCacheIfPossible = $q.when(LabKey.getDataSet(config.demographicDataset))
         .then(updateParticipantKeyInfoCache);
     }
 
@@ -111,7 +110,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
     if(resultsCache.participants[participantId]){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSets())
+      getFromCacheIfPossible = $q.when(LabKey.getDataSets())
         .then(getDataSetsForParticipant)
         .then(updateParticipantCache);
     }
@@ -121,7 +120,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       .catch(fail);
 
     function getDataSetsForParticipant(response) {
-        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKeyAPI.getParticipantDataSet(config.subjectNoun, participantId, dataSet.Name)));
+        var participantDataSetPromises = response.rows.map((dataSet) => $q.when(LabKey.getParticipantDataSet(config.subjectNoun, participantId, dataSet.Name)));
         return $q.all(participantDataSetPromises);
     }
 
@@ -150,7 +149,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       }
     });
 
-    return $q.all([DatasetMetadataService.getMetaData(), LabKeyAPI.insertRow(dataSetName, serialisedRecord)])
+    return $q.all([DatasetMetadataService.getMetaData(), LabKey.insertRow(dataSetName, serialisedRecord)])
       .then(function(responses) {
         var [metadata, response] = responses;
         var participantId = response.rows[0][config.subjectNoun];
@@ -170,7 +169,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
 
         var datasetMetadata = metadata[dataSetName].columns;
         var returnedRecords = response.rows.map(function(row) {
-          return LabKeyAPI.coerceToType(row, datasetMetadata, 'Name');
+          return LabKey.coerceToType(row, datasetMetadata, 'Name');
         });
 
         Array.prototype.push.apply(resultsCache.participants[participantId].dataSets[dataSetName].rows, returnedRecords);
@@ -195,7 +194,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
       }
     });
 
-    return $q.when(LabKeyAPI.updateDataSetRow(dataSetName, serialisedRecord))
+    return $q.when(LabKey.updateDataSetRow(dataSetName, serialisedRecord))
       .then(function(response) {
         var participantId = response.rows[0][config.subjectNoun];
         var dataset = resultsCache.participants[participantId].dataSets[dataSetName].rows;
@@ -214,7 +213,7 @@ function ParticipantService(config, DatasetMetadataService, $q, logger, $rootSco
   }
 
   function removeRecord(dataSetName, record) {
-    return $q.when(LabKeyAPI.removeDataSetRow(dataSetName, record))
+    return $q.when(LabKey.removeDataSetRow(dataSetName, record))
       .then(function () {
         var dataset = resultsCache.participants[record[config.subjectNoun]].dataSets[dataSetName].rows;
         var i = _.findIndex(dataset, { 'lsid': record.lsid});

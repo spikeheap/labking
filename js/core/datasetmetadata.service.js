@@ -1,10 +1,9 @@
 'use strict';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash');
+var _ = require('lodash');
 
 /** @ngInject **/
-function DatasetMetadataService($q, logger) {
+function DatasetMetadataService($q, logger, LabKey) {
 
   // We only need to do this request once, and it's quite heavy
   var resultsCache = {
@@ -27,8 +26,8 @@ function DatasetMetadataService($q, logger) {
       getFromCacheIfPossible = $q.when();
     }else{
       getFromCacheIfPossible = $q.all([
-            LabKeyAPI.getDataSets(),
-            LabKeyAPI.getDataSetsColumns()
+            LabKey.getDataSets(),
+            LabKey.getDataSetsColumns()
           ])
         .then(updateMetaDataCache);
     }
@@ -57,7 +56,7 @@ function DatasetMetadataService($q, logger) {
       return $q.when(resultsCache.lookups[lookupName]);
     }
 
-    return $q.when(LabKeyAPI.getLookups(lookupName))
+    return $q.when(LabKey.getLookups(lookupName))
       .then(updateLookupCache)
       .catch(fail);
 
@@ -79,7 +78,7 @@ function DatasetMetadataService($q, logger) {
     if(resultsCache.metadata[dataSetName] && resultsCache.metadata[dataSetName].columnOrder){
       getFromCacheIfPossible = $q.when();
     }else{
-      getFromCacheIfPossible = $q.when(LabKeyAPI.getDataSet(dataSetName))
+      getFromCacheIfPossible = $q.when(LabKey.getDataSet(dataSetName))
         .then(function(response){
           cacheColumnModel(dataSetName, response.columnModel);
           return resultsCache.metadata[dataSetName].columnOrder;

@@ -2,12 +2,11 @@
 
 const LABKEY_DATE_FORMAT = 'YYYY/MM/DD hh:mm:ss';
 
-var LabKeyAPI = require('../lib/LabKeyAPI'),
-    _ = require('lodash'),
+var _ = require('lodash'),
     moment = require('moment');
 
 /** @ngInject **/
-function ParticipantKeyInfoService(config, ParticipantService, $q, logger) {
+function ParticipantKeyInfoService(config, ParticipantService, LabKey, $q, logger) {
 
   return {
     getParticipantKeyInfo: getParticipantKeyInfo,
