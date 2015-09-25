@@ -22,6 +22,7 @@ require('angular')
   .factory('CohortService', require('./cohort.service'))
   .factory('DatasetMetadataService', require('./datasetmetadata.service'))
   .factory('ParticipantService', require('./participant.service'))
+  .factory('ParticipantKeyInfoService', require('./participantKeyInfo.service'))
 ;
 
 module.exports = moduleName;

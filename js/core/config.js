@@ -15,7 +15,14 @@ var config = {
   subjectIdZeroPadding: 4,
   subjectIdRegex: /^HEP-([0-9]+)$/,
   demographicDataset: 'Database_Enrollment',
-  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName']
+  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'FirstName', 'LastName'],
+  keyDemographicFields: [
+    'Database_Enrollment.ParticipantId',
+    'Database_Enrollment.NHSNumber',
+    'Database_Enrollment.MRNNumber',
+    'Database_Enrollment.FirstName',
+    'Database_Enrollment.LastName'
+  ]
   // subjectNameFields: ['FirstName', 'LastName'],
   // headlineSubjectInfoFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'DOB']
 };
