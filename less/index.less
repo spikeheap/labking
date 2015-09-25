@@ -15,6 +15,11 @@
 @import "../bower_components/fontawesome/less/stacked.less";
 @import "../bower_components/fontawesome/less/icons.less";
 
+
+// Used by hack to override glyphicons with FontAwesome for Bootstrap date picker
+// see https://github.com/angular-ui/bootstrap/issues/2475#issuecomment-49485332
+@import (less, reference) "../bower_components/fontawesome/css/font-awesome.css";
+
 @import "../bower_components/bootstrap/less/variables";
 @font-family-sans-serif:  Verdana,Arial,Helvetica,sans serif;
 @font-family-base:        @font-family-sans-serif;
@@ -172,5 +177,15 @@ body {
 
   .high-enough-for-labels {
     min-height: 1.3em;
+  }
+
+  // Hack to override glyphicons with FontAwesome for Bootstrap date picker
+  // see https://github.com/angular-ui/bootstrap/issues/2475#issuecomment-49485332
+  // requires import statement outside of .labking
+  .glyphicon:extend(.fa all) {
+    &.glyphicon-chevron-right:extend(.fa-chevron-right all) {};
+    &.glyphicon-chevron-left:extend(.fa-chevron-left all) {};
+    &.glyphicon-chevron-up:extend(.fa-chevron-up all) {};
+    &.glyphicon-chevron-down:extend(.fa-chevron-down all) {};
   }
 }

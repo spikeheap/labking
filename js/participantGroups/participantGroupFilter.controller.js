@@ -3,7 +3,7 @@
 module.exports = ParticipantGroupFilterController;
 
 /** @ngInject **/
-function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsService, $q) {
+function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsService, $q, $scope) {
   const _ = require('lodash');
   const NOT_IN_PREFIX = 'not_in_';
   let self = this;
@@ -23,16 +23,30 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
   self.toggleIgnoreCategory = toggleIgnoreCategory;
   self.isCategoryIgnored = isCategoryIgnored;
 
-  activate();
+  activate().then(function () {
+    // set initial state to selected
+    _.each(self.categories, function (groups, categoryLabel) {
+      selectAllGroups(categoryLabel);
+      ignoredCategories[categoryLabel] = true;
+    });
+    emitChangeNotification();
+  });
+
+
+
+
+  // Refilter if we create or update a record
+  // because the group may have changed
+  $scope.$on('labkey:record:created', activate);
+  $scope.$on('labkey:record:updated', activate);
 
   /**
    * Private methods
    */
 
   function activate () {
-
-    $q.all([
-        ParticipantService.getParticipantList(false),
+    return $q.all([
+        ParticipantService.getParticipantList(),
         ParticipantGroupsService.getParticipantGroupCategories()
       ])
       .then(function (responses) {
@@ -42,12 +56,6 @@ function ParticipantGroupFilterController(ParticipantService, ParticipantGroupsS
 
         self.allParticipants = participants.map(function(participant) {
           return participant.ParticipantId;
-        });
-
-        // set initial state to selected
-        _.each(self.categories, function (groups, categoryLabel) {
-          selectAllGroups(categoryLabel);
-          ignoredCategories[categoryLabel] = true;
         });
 
         emitChangeNotification();
