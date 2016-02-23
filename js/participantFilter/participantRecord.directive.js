@@ -25,6 +25,7 @@ function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
         self.getParticipantName = getParticipantName;
         self.selectCategory = selectCategory;
         self.selectDataSet = selectDataSet;
+        self.getRecordCount = getRecordCount;
 
         DatasetMetadataService.getMetaData().then(function(metadata) {
 
@@ -53,6 +54,19 @@ function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
         function selectCategory(category) {
           self.selectedCategory = category;
           selectDataSet(self.selectedCategory[0]);
+        }
+
+        /**
+         * Gets the number of rows in a dataset for the currently selected user.
+         * @param  {String} datasetName The name of the dataset. NOT the dataset object.
+         * @return {Number}             The count of rows in the dataset with the passed name, for the currently selected participant.
+         */
+        function getRecordCount (datasetName) {
+          if(self.participant !== undefined && self.participant.dataSets[datasetName] !== undefined){
+            return self.participant.dataSets[datasetName].rows.length;
+          }else{
+            return 0;
+          }
         }
 
         function selectDataSet(dataSet) {

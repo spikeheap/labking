@@ -32,8 +32,10 @@
             ng-class="{active: vm.selectedDataSet == dataSet}"
             ng-repeat="dataSet in vm.selectedCategory">
           <a aria-controls="home" role="tab"
-            ng-bind="dataSet.Label"
-            ng-click="vm.selectDataSet(dataSet)"></a>
+            ng-click="vm.selectDataSet(dataSet)">
+            {{dataSet.Label}}
+            <span class="badge">{{vm.getRecordCount(dataSet.Name)}}</span>
+          </a>
       </li>
     </ul>
 
