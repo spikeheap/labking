@@ -5,7 +5,7 @@ exports.service = ParticipantGroupsService;
 
 
 /** @ngInject **/
-function ParticipantGroupsService($q, logger) {
+function ParticipantGroupsService($q, logger, config) {
   var LabKeyAPI = require('../lib/LabKeyAPI'),
     _ = require('lodash');
 
@@ -63,7 +63,7 @@ function ParticipantGroupsService($q, logger) {
       var categoryLabel = participantGroupMapping['GroupId/CategoryId/Label'];
       var groupId = participantGroupMapping.GroupId;
       var groupLabel = participantGroupMapping['GroupId/Label'];
-      var participantId = participantGroupMapping.ParticipantId;
+      var participantId = participantGroupMapping[config.subjectNoun];
 
       // Create participant group category if it doesn't exist
       if(participantGroupCategories[categoryId] === undefined){
