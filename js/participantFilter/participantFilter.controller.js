@@ -28,6 +28,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   self.isParticipantSelected = isParticipantSelected;
   self.keyFieldsPercentageComplete = keyFieldsPercentageComplete;
 
+  self.searchFields = config.searchFields.slice();
   self.openAddParticipantModal = openAddParticipantModal;
 
   self.updateParticipantGroupFilter = updateParticipantGroupFilter;
