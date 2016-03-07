@@ -10,12 +10,15 @@ function toastrConfig(toastr) {
 var config = {
   appErrorPrefix: '[labKing Error] ',
   appTitle: 'labKing',
-  subjectNoun: 'ParticipantId',
-  subjectIdPrefix: 'HEP-',
-  subjectIdZeroPadding: 4,
-  subjectIdRegex: /^HEP-([0-9]+)$/,
-  demographicDataset: 'Database_Enrollment',
-  searchFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'MedWarNum', 'FirstName', 'LastName']
+
+  // Customise for project
+  subjectNoun: 'StudyNumber',
+  subjectIdPrefix: 'G4',
+  subjectIdZeroPadding: 3,
+  subjectIdRegex: /^G4([0-9]+)$/,
+  demographicDataset: 'Demographics',
+  searchFields: ['StudyNumber', 'NHSNo', 'DateOfBirth']
+
   // subjectNameFields: ['FirstName', 'LastName'],
   // headlineSubjectInfoFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'DOB']
 };
