@@ -41,7 +41,7 @@
         <div class="form-inline">
           <div class="form-group has-feedback">
             <label for="labking-participant-search">Search</label>
-            <input type="search" class="form-control" id="labking-participant-search" placeholder="NHS, MRN, MedWar or name" autofocus ng-model="vm.participantSearchText">
+            <input type="search" class="form-control" id="labking-participant-search" placeholder="{{vm.searchFields.join(', ')}}" autofocus ng-model="vm.participantSearchText">
             <a ng-show="vm.participantSearchText" ng-click="vm.clearSearch()" class="text-muted">
               <span class="fa fa-remove form-control-feedback"></span>
             </a>

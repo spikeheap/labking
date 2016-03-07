@@ -28,6 +28,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   self.isParticipantSelected = isParticipantSelected;
   self.keyFieldsPercentageComplete = keyFieldsPercentageComplete;
 
+  self.searchFields = config.searchFields.slice();
   self.openAddParticipantModal = openAddParticipantModal;
 
   self.updateParticipantGroupFilter = updateParticipantGroupFilter;
@@ -83,7 +84,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   function filterParticipants(){
     self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
       return self.selectedCohorts[candidateParticipant.Cohort]
-          && _.contains(self.groupFilterParticipantIDs, candidateParticipant.ParticipantId);
+          && _.includes(self.groupFilterParticipantIDs, candidateParticipant.ParticipantId);
     });
   }
 
