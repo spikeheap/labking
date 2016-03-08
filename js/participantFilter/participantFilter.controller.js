@@ -28,6 +28,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   self.isParticipantSelected = isParticipantSelected;
   self.keyFieldsPercentageComplete = keyFieldsPercentageComplete;
 
+  self.searchFields = config.searchFields.slice();
   self.openAddParticipantModal = openAddParticipantModal;
 
   self.updateParticipantGroupFilter = updateParticipantGroupFilter;
@@ -66,7 +67,14 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function selectParticipant(participant) {
     self.selectedParticipant = participant;
-    self.onParticipantSelect({participantId: participant[config.subjectNoun]});
+    var subjectKey = config.subjectNoun;
+
+    // lower-case the first character, because LabKey's expecting it that way
+    subjectKey = subjectKey[0].toLowerCase() + subjectKey.substr(1);
+
+    var payload = {};
+    payload[subjectKey] = participant[config.subjectNoun];
+    self.onParticipantSelect(payload);
   }
 
   function isParticipantSelected(participant){
@@ -76,7 +84,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   function filterParticipants(){
     self.filteredParticipants = self.allParticipants.filter(function(candidateParticipant) {
       return self.selectedCohorts[candidateParticipant.Cohort]
-          && _.contains(self.groupFilterParticipantIDs, candidateParticipant.ParticipantId);
+          && _.includes(self.groupFilterParticipantIDs, candidateParticipant.ParticipantId);
     });
   }
 

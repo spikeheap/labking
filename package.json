@@ -1,6 +1,6 @@
 {
   "name": "labking",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A LabKey module to allow creation and editing of Study module datasets in a subject-centric way",
   "main": "js/labking.module.js",
   "scripts": {
@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/spikeheap/labkey-labking",
   "devDependencies": {
-    "babel-eslint": "^3.1.23",
+    "babel-eslint": "4.1.7",
     "babelify": "^5.0.4",
     "bower": "^1.4.1",
     "browserify": "^9.0.3",
