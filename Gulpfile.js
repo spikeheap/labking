@@ -139,19 +139,11 @@
           'scripts:compile'
         ], function() {
 
-      var userefAssets = useref.assets({
-        searchPath: 'dist/labking/web'
-      });
-
       var pipeline = gulp.src("views/**/*.html")
-        .pipe(userefAssets)      // Concatenate with gulp-useref
-
-        .pipe(gulpif('*.js', uglify({mangle: true})))
+        //.pipe(gulpif('*.js', uglify({mangle: true})))
         .pipe(gulpif('*.css', minifyCss()))
-
         .pipe(rev())                // Rename the concatenated files
-        .pipe(userefAssets.restore())
-        .pipe(useref())
+        .pipe(useref({ searchPath: 'dist/labking/web' }))
         .pipe(revReplace())         // Substitute in new filenames
         .pipe(replace('../web/', '<%=contextPath%>/'))
         .pipe(gulp.dest(path.join(outputPath, 'views')));
