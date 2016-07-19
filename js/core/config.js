@@ -12,12 +12,12 @@ var config = {
   appTitle: 'labKing',
 
   // Customise for project
-  subjectNoun: 'StudyNumber',
+  subjectNoun: 'ParticipantId',
   subjectIdPrefix: 'G4',
   subjectIdZeroPadding: 3,
   subjectIdRegex: /^G4([0-9]+)$/,
   demographicDataset: 'Demographics',
-  searchFields: ['StudyNumber', 'NHSNo', 'DateOfBirth']
+  searchFields: ['ParticipantId', 'YearOfBirth']
 
   // subjectNameFields: ['FirstName', 'LastName'],
   // headlineSubjectInfoFields: ['ParticipantId', 'NHSNumber', 'MRNNumber', 'DOB']

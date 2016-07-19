@@ -52,11 +52,8 @@
       <table class="table table-condensed">
         <thead>
           <tr>
-            <th class="col-xs-1">LabKey Id</th>
-            <th class="col-xs-1">NHS #</th>
-            <th class="col-xs-1">MRN #</th>
-            <th>Name</th>
-            <th>Date of Birth</th>
+            <th>Participant ID</th>
+            <th>Year of Birth</th>
             <th>Summary fields completed</th>
           </tr>
         </thead>
@@ -67,10 +64,7 @@
               ng-click="vm.selectParticipant(participant)"
               role="button">
             <td><span class="label label-primary" ng-bind="participant[vm.subjectNoun]"></span></td>
-            <td><span class="label label-success" ng-bind="participant.keyInfo.NHSNumber"></span></td>
-            <td><span class="label label-info" ng-bind="participant.keyInfo.MRNNumber"></span></td>
-            <td>{{participant.keyInfo.FirstName}} {{participant.keyInfo.LastName}}</td>
-            <td ng-bind="participant.keyInfo.DOB | date: 'shortDate'"</td>
+            <td ng-bind="participant.keyInfo.YearOfBirth"</td>
             <td class="col-xs-1">
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{vm.keyFieldsPercentageComplete(participant)}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vm.keyFieldsPercentageComplete(participant)}}%;">
