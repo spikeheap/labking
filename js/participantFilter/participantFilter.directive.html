@@ -54,7 +54,6 @@
           <tr>
             <th>Participant ID</th>
             <th>Year of Birth</th>
-            <th>Summary fields completed</th>
           </tr>
         </thead>
         <tbody>
@@ -65,13 +64,6 @@
               role="button">
             <td><span class="label label-primary" ng-bind="participant[vm.subjectNoun]"></span></td>
             <td ng-bind="participant.keyInfo.YearOfBirth"</td>
-            <td class="col-xs-1">
-              <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{vm.keyFieldsPercentageComplete(participant)}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vm.keyFieldsPercentageComplete(participant)}}%;">
-                  <span class="sr-only">{{vm.keyFieldsPercentageComplete(participant)}}%</span>
-                </div>
-              </div>
-            </td>
           </tr>
         </tbody>
       </table>

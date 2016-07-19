@@ -1,15 +1,7 @@
 <div class="row">
   <div class="jumbotron">
     <div class="container">
-        <h2>{{vm.getParticipantName()}}</h2>
-        <dl class="dl-horizontal">
-          <dt>NHS #:</dt>
-          <dd ng-bind="vm.getEnrolmentDataSet().NHSNumber"></dd>
-          <dt>MRN #:</dt>
-          <dd ng-bind="vm.getEnrolmentDataSet().MRNNumber"></dd>
-          <dt>Date of birth:</dt>
-          <dd ng-bind="vm.getEnrolmentDataSet().DOB | date: 'shortDate'"></dd>
-        </dl>
+        <h2>{{vm.participant[vm.subjectNoun]}}</h2>
     </div>
   </div>
 </div>

@@ -26,6 +26,7 @@ function ParticipantRecord(config, ParticipantService, DatasetMetadataService) {
         self.selectCategory = selectCategory;
         self.selectDataSet = selectDataSet;
         self.getRecordCount = getRecordCount;
+        self.subjectNoun = config.subjectNoun;
 
         DatasetMetadataService.getMetaData().then(function(metadata) {
 
