@@ -71,7 +71,16 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   }
 
   function getValueFromLookup(lookupName, key) {
-    return _.find(self.lookups[lookupName].rows, 'Key', key).Label;
+    // if the key is null, so is the value
+    if(key === undefined){
+      return;
+    }
+
+    var lookup = _.find(self.lookups[lookupName].rows, 'Key', key);
+
+    if(lookup !== undefined){
+      return lookup.Label;
+    }
   }
 
   function selectParticipant(participant) {
