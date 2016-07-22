@@ -73,7 +73,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   function getValueFromLookup(lookupName, key) {
     // if the key is null, so is the value
     if(key === undefined){
-      return;
+      return undefined;
     }
 
     var lookup = _.find(self.lookups[lookupName].rows, 'Key', key);
@@ -85,7 +85,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   function selectParticipant(participant) {
     self.selectedParticipant = participant;
-    var subjectKey = config.subjectNoun
+    var subjectKey = config.subjectNoun;
     // lower-case the first character, because LabKey's expecting it that way
     subjectKey = subjectKey[0].toLowerCase() + subjectKey.substr(1);
 
