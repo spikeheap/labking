@@ -3,7 +3,7 @@
 module.exports = ParticipantFilterController;
 
 // @ngInject
-function ParticipantFilterController($modal, $q, $scope, config, CohortService, ParticipantService) {
+function ParticipantFilterController($modal, $q, $scope, config, CohortService, ParticipantService, DatasetMetadataService) {
   var _ = require('lodash');
   var self = this;
 
@@ -33,6 +33,8 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.updateParticipantGroupFilter = updateParticipantGroupFilter;
 
+  self.getValueFromLookup = getValueFromLookup;
+
   activate();
 
   ///////
@@ -47,9 +49,10 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
     $q.all([
       ParticipantService.getParticipantList(false),
       ParticipantService.getParticipantKeyInfo(),
-      CohortService.getCohorts()
+      CohortService.getCohorts(),
+      DatasetMetadataService.getLookups('IgYears')
     ]).then(function(responses) {
-      var [participants, participantsKeyInfo, cohorts] = responses;
+      var [participants, participantsKeyInfo, cohorts, igYearsLookup] = responses;
 
       self.allParticipants = participants.map(function(participant) {
         participant.keyInfo = _.find(participantsKeyInfo, config.subjectNoun, participant[config.subjectNoun]);
@@ -61,8 +64,14 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
         self.selectedCohorts[cohort.rowid] = true;
       });
 
+      self.lookups = { IgYears: igYearsLookup};
+
       filterParticipants();
     });
+  }
+
+  function getValueFromLookup(lookupName, key) {
+    return _.find(self.lookups[lookupName].rows, 'Key', key).Label;
   }
 
   function selectParticipant(participant) {
