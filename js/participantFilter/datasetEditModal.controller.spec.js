@@ -60,9 +60,6 @@ describe('DatasetEditModalController', function () {
   });
 
   describe('isDisabled', function () {
-    it('is disabled when the column is the participant ID', function () {
-      expect(controller.isDisabled({dataIndex: config.subjectNoun})).to.equal(true);
-    });
 
     it('returns false when the column is not the participant ID', function () {
       expect(controller.isDisabled({dataIndex: 'shownColumn', hidden: false})).to.equal(false);
@@ -128,6 +125,16 @@ describe('DatasetEditModalController', function () {
 
       it('shows subject noun columns when it is a new subject', function () {
         expect(controller.isColumnShown({dataIndex: config.subjectNoun})).to.equal(true);
+      });
+
+      it('enables input for participant ID when config.subjectIdPrefix is undefined', function () {
+        config.subjectIdPrefix = undefined;
+        expect(controller.isDisabled({dataIndex: config.subjectNoun})).to.equal(false);
+      });
+
+      it('disables input for participant ID when config.subjectIdPrefix is set', function () {
+        config.subjectIdPrefix = 'TEST-';
+        expect(controller.isDisabled({dataIndex: config.subjectNoun})).to.equal(true);
       });
     });
   });

@@ -13,7 +13,7 @@ var config = {
 
   // Customise for project
   subjectNoun: 'ParticipantId',
-  subjectIdPrefix: 'G4',
+  //subjectIdPrefix: 'G4',
   subjectIdZeroPadding: 3,
   subjectIdRegex: /^G4([0-9]+)$/,
   demographicDataset: 'Demographics',
