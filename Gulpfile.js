@@ -67,12 +67,14 @@
 
     // Module definition XML for LabKey
     gulp.task('labkey:module', function() {
+      var semver = project.version.split(".");
+
       return gulp.src("./templates/module.xml.mustache")
         .pipe(gulpstache({
             name: project.name,
             // LabKey needs double values for the version, so can't cope with SemVer.
-            // We'll take the major and minor numbers to make the LabKey version.
-            version: project.version.split(".").slice(0,2).join('.')
+            // We'll lump together minor and patch versions so 1.2.3 => 1.23
+            version:  semver[0] + '.' + semver.slice(1).join('')
         }))
         .pipe(rename('module.xml'))
         .pipe(gulp.dest(path.join(outputPath, 'config')));
