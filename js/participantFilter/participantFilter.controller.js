@@ -88,6 +88,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   function selectParticipant(participant) {
     self.selectedParticipant = participant;
     var subjectKey = config.subjectNoun;
+
     // lower-case the first character, because LabKey's expecting it that way
     subjectKey = subjectKey[0].toLowerCase() + subjectKey.substr(1);
 
