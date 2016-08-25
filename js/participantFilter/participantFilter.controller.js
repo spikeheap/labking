@@ -33,8 +33,6 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
 
   self.updateParticipantGroupFilter = updateParticipantGroupFilter;
 
-  self.getValueFromLookup = getValueFromLookup;
-
   activate();
 
   ///////
@@ -54,8 +52,14 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
     ]).then(function(responses) {
       var [participants, participantsKeyInfo, cohorts, igYearsLookup] = responses;
 
+      self.lookups = { IgYears: igYearsLookup};
+
       self.allParticipants = participants.map(function(participant) {
         participant.keyInfo = _.find(participantsKeyInfo, config.subjectNoun, participant[config.subjectNoun]);
+
+        // We only have one lookup, so let's do that explicitly here
+        participant.keyInfo.YearOfBirth = getValueFromLookup('IgYears', participant.keyInfo.YearOfBirth)
+
         return participant;
       });
 
@@ -63,8 +67,6 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
       self.cohorts.forEach(function(cohort) {
         self.selectedCohorts[cohort.rowid] = true;
       });
-
-      self.lookups = { IgYears: igYearsLookup};
 
       filterParticipants();
     });
@@ -122,7 +124,13 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
   }
 
   function fieldMatches(field, term){
-    return field && field.toUpperCase().indexOf(term.toUpperCase()) > -1;
+
+    // We can't do much with undefined, so assume no match.
+    if(field === undefined){
+      return false;
+    }
+
+    return String(field).toUpperCase().indexOf(term.toUpperCase()) > -1;
   }
 
   /**

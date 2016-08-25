@@ -63,7 +63,7 @@
               ng-click="vm.selectParticipant(participant)"
               role="button">
             <td><span class="label label-primary" ng-bind="participant[vm.subjectNoun]"></span></td>
-            <td ng-bind="vm.getValueFromLookup('IgYears', participant.keyInfo.YearOfBirth)"</td>
+            <td ng-bind="participant.keyInfo.YearOfBirth"</td>
           </tr>
         </tbody>
       </table>
