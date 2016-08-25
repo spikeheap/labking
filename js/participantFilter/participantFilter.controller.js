@@ -58,7 +58,7 @@ function ParticipantFilterController($modal, $q, $scope, config, CohortService, 
         participant.keyInfo = _.find(participantsKeyInfo, config.subjectNoun, participant[config.subjectNoun]);
 
         // We only have one lookup, so let's do that explicitly here
-        participant.keyInfo.YearOfBirth = getValueFromLookup('IgYears', participant.keyInfo.YearOfBirth)
+        participant.keyInfo.YearOfBirth = getValueFromLookup('IgYears', participant.keyInfo.YearOfBirth);
 
         return participant;
       });
